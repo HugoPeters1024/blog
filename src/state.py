@@ -32,3 +32,16 @@ class Post:
 @dataclass
 class State:
     posts: List[Post]
+
+    def to_json(self) -> Dict[str, Any]:
+        return {
+            "posts": list(map(Post.to_json, self.posts))
+        }
+
+    @classmethod
+    def from_json(cls, json: Dict[str, Any]) -> Optional[Class]:
+        try:
+            post = list([Post.from_json(x) for x in json["posts"]])
+            return cls(post)
+        except KeyError:
+            return None
