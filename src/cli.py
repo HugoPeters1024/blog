@@ -3,6 +3,7 @@ import click
 import json
 
 from pathlib import Path;
+from src.state import State;
 
 @click.group(name="blog")
 def cli() -> None:
@@ -10,13 +11,16 @@ def cli() -> None:
 
 @cli.command(name="init")
 def init_cmd() -> None:
-    state = Path("lock.json")
-    if state.exists():
-        click.echo("lock.json already exists, blog already initialized")
+    path = Path("state.json")
+    if path.exists():
+        click.echo("state.json already exists, blog already initialized")
         sys.exit(1)
 
+    state = State([])
+    path.write_text(json.dumps(state.to_json()))
 
-    
+
+
 
 def main() -> None:
     cli()
