@@ -21,6 +21,7 @@ state_path = Path("state.json")
 def cli() -> None:
     """Build management script for static blog site"""
 
+
 @cli.group(name="post")
 def post() -> None:
     """Post module for management script"""
@@ -33,10 +34,9 @@ def init_cmd(force: bool) -> None:
         click.echo("state.json already exists, blog already initialized")
         sys.exit(1)
 
-    state = State(
-        [Post(0, "test_post", datetime.now())]
-    )
+    state = State([Post(0, "test_post", datetime.now())])
     state_path.write_text(json.dumps(state.to_json()))
+
 
 @cli.command(name="build")
 @click.option("--debug", is_flag=True, default=False)
@@ -46,10 +46,11 @@ def build_cmd(debug: bool) -> None:
     source_dir = Path("design")
     generate.build(source_dir, state, output_dir, debug=debug)
 
+
 @post.command(name="create")
 def post_create_cmd() -> None:
     state = getState()
-    new_id = 1 + max([x.number for x in state.posts]) 
+    new_id = 1 + max([x.number for x in state.posts])
     title = click.prompt("Title")
 
     template_file = Path("design") / "pages" / "templates" / "post.html"
@@ -61,8 +62,7 @@ def post_create_cmd() -> None:
     post = Post(new_id, title, datetime.now())
     state.posts.append(post)
     saveState(state)
-    os.system('%s %s' % (os.getenv('EDITOR'), result_dir / "index.html"))
-
+    os.system("%s %s" % (os.getenv("EDITOR"), result_dir / "index.html"))
 
 
 @post.command(name="edit")
@@ -74,7 +74,8 @@ def post_edit_cmd(number: int) -> None:
         number = max([x.number for x in state.posts])
 
     file_path = Path("design") / "pages" / "posts" / str(number)
-    os.system('%s %s' % (os.getenv('EDITOR'), file_path))
+    os.system("%s %s" % (os.getenv("EDITOR"), file_path))
+
 
 @post.command(name="delete")
 @click.option("--number", default=-1)
@@ -94,7 +95,6 @@ def post_delete_cmd(number: int) -> None:
     click.confirm("Are you sure?", abort=True)
     state.posts = list([x for x in state.posts if x.number != number])
     saveState(state)
-
 
 
 @cli.command("preview")
@@ -136,6 +136,7 @@ def preview_cmd(port: int, bind: str, watch: bool) -> None:
         click.echo(f"Serving {output_dir} at port {port}", err=True)
         httpd.serve_forever()
 
+
 def getState() -> State:
     if not state_path.exists():
         click.echo("Could not find state.json, please run blog init first")
@@ -147,10 +148,10 @@ def getState() -> State:
         sys.exit(1)
     return state
 
+
 def saveState(state: State) -> None:
     with open(state_path, "w") as f:
         json.dump(state.to_json(), f, indent=4)
-        
 
 
 def main() -> None:

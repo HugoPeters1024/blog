@@ -1,9 +1,8 @@
 import jinja2
 import shutil
 import click
-import pygments
-from pygments.formatters import HtmlFormatter
-import pygments.lexers
+from pygments.formatters import HtmlFormatter # type: ignore
+import pygments.lexers # type: ignore
 from pathlib import Path
 from typing import Callable
 
@@ -51,7 +50,7 @@ def build(
         template = load_template(Path("posts") / str(post.number) / "index.html")
 
         # overwrite template with rendered version
-        with open(post_path /  "index.html", "w") as f:
+        with open(post_path / "index.html", "w") as f:
             template.stream(post=post).dump(f)
 
 
@@ -72,16 +71,18 @@ def clear_directory(dir_path: Path) -> None:
         else:
             entry.unlink()
 
+
 def highlight(lang: str, code: str) -> str:
     formatter = HtmlFormatter()
 
     # Remove all common whitespace
-    lines = code.split('\n')
-    while all([str(x)[0].isspace() for x in lines if len(x) > 0]) and not \
-            all([len(x) == 0 for x in lines]):
+    lines = code.split("\n")
+    while all([str(x)[0].isspace() for x in lines if len(x) > 0]) and not all(
+        [len(x) == 0 for x in lines]
+    ):
         for i in range(len(lines)):
             if len(lines[i]) > 0:
                 lines[i] = lines[i][1:]
-    code = "\n".join(lines) 
+    code = "\n".join(lines)
     lex = pygments.lexers.get_lexer_by_name(lang)
-    return pygments.highlight(code, lex, formatter)
+    return str(pygments.highlight(code, lex, formatter))
