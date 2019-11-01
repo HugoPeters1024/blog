@@ -42,9 +42,15 @@ def build(
     posts_output.mkdir(exist_ok=True)
 
     for post in state.posts:
-        template = load_template(Path("posts") / str(post.number) / "index.html")
+        # Copy all files
         post_path = posts_output / str(post.number)
-        post_path.mkdir(exist_ok=True)
+        source_post_path = source_dir / "pages" / "posts" / str(post.number)
+        shutil.copytree(source_post_path, post_path)
+
+        # load template
+        template = load_template(Path("posts") / str(post.number) / "index.html")
+
+        # overwrite template with rendered version
         with open(post_path /  "index.html", "w") as f:
             template.stream(post=post).dump(f)
 
