@@ -1,8 +1,8 @@
 import jinja2
 import shutil
 import click
-from pygments.formatters import HtmlFormatter # type: ignore
-import pygments.lexers # type: ignore
+from pygments.formatters import HtmlFormatter  # type: ignore
+import pygments.lexers  # type: ignore
 from pathlib import Path
 from typing import Callable
 
