@@ -195,11 +195,6 @@ footer {
     grid-template-columns: 1fr 3fr 1fr;
 }
 
-footer {
-    position: absolute;
-    bottom : 0;
-}
-
 footer .foot-box {
     height: 100%;
     width: 100%;

@@ -2,6 +2,6 @@
 
 {% block content %}
   {% for post in state.posts %}
-    {{ post.title }}
+    <a href="posts/{{post.title}}.html">{{ post.title }}</a>
   {% endfor %}
 {% endblock %}

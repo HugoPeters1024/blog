@@ -1,5 +1,5 @@
 {"posts": 
   [
     {"title": "test_post", "path": "templates/post.html", "postedAt": "2019-10-31T20:14:23"},
-    {"title": "another_post", "path" : "templates/post.html", "postedAt": "2019-10-31T20:14:25"}
+    {"title": "another_post", "path" : "posts/test.html", "postedAt": "2019-10-31T20:14:25"}
   ]}

@@ -2,7 +2,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import List, Dict, Any, Optional
 from pathlib import Path
-from datetime import datetime;
+from datetime import datetime
+
 
 @dataclass
 class Post:
@@ -10,11 +11,11 @@ class Post:
     path: Path
     postedAt: datetime
 
-    def to_json(self) -> Dict[str, Any]: 
+    def to_json(self) -> Dict[str, Any]:
         return {
-           "title": self.title,
-           "path": str(self.path),
-           "postedAt": self.postedAt.isoformat(timespec="seconds"),
+            "title": self.title,
+            "path": str(self.path),
+            "postedAt": self.postedAt.isoformat(timespec="seconds"),
         }
 
     @classmethod
@@ -34,14 +35,12 @@ class State:
     posts: List[Post]
 
     def to_json(self) -> Dict[str, Any]:
-        return {
-            "posts": list(map(Post.to_json, self.posts))
-        }
+        return {"posts": list(map(Post.to_json, self.posts))}
 
     @classmethod
-    def from_json(cls, json: Dict[str, Any]) -> Optional[Class]:
+    def from_json(cls, json: Dict[str, Any]) -> Optional[State]:
         try:
-            post = list([Post.from_json(x) for x in json["posts"]])
-            return cls(post)
+            posts = list([Post.from_json(x) for x in json["posts"]])
+            return cls([x for x in posts if x is not None])
         except KeyError:
             return None

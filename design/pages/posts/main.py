@@ -1,3 +1,3 @@
 def main():
     print("Hello World")
-    print('fuucked')
+    print("fuucked")

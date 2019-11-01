@@ -6,11 +6,9 @@ from typing import Callable
 
 from src.state import State, Post
 
+
 def build(
-        source_dir: Path,
-        state: State,
-        output_dir: Path,
-        debug: bool = False,
+    source_dir: Path, state: State, output_dir: Path, debug: bool = False
 ) -> None:
     if not Path.cwd() == Path.home() / "repos" / "blog":
         click.echo("Running from bad location")
@@ -19,7 +17,6 @@ def build(
     clear_directory(output_dir)
     output_dir.mkdir(exist_ok=True, parents=True)
 
-
     # Copy public files from design
     shutil.copytree(source_dir / "public", output_dir / "public")
 
@@ -27,10 +24,12 @@ def build(
     env = jinja2.Environment(loader=jinja2.FileSystemLoader("design/pages/"))
     env.globals["DEBUG"] = debug
 
-    load_template : Callable[[Path], jinja2.Template] = lambda template_file: env.get_template(str(template_file))
+    load_template: Callable[
+        [Path], jinja2.Template
+    ] = lambda template_file: env.get_template(str(template_file))
 
     # Render index
-    template = load_template("index.html")
+    template = load_template(Path("index.html"))
     with open(output_dir / "index.html", "w") as f:
         template.stream(state=state).dump(f)
 
@@ -60,4 +59,3 @@ def clear_directory(dir_path: Path) -> None:
             shutil.rmtree(entry)
         else:
             entry.unlink()
-
