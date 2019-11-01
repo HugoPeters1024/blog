@@ -9,6 +9,7 @@ pathlib = "*"
 dataclasses = "*"
 dataclasses-json = "*"
 jinja2 = "*"
+pygments = "*"
 
 [dev-packages]
 mypy-mypyc = "*"

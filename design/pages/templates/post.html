@@ -6,7 +6,15 @@
     <h1>{% block post_title %}{{post.title}}{% endblock %}</h1>
 
     {% block post %}
-      Just some random stuff
+      <p>Just some random stuff</p>
+
+      <p>
+        And a code block:
+        {% call macros.code("javascript") %}
+          const express = require('express');
+          const app = express;
+        {% endcall %}
+      <p>
     {% endblock %}
 
 {% endblock %}
