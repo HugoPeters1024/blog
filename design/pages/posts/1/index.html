@@ -6,15 +6,92 @@
     <h1>{% block post_title %}{{post.title}}{% endblock %}</h1>
 
     {% block post %}
-      <p>Just some random stuff</p>
+      <h2>What do we want</h2>
 
       <p>
-        And a code block:
-        {% call macros.code("python") %}
-          def the_right_way():
-            return True
-        {% endcall %}
+        What a better way to start of a programming blog by writing a
+        piece on how I build this website itself? 
+      </p>
+
       <p>
+        Let's kick it off with defining our requirements:
+        <ul>
+          <li>Learn something</li>
+          <li>Little maintance</li>
+          <li>Easy to update and add posts</li>
+          <li>Ability to show code snippets</li>
+        </ul>
+      </p>
+
+      <p>
+      Initially I started building a setup in Nodejs with nunjucks (a Jinja
+      templating engine). Whilst I rarely use javascript I've always been
+      attracted to the functional syntax of Nodejs and it's asynchronous nature.
+      However, in a discussion with a former peer student who has some years of
+      experience in DevOps, I learned that since data changes are rare and
+      request agnostic, a static site would be more sensical. This idea would also
+      tie in nicely with our low maintance requirement since we only need to care
+      about keeping a trivial nginx server alive, which I know to be quite 
+      trivial.
+      <p>
+
+      <p>
+      Incidently, I also played a small role in making a static photo gallery
+      for my study association which was to be placed behind a login to abide by
+      GDPR guidelines. This project contained a few templates along with a python
+      applications to build and manage the website and it's state. I decided to
+      borrow heavily from this setup. This project is also open source by the way
+      (<a href="https://www.github.com/svsticky/pxl" target="_blank">github</a>)
+      </p>
+
+      <h2>Our plan</h2>
+      <ol>
+        <li>Create templates for posts and an overview</li>
+        <li>Create a python based cli to manage the state and build the site</li>
+        <li>Create an nginx configurations to serve files (without extensions in uri)</li>
+      </ol>
+
+      <h2>1. Create templates</h2>
+      <p>
+      This turned out to be a very uninteresting step. I created a simple base template with a
+      mobile friendly nav bar and that was it! The most interesting thing I learned, which
+      proved to be very useful for our code highlighting macro was the following:
+      </p>
+
+      {% call macros.code("html") %}
+        {% raw %}
+          {% macro code(language) -%}
+              {{ highlight(language, caller()) }}
+          {%- endmacro %}
+        {% endraw %}
+      {% endcall %}
+
+      <p>Which you can then use as follows:</p>
+
+      {% call macros.code("html") %}
+        {% raw %}
+          {% call macros.code("python") %}
+            def main():
+              print("my source code is not a nice string")
+              return 0;
+          {% endcall }
+        {% endraw %}
+      {% endcall %}
+
+      <p>
+      Effectively, you can use the caller() method to load in the literal string
+      that was typed between the call block. This circumvents the need of awkwardly passing code
+      containing all kinds of weird characters as argument to the macro directly.
+      </p>
+
+      <p>
+      Lastly I also decided to reject adding any javascript to the website. First of all,
+      we are building a very simple static html website, it will not be neccesary. Secondly, the
+      bragging rights, javascript has its place but avoiding it when possible has never proved
+      to be a bad rule for me.
+      </p>
     {% endblock %}
+
+    <h2>2. Create cli for management</h2>
 
 {% endblock %}
