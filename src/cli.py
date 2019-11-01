@@ -8,7 +8,7 @@ import socketserver
 import http.server
 from datetime import datetime
 from pathlib import Path
-import subprocess
+from subprocess import Popen
 import shutil
 
 from src.state import State, Post
@@ -113,7 +113,7 @@ def preview_cmd(port: int, bind: str, watch: bool) -> None:
     click.launch(f"http://localhost:{port}")
 
     if watch:
-        subprocess.run(["scripts/watch.sh"])
+        Popen(["scripts/watch.sh"])
 
     # Start the default Python HTTP server.
     #
@@ -130,6 +130,8 @@ def preview_cmd(port: int, bind: str, watch: bool) -> None:
     handler_class = functools.partial(
         http.server.SimpleHTTPRequestHandler, directory=str(output_dir)
     )
+
+    print("starting server")
     with socketserver.TCPServer(server_address, handler_class) as httpd:  # type: ignore
         click.echo(f"Serving {output_dir} at port {port}", err=True)
         httpd.serve_forever()
