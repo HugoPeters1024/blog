@@ -38,15 +38,15 @@ def build(
         template.stream(state=state).dump(f)
 
     # Render posts
-    posts_dir = output_dir / "posts"
-    posts_dir.mkdir(exist_ok=True)
+    posts_output = output_dir / "posts"
+    posts_output.mkdir(exist_ok=True)
 
     for post in state.posts:
-        template = load_template(post.path)
-        with open(posts_dir / (post.title + ".html"), "w") as f:
+        template = load_template(Path("posts") / str(post.number) / "index.html")
+        post_path = posts_output / str(post.number)
+        post_path.mkdir(exist_ok=True)
+        with open(post_path /  "index.html", "w") as f:
             template.stream(post=post).dump(f)
-    
-    highlight("python", "")
 
 
 def clear_directory(dir_path: Path) -> None:

@@ -28,7 +28,7 @@ def init_cmd(force: bool) -> None:
         sys.exit(1)
 
     state = State(
-        [Post("test_post", Path("design/pages/templates/post.html"), datetime.now())]
+        [Post(0, "test_post", datetime.now())]
     )
     state_path.write_text(json.dumps(state.to_json()))
 

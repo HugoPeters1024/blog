@@ -1,5 +1,1 @@
-{"posts": 
-  [
-    {"title": "template_post", "path": "templates/post.html", "postedAt": "2019-10-31T20:14:23"},
-    {"title": "another_post", "path" : "posts/test.html", "postedAt": "2019-10-31T20:14:25"}
-  ]}
+{"posts": [{"number": 0, "title": "test_post", "postedAt": "2019-11-01T15:51:16"}]}
