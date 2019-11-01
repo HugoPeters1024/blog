@@ -1,0 +1,7 @@
+{% extends "templates/base.html" %}
+
+{% block content %}
+  {% for post in state.posts %}
+    {{ post.title }}
+  {% endfor %}
+{% endblock %}

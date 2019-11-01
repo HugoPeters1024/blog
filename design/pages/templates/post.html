@@ -1,9 +1,12 @@
 {% extends "templates/base.html" %}
 
+{% block title %}{{post.title}}{% endblock %}
+
 {% block content %}
-    <h1>{% block title %}{{post.title}}{% endblock %}</h1>
+    <h1>{% block post_title %}{{post.title}}{% endblock %}</h1>
 
     {% block post %}
+      Just some random stuff
     {% endblock %}
 
 {% endblock %}

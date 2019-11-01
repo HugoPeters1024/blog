@@ -1,20 +1,38 @@
 import jinja2
 import shutil
+import click
 from pathlib import Path
+from typing import Callable
 
 from src.state import State, Post
 
 def build(
+        source_dir: Path,
         state: State,
-        output_dir: Path
+        output_dir: Path,
+        debug: bool = False,
 ) -> None:
+    if not Path.cwd() == Path.home() / "repos" / "blog":
+        click.echo("Running from bad location")
+        exit(1)
 
-    print(Path.cwd())
     clear_directory(output_dir)
     output_dir.mkdir(exist_ok=True, parents=True)
 
+
     # Copy public files from design
-    shutil.copytree(Path("design/public"), output_dir / "public")
+    shutil.copytree(source_dir / "public", output_dir / "public")
+
+    # Setup jinja2 context
+    env = jinja2.Environment(loader=jinja2.FileSystemLoader("design/pages/"))
+    env.globals["DEBUG"] = debug
+
+    load_template : Callable[[Path], jinja2.Template] = lambda template_file: env.get_template(str(template_file))
+
+    # Render index
+    template = load_template("index.html")
+    with open(output_dir / "index.html", "w") as f:
+        template.stream(state=state).dump(f)
 
     # Render posts
     posts_dir = output_dir / "posts"
@@ -25,15 +43,6 @@ def build(
         with open(posts_dir / (post.title + ".html"), "w") as f:
             template.stream(post=post).dump(f)
 
-
-def load_template(template_file: Path) -> jinja2.Template:
-    """Load a jinja template from a file.
-
-    There isn't a method in the standard API that does this, so
-    we roll it ourselves."""
-
-    env = jinja2.Environment(loader=jinja2.FileSystemLoader("design/pages/"))
-    return env.get_template(str(template_file))
 
 def clear_directory(dir_path: Path) -> None:
     """Remove all directory contents, except for the directory itself.

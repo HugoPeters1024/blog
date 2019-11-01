@@ -7,6 +7,7 @@ import socketserver
 import http.server
 from datetime import datetime
 from pathlib import Path;
+import subprocess
 
 from src.state import State, Post;
 import src.generate as generate
@@ -28,7 +29,8 @@ def init_cmd(force: bool) -> None:
     state_path.write_text(json.dumps(state.to_json()))
 
 @cli.command(name="build")
-def build_cmd() -> None:
+@click.option("--debug", is_flag=True, default=False)
+def build_cmd(debug: bool) -> None:
     if not state_path.exists():
         click.echo("Could not find state.json, please run blog init first")
         sys.exit(1)
@@ -39,12 +41,14 @@ def build_cmd() -> None:
         sys.exit(1)
 
     output_dir = Path("ignore") / "build"
-    generate.build(state, output_dir)
+    source_dir = Path("design")
+    generate.build(source_dir, state, output_dir, debug=debug)
 
 @cli.command("preview")
 @click.option("--port", default=8000, type=int, help="Port to use")
 @click.option("--bind", default="", help="Address to bind on (default: all interfaces)")
-def preview_cmd(port: int, bind: str) -> None:
+@click.option("--watch", is_flag=True, default=False, help="Auto rebuild on source changes")
+def preview_cmd(port: int, bind: str, watch: bool) -> None:
     """Run a local webserver on build output"""
     output_dir = Path("ignore/build")
     if not output_dir.is_dir():
@@ -52,6 +56,9 @@ def preview_cmd(port: int, bind: str) -> None:
         sys.exit(1)
 
     click.launch(f"http://localhost:{port}")
+
+    if watch:
+        subprocess.run(["scripts/watch.sh"])
 
     # Start the default Python HTTP server.
     #
@@ -64,6 +71,7 @@ def preview_cmd(port: int, bind: str) -> None:
     #
     # This feels more complicated than it should be.
     server_address = (bind, port)
+    socketserver.TCPServer.allow_reuse_address=True
     handler_class = functools.partial(
         http.server.SimpleHTTPRequestHandler, directory=str(output_dir)
     )
