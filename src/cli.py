@@ -63,6 +63,8 @@ def post_create_cmd() -> None:
     saveState(state)
     os.system('%s %s' % (os.getenv('EDITOR'), result_dir / "index.html"))
 
+
+
 @post.command(name="edit")
 @click.option("--number", default=-1)
 def post_edit_cmd(number: int) -> None:
@@ -73,6 +75,26 @@ def post_edit_cmd(number: int) -> None:
 
     file_path = Path("design") / "pages" / "posts" / str(number)
     os.system('%s %s' % (os.getenv('EDITOR'), file_path))
+
+@post.command(name="delete")
+@click.option("--number", default=-1)
+def post_delete_cmd(number: int) -> None:
+    state = getState()
+    # Resolve last post if not given
+    if number == -1:
+        number = max([x.number for x in state.posts])
+
+    if number not in [x.number for x in state.posts]:
+        click.echo(f"Post {number} does not exist")
+        sys.exit(1)
+
+    post = next(x for x in state.posts if x.number == number)
+
+    click.echo(f"You are about to delete post {number}: {post.title}")
+    click.confirm("Are you sure?", abort=True)
+    state.posts = list([x for x in state.posts if x.number != number])
+    saveState(state)
+
 
 
 @cli.command("preview")
