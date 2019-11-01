@@ -1,3 +1,4 @@
+import os
 import sys
 import click
 import json
@@ -8,6 +9,7 @@ import http.server
 from datetime import datetime
 from pathlib import Path
 import subprocess
+import shutil
 
 from src.state import State, Post
 import src.generate as generate
@@ -18,6 +20,10 @@ state_path = Path("state.json")
 @click.group(name="blog")
 def cli() -> None:
     """Build management script for static blog site"""
+
+@cli.group(name="post")
+def post() -> None:
+    """Post module for management script"""
 
 
 @cli.command(name="init")
@@ -32,22 +38,41 @@ def init_cmd(force: bool) -> None:
     )
     state_path.write_text(json.dumps(state.to_json()))
 
-
 @cli.command(name="build")
 @click.option("--debug", is_flag=True, default=False)
 def build_cmd(debug: bool) -> None:
-    if not state_path.exists():
-        click.echo("Could not find state.json, please run blog init first")
-        sys.exit(1)
-
-    state = State.from_json(json.loads(state_path.read_text()))
-    if not state:
-        click.echo("state.json is not valid")
-        sys.exit(1)
-
+    state = getState()
     output_dir = Path("ignore") / "build"
     source_dir = Path("design")
     generate.build(source_dir, state, output_dir, debug=debug)
+
+@post.command(name="create")
+def post_create_cmd() -> None:
+    state = getState()
+    new_id = 1 + max([x.number for x in state.posts]) 
+    title = click.prompt("Title")
+
+    template_file = Path("design") / "pages" / "templates" / "post.html"
+
+    result_dir = Path("design") / "pages" / "posts" / str(new_id)
+    result_dir.mkdir(exist_ok=True)
+
+    shutil.copyfile(template_file, result_dir / "index.html")
+    post = Post(new_id, title, datetime.now())
+    state.posts.append(post)
+    saveState(state)
+    os.system('%s %s' % (os.getenv('EDITOR'), result_dir / "index.html"))
+
+@post.command(name="edit")
+@click.option("--number", default=-1)
+def post_edit_cmd(number: int) -> None:
+    state = getState()
+    # Resolve last post if not given
+    if number == -1:
+        number = max([x.number for x in state.posts])
+
+    file_path = Path("design") / "pages" / "posts" / str(number)
+    os.system('%s %s' % (os.getenv('EDITOR'), file_path))
 
 
 @cli.command("preview")
@@ -86,6 +111,22 @@ def preview_cmd(port: int, bind: str, watch: bool) -> None:
     with socketserver.TCPServer(server_address, handler_class) as httpd:  # type: ignore
         click.echo(f"Serving {output_dir} at port {port}", err=True)
         httpd.serve_forever()
+
+def getState() -> State:
+    if not state_path.exists():
+        click.echo("Could not find state.json, please run blog init first")
+        sys.exit(1)
+
+    state = State.from_json(json.loads(state_path.read_text()))
+    if not state:
+        click.echo("state.json is not valid")
+        sys.exit(1)
+    return state
+
+def saveState(state: State) -> None:
+    with open(state_path, "w") as f:
+        json.dump(state.to_json(), f, indent=4)
+        
 
 
 def main() -> None:
