@@ -1,0 +1,7 @@
+{% extends "templates/base.html" %}
+
+{% block content %}
+  {% for post in state.posts %}
+    <a href="posts/{{post.number}}">{{ post.title }}</a>
+  {% endfor %}
+{% endblock %}

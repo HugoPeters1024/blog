@@ -4,7 +4,7 @@ import click
 from pygments.formatters import HtmlFormatter  # type: ignore
 import pygments.lexers  # type: ignore
 from pathlib import Path
-from typing import Callable
+from typing import Callable, List, Any
 
 from src.state import State, Post
 
@@ -20,7 +20,11 @@ def build(
     output_dir.mkdir(exist_ok=True, parents=True)
 
     # Copy public files from design
-    shutil.copytree(source_dir / "public", output_dir / "public")
+    for entry in source_dir.iterdir():
+        if entry.is_dir():
+            shutil.copytree(entry, output_dir / entry.name)
+        else:
+            shutil.copy(entry, output_dir)
 
     # Setup jinja2 context
     env = jinja2.Environment(loader=jinja2.FileSystemLoader("design/pages/"))
@@ -31,14 +35,15 @@ def build(
         [Path], jinja2.Template
     ] = lambda template_file: env.get_template(str(template_file))
 
-    # Render index
-    template = load_template(Path("index.html"))
-    with open(output_dir / "index.html", "w") as f:
-        template.stream(state=state).dump(f)
 
     # Render posts
     posts_output = output_dir / "posts"
     posts_output.mkdir(exist_ok=True)
+
+    # Render posts index
+    template = load_template(Path("posts") / "index.html")
+    with open(posts_output / "index.html", "w") as f:
+        template.stream(state=state).dump(f)
 
     for post in state.posts:
         # Copy all files
@@ -75,11 +80,12 @@ def clear_directory(dir_path: Path) -> None:
 def highlight(lang: str, code: str) -> str:
     formatter = HtmlFormatter()
 
-    # Remove all common whitespace
+    # special all() function that return false for empty sets
+    alln: Callable[[List[Any]], bool] = lambda l: all(l) and len(l) > 0
+
+    # Remove all shared whitespace
     lines = code.split("\n")
-    while all([str(x)[0].isspace() for x in lines if len(x) > 0]) and not all(
-        [len(x) == 0 for x in lines]
-    ):
+    while alln([str(x)[0].isspace() for x in lines if len(x) > 0]):
         for i in range(len(lines)):
             if len(lines[i]) > 0:
                 lines[i] = lines[i][1:]

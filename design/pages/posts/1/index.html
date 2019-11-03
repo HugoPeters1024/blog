@@ -9,7 +9,7 @@
       <h2>What do we want</h2>
 
       <p>
-        What a better way to start of a programming blog by writing a
+        What better way to start of a programming blog by writing a
         piece on how I build this website itself? 
       </p>
 
@@ -22,6 +22,8 @@
           <li>Ability to show code snippets</li>
         </ul>
       </p>
+
+      <h2>The old way is the gold way: static html</h2>
 
       <p>
       Initially I started building a setup in Nodejs with nunjucks (a Jinja
@@ -46,52 +48,256 @@
 
       <h2>Our plan</h2>
       <ol>
-        <li>Create templates for posts and an overview</li>
+        <li>Define the state</li>
+        <li>Create Jinja2 templates to render the state</li>
         <li>Create a python based cli to manage the state and build the site</li>
         <li>Create an nginx configurations to serve files (without extensions in uri)</li>
       </ol>
 
-      <h2>1. Create templates</h2>
+      <h3>1. Defining the state</h3>
+      Being a very simple blog, it seems adequeate that our state is merely a list of posts.
+      Let's define our types using the marvelous dataclasses introduced into python3.7:
+
+      {% call macros.code("python") %}
+        @dataclass
+        class Post:
+            number: int
+            title: str
+            postedAt: datetime
+
+        @dataclass
+        class State:
+            posts: List[Post]
+      {% endcall %}
+
+      Also, be warned. I use type annotations in python. They do not have any effect on the
+      functionality but are used to enforce a typesystem using static analysis. You can read
+      more about it here: <a href="http://mypy-lang.org/" target="_blank">mypy</a>.
+
       <p>
-      This turned out to be a very uninteresting step. I created a simple base template with a
-      mobile friendly nav bar and that was it! The most interesting thing I learned, which
-      proved to be very useful for our code highlighting macro was the following:
+      Also, I left out the code for json parsing here since it is quite straightforward.
+      The state file might look something like this:
+      </p>
+      {% call macros.code("json") %}
+      {
+          "posts": 
+          [
+              {
+                  "number": 0,
+                  "title": "test_post",
+                  "postedAt": "2019-11-01T16:54:42"
+              },
+              {
+                  "number": 1,
+                  "title": "Making a blog website",
+                  "postedAt": "2019-11-01T17:22:20"
+              }
+          ]
+      }
+      {% endcall %}
+
+      <h3>2. Creating templates</h3>
+
+      <p>
+      Blogposts I love are those that contain clear, copyable code snippets. It goes then
+      without saying that I should adhere by the same standard. My forementioned friend that
+      advised build a static site, also recommended <a href="http://pygments.org">pygments</a> 
+      to convert plain text code into syntax highlighted html. The great thing about Jinja is
+      the flexible way in which you can provide your template with custom functions. These means
+      that we can write our highlight function the way we normally would in python and then
+      simply inject it into our Jinja context.
       </p>
 
+      {% call macros.code("python") %}
+        def highlight(lang: str, code: str) -> str:
+            formatter = HtmlFormatter()
+            lex = pygments.lexers.get_lexer_by_name(lang)
+            return str(pygments.highlight(code, lex, formatter))
+
+        def build() -> None:
+          # Create a Jinja context with /design/pages/ as root
+          env = jinja2.Environment(loader=jinja2.FileSystemLoader("design/pages/"))
+          env.globals["highlight"] = highlight
+          # Then simply render all templates to eponymous files
+          # in the build directory
+      {% endcall %}
+
+
+      <p>
+      Now in our template we can easily call that function. However, because our code is
+      generally a multiline string contained all kinds of different strings themselves, it
+      would be a strenious task to somehow pipe all that text as argument. Not to mention
+      the appalling syntax we would have to swallow writing blogposts! Instead I found this
+      beautiful way to call a macro in jinja
+      </p>
       {% call macros.code("html") %}
         {% raw %}
+          <!-- imported somewhere in the base template -->
           {% macro code(language) -%}
               {{ highlight(language, caller()) }}
           {%- endmacro %}
-        {% endraw %}
-      {% endcall %}
 
-      <p>Which you can then use as follows:</p>
-
-      {% call macros.code("html") %}
-        {% raw %}
+          <!-- while writing a blog post -->
           {% call macros.code("python") %}
             def main():
               print("my source code is not a nice string")
               return 0;
-          {% endcall }
+          {% endcall %}
         {% endraw %}
       {% endcall %}
 
       <p>
       Effectively, you can use the caller() method to load in the literal string
       that was typed between the call block. This circumvents the need of awkwardly passing code
-      containing all kinds of weird characters as argument to the macro directly.
+      containing all kinds of weird characters as argument to the macro directly. 
+      </p>
+      
+      <p>
+      At this time I was introduced to another problem however; code segments are placed
+      between 'pre' (preformated) tags. That means that the indent I so nicely added to my
+      templates to keep things readible, where now also showing up in the final result.
+      Evidently I could not simply remove a white space from the start of every line because I
+      want to be able to present indented code snippets in a frivolous attempt to make the
+      impression that I write tidy code. Fixing this would require not us to consider all the
+      lines of code in the snippet simultaneously. What we want to the remove the leading indent
+      of the snippet, or in other words remove all indent that is shared between all the lines.
+      Let's fix our highlight function to statisfy this new constraint:
+      </p>
+
+      {% call macros.code("python") %}
+      def highlight(lang: str, code: str) -> str:
+          formatter = HtmlFormatter()
+
+          # special all() function that return false for empty sets
+          alln: Callable[[List[Any]], bool] = lambda l: all(l) and len(l) > 0
+
+          # Remove all shared whitespace
+          lines = code.split("\n")
+          while alln([str(x)[0].isspace() for x in lines if len(x) > 0]):
+              for i in range(len(lines)):
+                  if len(lines[i]) > 0:
+                      lines[i] = lines[i][1:]
+          code = "\n".join(lines)
+          lex = pygments.lexers.get_lexer_by_name(lang)
+          return str(pygments.highlight(code, lex, formatter))
+      {% endcall %}
+
+
+      <h3>3. Management CLI</h3>
+      <p>
+      This will be the gatekeeper to our state. It is this cli we will use for building the site
+      as well as creating new posts.
+      </p>
+      <p>
+      Over the years I've created loads of small cli programs. But until recently they always
+      sucked. I've had dotnet projects with 30 different attributes all doing weird type
+      reflecion logic to slowly consume a command and eventually select a method to execute.
       </p>
 
       <p>
-      Lastly I also decided to reject adding any javascript to the website. First of all,
-      we are building a very simple static html website, it will not be neccesary. Secondly, the
-      bragging rights, javascript has its place but avoiding it when possible has never proved
-      to be a bad rule for me.
+      But all my troubles seemed to have been solved by the wonderful 
+      <a href="https://click.palletsprojects.com/en/7.x/" target="_blank">click</a> package. 
+      It allowed me to effortlesly create commands and subgroups to eventually come to the
+      following set of commands:
       </p>
-    {% endblock %}
 
-    <h2>2. Create cli for management</h2>
+      {% call macros.code("sh") %}
+        blog init          # create an empty state.json file
+        blog build         # copy and render source files to build location
+        blog preview       # serve build directory in browser
+        blog post create   # copy post template to new directory in the source and append to the state
+        blog post edit     # open a post's directory in vim 
+        blog post delete   # remove a post from the state
+      {% endcall %}
+
+      <h2>4. Nginx configuration</h2>
+      Now that we have everything setup, we just need a way to serve the files. For this we
+      only need a simple and short nginx configuration that simply looks for the file specified
+      in the uri. To avoid having ugly looking uri's that end in .html, we simply leverage
+      the fact that nginx simply looks for index.html if no file is specified. So you, my dear
+      reader, only sees <i>/posts/1</i> for example, which in actuality is interpreted as
+      <i>/posts/1/index.html</i>.
+
+      {% call macros.code("nginx") %}
+      http {
+        include /etc/nginx/conf/mime.types;
+        default_type application/octet-stream;
+
+        server {
+          listen 80;
+
+          root /var/www/blog;
+          index index.html index.htm index.php;
+
+          server_name blog;
+
+          location / {
+            try_files $uri $uri/ =404;
+          }
+        }
+      }
+      events { }
+      {% endcall %}
+
+      <h2>Looking back</h2>
+      Let's take a look at what we have:
+
+      {% call macros.code("sh") %}
+      .
+      ├── design
+      │   ├── pages
+      │   │   ├── index.html
+      │   │   ├── posts
+      │   │   │   ├── 0
+      │   │   │   │   └── index.html
+      │   │   │   └── 1
+      │   │   │       └── index.html
+      │   │   └── templates
+      │   │       ├── base.html
+      │   │       ├── footer.html
+      │   │       ├── macros.html
+      │   │       ├── nav.html
+      │   │       └── post.html
+      │   └── public
+      │       ├── pygments.css
+      │       └── style.css
+      ├── ignore
+      │   └── build
+      │       ├── index.html
+      │       ├── posts
+      │       │   ├── 0
+      │       │   │   └── index.html
+      │       │   └── 1
+      │       │       └── index.html
+      │       └── public
+      │           ├── pygments.css
+      │           └── style.css
+      ├── main.py
+      ├── Pipfile
+      ├── Pipfile.lock
+      ├── README.md
+      ├── src
+      │   ├── cli.py
+      │   ├── generate.py
+      │   ├── state.py
+      │   └── __init__.py
+      └── state.json
+      {% endcall %}
+
+      <p>
+      We have the our design directory that contains all of our templates and other files that I
+      might need in any future posts, conviently boxed in their own subdirectory. In our build
+      folder we have now have the exact same tree structure except that the files are new
+      rendered with the data provided by the state.json file. I am particularly pleased by
+      the simplicity of it all. Now we have all the time in the world to fiddle with the
+      layout and conjure a custom 404 pages with images of cute animals.
+      </p>
+
+      <p>
+      And this concludes the project. If you want to take a look at the source you can find that
+      over here on <a href="https://github.com/HugoPeters1024/blog" target="_blank">Github</a>. 
+      </p>
+      
+    {% endblock %}
 
 {% endblock %}
