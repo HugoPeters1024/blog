@@ -10,7 +10,7 @@
 .cm { color: #75715e } /* Comment.Multiline */
 .cp { color: #75715e } /* Comment.Preproc */
 .cpf { color: #75715e } /* Comment.PreprocFile */
-.c1 { color: #75715e } /* Comment.Single */
+.c1 { color: #95917e } /* Comment.Single */
 .cs { color: #75715e } /* Comment.Special */
 .gd { color: #f92672 } /* Generic.Deleted */
 .ge { font-style: italic } /* Generic.Emph */
@@ -49,7 +49,6 @@
 .mo { color: #ae81ff } /* Literal.Number.Oct */
 .sa { color: #e6db74 } /* Literal.String.Affix */
 .sb { color: #e6db74 } /* Literal.String.Backtick */
-.sc { color: #e6db74 } /* Literal.String.Char */
 .dl { color: #e6db74 } /* Literal.String.Delimiter */
 .sd { color: #e6db74 } /* Literal.String.Doc */
 .s2 { color: #e6db74 } /* Literal.String.Double */

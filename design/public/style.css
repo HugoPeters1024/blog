@@ -226,4 +226,5 @@ footer .foot-box {
   padding: 0.6em;
   background-color: #333;
   color: var(--white);
+  overflow: auto;
 }
