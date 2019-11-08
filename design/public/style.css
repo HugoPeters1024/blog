@@ -2,17 +2,23 @@
     --nav-background: #303952;
     --nav-text: #bbb;
     --nav-text-hover: #e15f41;
+    --nav-font: "Courier New", Courier, monospace;
     --white: #eee;
 }
 
 body {
-    height: 100%;
+    min-height: 100%;
     margin: 0;
     padding: 0;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: Arial, Helvetica, sans-serif; 
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     background-color: var(--white);
+}
+
+html {
+  height: 100%;
 }
 
 /* Navigation */
@@ -28,6 +34,7 @@ header {
 }
 
 nav {
+    font-family: var(--nav-font);
     position: absolute;
     text-align: left;
     background-color: var(--nav-background);
@@ -212,6 +219,8 @@ footer .foot-box {
     height: 100%;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(400px, 3fr) minmax(0, 1fr);
+    /* Instead of justify-self: start */
+    margin-bottom: auto;
 }
 
 .content-page
