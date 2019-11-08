@@ -205,13 +205,14 @@
         blog post delete   # remove a post from the state
       {% endcall %}
 
-      <h2>4. Nginx configuration</h2>
+      <h3>4. Nginx configuration</h3>
       Now that we have everything setup, we just need a way to serve the files. For this we
       only need a simple and short nginx configuration that simply looks for the file specified
       in the uri. To avoid having ugly looking uri's that end in .html, we simply leverage
       the fact that nginx simply looks for index.html if no file is specified. So you, my dear
       reader, only sees <i>/posts/1</i> for example, which in actuality is interpreted as
       <i>/posts/1/index.html</i>.
+
 
       {% call macros.code("nginx") %}
       http {
@@ -234,6 +235,74 @@
       events { }
       {% endcall %}
 
+      <h2>We want more, but mmm</h2>
+      During any coding project I find myself always arriving at that feeling; You want to
+      add a feature but it just doesn't really play nice with the existing codebase. In this
+      case it was the feature of showing the last modified time the bottom of a post's page.
+      Getting the information is quite straightforward using Pathlib, but this is information
+      that was not in our original state. Previously we could think of our pipeline as follows:
+
+      {% call macros.code("haskell") %}
+      build :: "state.json" -> State -> html 
+      {% endcall %}
+
+      But we now want to fetch extra data at runtime and add this to the state. To keep our
+      typesystem as an ally we therefore have to adjust our plan to this:
+
+      {% call macros.code("haskell") %}
+      build:: "state.json" -> State -> PreparedState -> html
+      {% endcall %}
+
+      We need to then create another set of types to represent this new state. While we're
+      added I also decided to leverage this functionality to the abstract from a seperate
+      file as well, this way I prevent myself from ever having to edit the state.json file, as
+      well as keeping it clean.
+
+      {% call macros.code("python") %}
+      @dataclass
+      class PreparedPost(Post):
+          modifiedAt: datetime
+          abstract: str
+
+      @dataclass
+      class PreparedState:
+          posts: List[PreparedPost]
+      {% endcall %}
+
+      And a finally a function for our conversion step:
+
+      {% call macros.code("python") %}
+      def prepareState(state: State, root: Path) -> PreparedState:
+          posts_dir = root / "posts"
+          prepared_posts = []
+          for post in state.posts:
+              post_path = posts_dir / str(post.number)
+
+              modifiedAt = lastModified(post_path)
+
+              # load the abstract
+              abstract = "abstract not available"
+              abstract_path = post_path / "abstract.html"
+              if abstract_path.exists():
+                  with open(abstract_path, "r") as f:
+                      abstract = f.read()
+
+              prepared_posts.append(
+                  PreparedPost(post.number,
+                  post.title,
+                  post.postedAt,
+                  modifiedAt,
+                  abstract)
+              )
+
+          return PreparedState(prepared_posts)
+      {% endcall %}
+
+      And that's it! We now have access to two more properties when rendering posts
+      in the template. Although it might seem a little tedious to have created a new
+      type, I do think that the redudancy there is a good tradeoff for making the
+      fetching of extra data a very explicit and maintainable step.
+
       <h2>Looking back</h2>
       Let's take a look at what we have:
 
@@ -244,9 +313,11 @@
       │   ├── index.html
       │   ├── posts
       │   │   ├── 0
-      │   │   │   └── index.html
+      │   │   │   ├── index.html
+      │   │   │   └── abstract.html
       │   │   └── 1
-      │   │       └── index.html
+      │   │       ├── index.html
+      │   │       └── abstract.html
       │   ├── templates
       │   │   ├── base.html
       │   │   ├── footer.html
@@ -285,7 +356,7 @@
       folder we have now have the exact same tree structure except that the files are new
       rendered with the data provided by the state.json file (also I deleted the templates
       directory). I am particularly pleased by the simplicity of it all. Now we have all the 
-      time in the world to fiddle with the layout and conjure a custom 404 pages with images 
+      time in the world to fiddle with the layout and conjure a custom 404 page with images
       of cute animals.
       </p>
 
