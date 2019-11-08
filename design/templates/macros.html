@@ -1,0 +1,6 @@
+{% macro code(language) -%}
+  <p>
+    {{ highlight(language, caller()) }}
+  </p>
+{%- endmacro %}
+

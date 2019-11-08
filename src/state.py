@@ -18,6 +18,13 @@ class Post:
             "postedAt": self.postedAt.isoformat(timespec="seconds"),
         }
 
+    def get_url(self) -> str:
+        return f"posts/{self.number}"
+
+    def get_postedAt_format(self) -> str:
+        return self.postedAt.strftime("%b %d %Y")
+
+
     @classmethod
     def from_json(cls, json: Dict[str, Any]) -> Optional[Post]:
         try:

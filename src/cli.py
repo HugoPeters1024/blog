@@ -53,9 +53,9 @@ def post_create_cmd() -> None:
     new_id = 1 + max([x.number for x in state.posts])
     title = click.prompt("Title")
 
-    template_file = Path("design") / "pages" / "templates" / "post.html"
+    template_file = Path("design") / "templates" / "post.html"
 
-    result_dir = Path("design") / "pages" / "posts" / str(new_id)
+    result_dir = Path("design") / "posts" / str(new_id)
     result_dir.mkdir(exist_ok=True)
 
     shutil.copyfile(template_file, result_dir / "index.html")
@@ -73,7 +73,7 @@ def post_edit_cmd(number: int) -> None:
     if number == -1:
         number = max([x.number for x in state.posts])
 
-    file_path = Path("design") / "pages" / "posts" / str(number)
+    file_path = Path("design") / "posts" / str(number)
     os.system("%s %s" % (os.getenv("EDITOR"), file_path))
 
 

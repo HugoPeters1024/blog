@@ -22,12 +22,14 @@ def build(
     # Copy public files from design
     for entry in source_dir.iterdir():
         if entry.is_dir():
+            if entry.name == "templates":
+                continue
             shutil.copytree(entry, output_dir / entry.name)
         else:
             shutil.copy(entry, output_dir)
 
     # Setup jinja2 context
-    env = jinja2.Environment(loader=jinja2.FileSystemLoader("design/pages/"))
+    env = jinja2.Environment(loader=jinja2.FileSystemLoader("design/"))
     env.globals["DEBUG"] = debug
     env.globals["highlight"] = highlight
 
@@ -36,20 +38,22 @@ def build(
     ] = lambda template_file: env.get_template(str(template_file))
 
 
-    # Render posts
-    posts_output = output_dir / "posts"
-    posts_output.mkdir(exist_ok=True)
+    # Render index
+    template = load_template("index.html")
+    with open(output_dir / "index.html", "w") as f:
+        template.stream(state=state).dump(f)
+
+    # Render posts index
+    posts_dir = output_dir / "posts"
 
     # Render posts index
     template = load_template(Path("posts") / "index.html")
-    with open(posts_output / "index.html", "w") as f:
+    with open(posts_dir / "index.html", "w") as f:
         template.stream(state=state).dump(f)
 
     for post in state.posts:
         # Copy all files
-        post_path = posts_output / str(post.number)
-        source_post_path = source_dir / "pages" / "posts" / str(post.number)
-        shutil.copytree(source_post_path, post_path)
+        post_path = posts_dir / str(post.number)
 
         # load template
         template = load_template(Path("posts") / str(post.number) / "index.html")

@@ -1,0 +1,18 @@
+{% extends "templates/base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+  <h1>Latest posts</h1>
+  
+  
+  <div class="latest-posts">
+  {% for post in state.posts | sort(attribute='postedAt', reverse=True)  %}
+      <a href="{{post.get_url()}}">
+        <div class="post-block">{{ post.title }}</div>
+        <div class="post-block">{{ post.get_postedAt_format() }}</div>
+      </a>
+  {% endfor %}
+  </div>
+
+{% endblock %}
