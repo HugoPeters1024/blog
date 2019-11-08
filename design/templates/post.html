@@ -3,18 +3,10 @@
 {% block title %}{{post.title}}{% endblock %}
 
 {% block content %}
-    <h1>{% block post_title %}{{post.title}}{% endblock %}</h1>
-
-    {% block post %}
-      <p>Just some random stuff</p>
-
-      <p>
-        And a code block:
-        {% call macros.code("javascript") %}
-          const express = require('express');
-          const app = express;
-        {% endcall %}
-      <p>
-    {% endblock %}
+  {% block post %}
+  {% endblock %}
+  <div class="modified-at"> 
+    <small>last modified: {{post.modifiedAt}}</small>
+  </div>
 
 {% endblock %}

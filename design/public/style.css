@@ -304,3 +304,10 @@ footer .foot-box {
     justify-content: center;
   }
 }
+
+/* Posts */
+.modified-at {
+  color: rgba(0, 0, 0, 0.5);
+  text-align: right;
+  width: 100%;
+}

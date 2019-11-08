@@ -1,11 +1,6 @@
-{% extends "templates/base.html" %}
+{% extends "templates/post.html" %}
 
-{% block title %}{{post.title}}{% endblock %}
-
-{% block content %}
-    <h1>{% block post_title %}{{post.title}}{% endblock %}</h1>
-
-    {% block post %}
+{% block post %}
       <h2>What do we want</h2>
 
       <p>
@@ -18,7 +13,7 @@
         <ul>
           <li>Learn something</li>
           <li>Little maintance</li>
-          <li>Easy to update and add posts</li>
+          <li>Easy to add and update posts</li>
           <li>Ability to show code snippets</li>
         </ul>
       </p>
@@ -299,6 +294,4 @@
       over here on <a href="https://github.com/HugoPeters1024/blog" target="_blank">Github</a>. 
       </p>
       
-    {% endblock %}
-
 {% endblock %}

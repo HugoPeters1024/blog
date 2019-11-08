@@ -53,7 +53,7 @@ def post_create_cmd() -> None:
     new_id = 1 + max([x.number for x in state.posts])
     title = click.prompt("Title")
 
-    template_file = Path("design") / "templates" / "post.html"
+    template_file = Path("design") / "templates" / "post_empty.html"
 
     result_dir = Path("design") / "posts" / str(new_id)
     result_dir.mkdir(exist_ok=True)

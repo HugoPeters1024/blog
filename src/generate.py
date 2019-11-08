@@ -1,12 +1,15 @@
 import jinja2
 import shutil
 import click
+import os 
+from pathlib import Path
+from datetime import datetime
+from typing import Callable, List, Any
 from pygments.formatters import HtmlFormatter  # type: ignore
 import pygments.lexers  # type: ignore
-from pathlib import Path
-from typing import Callable, List, Any
 
 from src.state import State, Post
+
 
 
 def build(
@@ -51,8 +54,9 @@ def build(
         template.stream(state=state).dump(f)
 
     for post in state.posts:
-        # Copy all files
         post_path = posts_dir / str(post.number)
+
+        post.modifiedAt = lastModified(post_path).strftime("%b %-d %Y at %H:%M")
 
         # load template
         template = load_template(Path("posts") / str(post.number) / "index.html")
@@ -95,3 +99,12 @@ def highlight(lang: str, code: str) -> str:
     code = "\n".join(lines)
     lex = pygments.lexers.get_lexer_by_name(lang)
     return str(pygments.highlight(code, lex, formatter))
+
+def lastModified(path: Path) -> datetime:
+    latest = 0
+    for entry in path.glob("*"):
+        if not entry.is_dir():
+            (mode, ino, dev, nlink, uid, gid, size, atime, mtime, ctime) = os.stat(entry)
+            latest = max(latest, mtime)
+    return datetime.fromtimestamp(latest)
+
