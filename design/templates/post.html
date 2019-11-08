@@ -3,10 +3,11 @@
 {% block title %}{{post.title}}{% endblock %}
 
 {% block content %}
+  <h1>{{post.title}}</h1>
   {% block post %}
   {% endblock %}
   <div class="modified-at"> 
-    <small>last modified: {{post.modifiedAt}}</small>
+    <small>last modified: {{post.get_modifiedAt_format()}}</small>
   </div>
 
 {% endblock %}

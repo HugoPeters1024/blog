@@ -22,7 +22,7 @@ class Post:
         return f"/posts/{self.number}"
 
     def get_postedAt_format(self) -> str:
-        return self.postedAt.strftime("%b %d %Y")
+        return str(self.postedAt.strftime("%b %d %Y"))
 
     @classmethod
     def from_json(cls, json: Dict[str, Any]) -> Optional[Post]:
@@ -50,3 +50,17 @@ class State:
             return cls([x for x in posts if x is not None])
         except KeyError:
             return None
+
+
+@dataclass
+class PreparedPost(Post):
+    modifiedAt: datetime
+    abstract: str
+
+    def get_modifiedAt_format(self) -> str:
+        return str(self.modifiedAt.strftime("%b %-d, %Y at %H:%M"))
+
+
+@dataclass
+class PreparedState:
+    posts: List[PreparedPost]

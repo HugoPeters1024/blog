@@ -1,19 +1,19 @@
 import jinja2
 import shutil
 import click
-import os 
+import os
+import re
 from pathlib import Path
 from datetime import datetime
 from typing import Callable, List, Any
 from pygments.formatters import HtmlFormatter  # type: ignore
 import pygments.lexers  # type: ignore
 
-from src.state import State, Post
-
+from src.state import State, Post, PreparedPost, PreparedState
 
 
 def build(
-    source_dir: Path, state: State, output_dir: Path, debug: bool = False
+    source_dir: Path, locked_state: State, output_dir: Path, debug: bool = False
 ) -> None:
     if not Path.cwd() == Path.home() / "repos" / "blog":
         click.echo("Running from bad location")
@@ -40,6 +40,9 @@ def build(
         [Path], jinja2.Template
     ] = lambda template_file: env.get_template(str(template_file))
 
+    # Prepare state
+    state = prepareState(locked_state, output_dir)
+
     # Render index
     template = load_template(Path("index.html"))
     with open(output_dir / "index.html", "w") as f:
@@ -47,8 +50,6 @@ def build(
 
     # Render posts index
     posts_dir = output_dir / "posts"
-
-    # Render posts index
     template = load_template(Path("posts") / "index.html")
     with open(posts_dir / "index.html", "w") as f:
         template.stream(state=state).dump(f)
@@ -56,14 +57,34 @@ def build(
     for post in state.posts:
         post_path = posts_dir / str(post.number)
 
-        post.modifiedAt = lastModified(post_path).strftime("%b %-d %Y at %H:%M")
-
         # load template
         template = load_template(Path("posts") / str(post.number) / "index.html")
+        render = template.render(post=post)
 
         # overwrite template with rendered version
         with open(post_path / "index.html", "w") as f:
-            template.stream(post=post).dump(f)
+            f.write(render)
+
+
+def prepareState(state: State, root: Path) -> PreparedState:
+    posts_dir = root / "posts"
+    prepared_posts = []
+    for post in state.posts:
+        post_path = posts_dir / str(post.number)
+
+        modifiedAt = lastModified(post_path)
+
+        # load the abstract
+        abstract = "abstract not available"
+        abstract_path = post_path / "abstract.html"
+        if abstract_path.exists():
+            with open(abstract_path, "r") as f:
+                abstract = f.read()
+        prepared_posts.append(
+            PreparedPost(post.number, post.title, post.postedAt, modifiedAt, abstract)
+        )
+
+    return PreparedState(prepared_posts)
 
 
 def clear_directory(dir_path: Path) -> None:
@@ -100,11 +121,12 @@ def highlight(lang: str, code: str) -> str:
     lex = pygments.lexers.get_lexer_by_name(lang)
     return str(pygments.highlight(code, lex, formatter))
 
+
 def lastModified(path: Path) -> datetime:
     latest = 0
     for entry in path.glob("*"):
         if not entry.is_dir():
-            (mode, ino, dev, nlink, uid, gid, size, atime, mtime, ctime) = os.stat(entry)
+            mtime = int(entry.stat().st_mtime)
             latest = max(latest, mtime)
-    return datetime.fromtimestamp(latest)
 
+    return datetime.fromtimestamp(latest)

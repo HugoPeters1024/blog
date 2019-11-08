@@ -52,6 +52,7 @@ def post_create_cmd() -> None:
     state = getState()
     new_id = 1 + max([x.number for x in state.posts])
     title = click.prompt("Title")
+    abstract = click.prompt("Abstract", default="No abstract available")
 
     template_file = Path("design") / "templates" / "post_empty.html"
 
@@ -59,6 +60,11 @@ def post_create_cmd() -> None:
     result_dir.mkdir(exist_ok=True)
 
     shutil.copyfile(template_file, result_dir / "index.html")
+
+    # Create empty abstract
+    with open(result_dir / "abstract.html", "w") as f:
+        f.write(abstract)
+
     post = Post(new_id, title, datetime.now())
     state.posts.append(post)
     saveState(state)

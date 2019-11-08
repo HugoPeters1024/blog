@@ -275,6 +275,16 @@ footer .foot-box {
   padding: 0;
 }
 
+.post-grid p {
+  margin: 0;
+  padding: 0;
+}
+
+.post-grid p.abstract {
+  padding: 0.5em;
+  font-style: italic;
+}
+
 .post-grid-block {
   width: 15em;
   height: 10em;
@@ -306,6 +316,7 @@ footer .foot-box {
 }
 
 /* Posts */
+
 .modified-at {
   color: rgba(0, 0, 0, 0.5);
   text-align: right;
