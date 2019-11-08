@@ -1,7 +1,11 @@
 {% extends "templates/base.html" %}
 
 {% block content %}
-  {% for post in state.posts %}
-    <a href="/posts/{{post.number}}">{{ post.title }}</a>
-  {% endfor %}
+  <div class="post-grid">
+    {% for post in state.posts %}
+     <a href="{{post.get_url()}}" class="post-grid-block">
+       <h3>{{ post.title }}</h3>
+     </a>
+    {% endfor %}
+  </div>
 {% endblock %}

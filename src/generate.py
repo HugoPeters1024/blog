@@ -37,9 +37,8 @@ def build(
         [Path], jinja2.Template
     ] = lambda template_file: env.get_template(str(template_file))
 
-
     # Render index
-    template = load_template("index.html")
+    template = load_template(Path("index.html"))
     with open(output_dir / "index.html", "w") as f:
         template.stream(state=state).dump(f)
 
