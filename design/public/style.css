@@ -322,3 +322,15 @@ footer .foot-box {
   text-align: right;
   width: 100%;
 }
+
+/* Home page */
+
+.profile-picture {
+  float: right;
+  width: 25%;
+  max-width: 200px;
+}
+
+.about {
+  display: inline-block;
+}
