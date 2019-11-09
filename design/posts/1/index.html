@@ -1,18 +1,26 @@
 {% extends "templates/post.html" %}
 
 {% block post %}
-      <h2>What do we want</h2>
 
       <p>
-        What better way to start of a programming blog by writing a
-        piece on how I build this website itself? 
+        A very heartily welcome to my first blog post ever! I created this
+        blog for two main reasons: 1. To force myself to think deeply about programming
+        decisions (after all, it must somehow become a coherent narrative). And 2. as a way of 
+        putting myself out there as a software and computer science enthusiast, something that
+        will hopefully lead to meeting new people. So now, what a better way to start of a 
+        programming blog by writing a piece on how I created this website itself? Do note 
+        that I do not plan to keep editing and updating this post going forward, so if 
+        you are from the future the website may well be a little different than described 
+        here. Yet I think it can serve as an interesting write up of the experience of 
+        such an undertaking.
       </p>
 
+      <h2>What do we want</h2>
       <p>
         Let's kick it off with defining our requirements:
         <ul>
           <li>Learn something</li>
-          <li>Little maintance</li>
+          <li>Little maintenance</li>
           <li>Easy to add and update posts</li>
           <li>Ability to show code snippets</li>
         </ul>
@@ -21,13 +29,15 @@
       <h2>The old way is the gold way: static html</h2>
 
       <p>
-      Initially I started building a setup in Nodejs with nunjucks (a Jinja
-      templating engine). Whilst I rarely use javascript I've always been
-      attracted to the functional syntax of Nodejs and it's asynchronous nature.
+      Initially I started building a setup in NodeJs with nunjucks (a Jinja
+      templating engine). Whilst I rarely use javascript, I've always been
+      attracted to the functional syntax and asynchronous nature of NodeJs.
       However, in a discussion with a former peer student who has some years of
-      experience in DevOps, I learned that since data changes are rare and
-      request agnostic, a static site would be more sensical. This idea would also
-      tie in nicely with our low maintance requirement since we only need to care
+      serious experience in DevOps, I learned something new. Namely that since data 
+      changes are rare, and request agnostic, a static site would be more than adequate. 
+      Of course we can still use templates but the difference is that we 'build'  (state -> html)
+      only when we change or add something.  This idea would also
+      tie in nicely with our low maintenance requirement since we only need to care
       about keeping a trivial nginx server alive, which I know to be quite 
       trivial.
       <p>
@@ -50,10 +60,13 @@
       </ol>
 
       <h3>1. Defining the state</h3>
-      Being a very simple blog, it seems adequeate that our state is merely a list of posts.
+      Being a very simple blog, it seems adequate that our state is merely a list of posts.
       Let's define our types using the marvelous dataclasses introduced into python3.7:
 
       {% call macros.code("python") %}
+        from __future__ import annotations
+        from dataclasses import dataclass
+
         @dataclass
         class Post:
             number: int
@@ -94,11 +107,11 @@
       <h3>2. Creating templates</h3>
 
       <p>
-      Blogposts I love are those that contain clear, copyable code snippets. It goes then
-      without saying that I should adhere by the same standard. My forementioned friend that
-      advised build a static site, also recommended <a href="http://pygments.org">pygments</a> 
+      Blog posts I love are those that contain clear, copyable code snippets. It goes then
+      without saying that I should adhere by the same standard. My aforementioned friend that
+      advised to build a static site, also recommended <a href="http://pygments.org">pygments</a>
       to convert plain text code into syntax highlighted html. The great thing about Jinja is
-      the flexible way in which you can provide your template with custom functions. These means
+      the flexible way in which you can provide your template with custom functions. This means
       that we can write our highlight function the way we normally would in python and then
       simply inject it into our Jinja context.
       </p>
@@ -120,9 +133,10 @@
 
       <p>
       Now in our template we can easily call that function. However, because our code is
-      generally a multiline string contained all kinds of different strings themselves, it
-      would be a strenious task to somehow pipe all that text as argument. Not to mention
-      the appalling syntax we would have to swallow writing blogposts! Instead I found this
+      generally a multi-line string contained all kinds of different strings themselves, it
+      would be a strenuous task to somehow pipe all that text as argument without messing
+      with indentation, special characters, etc. Not to mention
+      the appalling syntax we would have to swallow writing blog posts! Instead I found this
       beautiful way to call a macro in jinja
       </p>
       {% call macros.code("html") %}
@@ -150,20 +164,22 @@
       <p>
       At this time I was introduced to another problem however; code segments are placed
       between 'pre' (preformated) tags. That means that the indent I so nicely added to my
-      templates to keep things readible, where now also showing up in the final result.
-      Evidently I could not simply remove a white space from the start of every line because I
+      templates to keep things readable, where now also showing up in the final result.
+      Evidently I could not simply remove all white space from the start of every line because I
       want to be able to present indented code snippets in a frivolous attempt to make the
-      impression that I write tidy code. Fixing this would require not us to consider all the
-      lines of code in the snippet simultaneously. What we want to the remove the leading indent
+      impression that I write tidy code. Fixing this problem would require us to consider all the
+      lines of code in the snippet together. What we want to the remove the leading indent
       of the snippet, or in other words remove all indent that is shared between all the lines.
-      Let's fix our highlight function to statisfy this new constraint:
+      Let's fix our highlight function so to satisfy this new constraint:
       </p>
 
       {% call macros.code("python") %}
       def highlight(lang: str, code: str) -> str:
           formatter = HtmlFormatter()
 
-          # special all() function that return false for empty sets
+          # special all() function that return false for empty sets, 
+          # otherwise we never terminate in the situation that the 
+          # code block contains only whitespace for example)
           alln: Callable[[List[Any]], bool] = lambda l: all(l) and len(l) > 0
 
           # Remove all shared whitespace
@@ -192,8 +208,9 @@
       <p>
       But all my troubles seemed to have been solved by the wonderful 
       <a href="https://click.palletsprojects.com/en/7.x/" target="_blank">click</a> package. 
-      It allowed me to effortlesly create commands and subgroups to eventually come to the
-      following set of commands:
+      It allowed me to effortlessly create commands and subgroups. Furthermore it can also be
+      configured that an argument should be path, allowing your favorite terminal to
+      auto complete your commands. Eventually I came to the following set of commands:
       </p>
 
       {% call macros.code("sh") %}
@@ -208,10 +225,12 @@
       <h3>4. Nginx configuration</h3>
       Now that we have everything setup, we just need a way to serve the files. For this we
       only need a simple and short nginx configuration that simply looks for the file specified
-      in the uri. To avoid having ugly looking uri's that end in .html, we simply leverage
-      the fact that nginx simply looks for index.html if no file is specified. So you, my dear
-      reader, only sees <i>/posts/1</i> for example, which in actuality is interpreted as
-      <i>/posts/1/index.html</i>.
+      in the uri. To avoid having ugly looking uri's that end in <i>.html</i>, we simply leverage
+      the fact that nginx simply looks for <i>index.html</i> if no file is specified. 
+      So you, my dear reader, only see <i>/posts/1</i> for example, which in actuality 
+      is interpreted as <i>/posts/1/index.html</i>. Note that in reality of course, 
+      we use a slightly longer configuration to enable ssl and redirect http to https, 
+      but that is outside the scope of this post. 
 
 
       {% call macros.code("nginx") %}
@@ -236,11 +255,17 @@
       {% endcall %}
 
       <h2>We want more, but mmm</h2>
-      During any coding project I find myself always arriving at that feeling; You want to
-      add a feature but it just doesn't really play nice with the existing codebase. In this
+      During any coding project I find myself always arriving at 'that' moment; You want to
+      add a feature but it just doesn't really play nice with the existing codebase, causing
+      you to edit way more source files than intended. In this
       case it was the feature of showing the last modified time the bottom of a post's page.
-      Getting the information is quite straightforward using Pathlib, but this is information
-      that was not in our original state. Previously we could think of our pipeline as follows:
+      Getting the information is quite straightforward using Pathlib, but there is no slot
+      for in our property state type. If you are familiar with python you might think 'why not
+      set the property at runtime? Isn't that what makes python so nice?'. You be very right,
+      this is an acceptable solution in the python world, but it does mean that you break your
+      predefined type, and we committed to having a sound typesystem. Therefore, we need not
+      mutate our existing state, but rather create a new extended type.
+      Previously we could think of our pipeline as follows:
 
       {% call macros.code("haskell") %}
       build :: "state.json" -> State -> html 
@@ -250,15 +275,18 @@
       typesystem as an ally we therefore have to adjust our plan to this:
 
       {% call macros.code("haskell") %}
-      build:: "state.json" -> State -> PreparedState -> html
+      build :: "state.json" -> State -> PreparedState -> html
       {% endcall %}
 
       We need to then create another set of types to represent this new state. While we're
-      added I also decided to leverage this functionality to the abstract from a seperate
-      file as well, this way I prevent myself from ever having to edit the state.json file, as
-      well as keeping it clean.
+      at it I also decided to leverage this newfound functionality to load the abstract of a post
+      from a separate file during that same transformation, this way I prevent myself from ever 
+      having to directly edit the state.json file, as well as keeping it clean and relevant post
+      information bundled.
 
       {% call macros.code("python") %}
+      # When inheriting from dataclasses, the constructor 
+      # parameters are a union of the parent's and the child's.
       @dataclass
       class PreparedPost(Post):
           modifiedAt: datetime
@@ -278,6 +306,8 @@
           for post in state.posts:
               post_path = posts_dir / str(post.number)
 
+              # Recursively finds the files in that path and
+              # return the most recent modification date.
               modifiedAt = lastModified(post_path)
 
               # load the abstract
@@ -288,7 +318,8 @@
                       abstract = f.read()
 
               prepared_posts.append(
-                  PreparedPost(post.number,
+                  PreparedPost(
+                  post.number,
                   post.title,
                   post.postedAt,
                   modifiedAt,
@@ -300,8 +331,10 @@
 
       And that's it! We now have access to two more properties when rendering posts
       in the template. Although it might seem a little tedious to have created a new
-      type, I do think that the redudancy there is a good tradeoff for making the
-      fetching of extra data a very explicit and maintainable step.
+      type, I do think that the redundancy there is a good trade off for making the
+      fetching of extra data a very explicit and maintainable step. In general, it
+      seems to be beneficial to think (and code) in terms of transformations 
+      or mappings instead of mutation.
 
       <h2>Looking back</h2>
       Let's take a look at what we have:
@@ -352,8 +385,8 @@
 
       <p>
       We have the our design directory that contains all of our templates and other files that I
-      might need in any future posts, conviently boxed in their own subdirectory. In our build
-      folder we have now have the exact same tree structure except that the files are new
+      might need in any future posts, conveniently boxed in their own subdirectory. In our build
+      folder we have now have the exact same tree structure except that the template are now
       rendered with the data provided by the state.json file (also I deleted the templates
       directory). I am particularly pleased by the simplicity of it all. Now we have all the 
       time in the world to fiddle with the layout and conjure a custom 404 page with images
@@ -362,7 +395,9 @@
 
       <p>
       And this concludes the project. If you want to take a look at the source you can find that
-      over here on <a href="https://github.com/HugoPeters1024/blog" target="_blank">Github</a>. 
+      over here on <a href="https://github.com/HugoPeters1024/blog" target="_blank">Github</a>.
+      If you enjoyed it, hated it, have any suggestions, or just want to say hi, 
+      feel free to email me!
       </p>
       
 {% endblock %}
