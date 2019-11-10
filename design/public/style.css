@@ -4,6 +4,7 @@
     --nav-text-hover: #e15f41;
     --nav-font: "Courier New", Courier, monospace;
     --white: #eee;
+    --black: #333;
 }
 
 body {
@@ -283,6 +284,7 @@ footer .foot-box {
 .post-grid p.abstract {
   padding: 0.5em;
   font-style: italic;
+  font-size: 0.9em;
 }
 
 .post-grid-block {
@@ -321,6 +323,21 @@ footer .foot-box {
   color: rgba(0, 0, 0, 0.5);
   text-align: right;
   width: 100%;
+}
+
+.code-languages {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.code-language {
+  padding: 0.4em;
+  margin: 0.2em;
+  margin-top: 0;
+  font-size: 0.8em;
+  background-color: var(--black);
+  color: var(--white);
+  border-radius: 5px;
 }
 
 /* Home page */

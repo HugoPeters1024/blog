@@ -7,6 +7,11 @@
        <h3>{{ post.title }}</h3>
        <p>posted at: {{ post.get_postedAt_format() }}</p>
        <p class="abstract">{{ post.abstract | safe }}</p>
+       <div class="code-languages">
+         {% for lang in post.languages %}
+           <div class="code-language">{{lang}}</div>
+         {% endfor %}
+       </div>
      </a>
     {% endfor %}
   </div>

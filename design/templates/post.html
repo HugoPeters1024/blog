@@ -3,6 +3,11 @@
 {% block title %}{{post.title}}{% endblock %}
 
 {% block content %}
+  <div class="code-languages">
+    {% for lang in post.languages %}
+    <div class="code-language">{{ lang }}</div>
+    {% endfor %}
+  </div>
   <h1>{{post.title}}</h1>
   {% block post %}
   {% endblock %}

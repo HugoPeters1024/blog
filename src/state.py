@@ -10,12 +10,14 @@ class Post:
     number: int
     title: str
     postedAt: datetime
+    languages: List[str]
 
     def to_json(self) -> Dict[str, Any]:
         return {
             "number": self.number,
             "title": self.title,
             "postedAt": self.postedAt.isoformat(timespec="seconds"),
+            "languages": self.languages,
         }
 
     def get_url(self) -> str:
@@ -30,8 +32,9 @@ class Post:
             number = int(json["number"])
             title = str(json["title"])
             postedAt = datetime.fromisoformat(json["postedAt"])
+            languages = json["languages"]
 
-            return cls(number, title, postedAt)
+            return cls(number, title, postedAt, languages)
         except KeyError:
             return None
 

@@ -81,7 +81,14 @@ def prepareState(state: State, root: Path) -> PreparedState:
             with open(abstract_path, "r") as f:
                 abstract = f.read()
         prepared_posts.append(
-            PreparedPost(post.number, post.title, post.postedAt, modifiedAt, abstract)
+            PreparedPost(
+                post.number,
+                post.title,
+                post.postedAt,
+                post.languages,
+                modifiedAt,
+                abstract,
+            )
         )
 
     return PreparedState(prepared_posts)

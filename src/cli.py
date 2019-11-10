@@ -34,7 +34,7 @@ def init_cmd(force: bool) -> None:
         click.echo("state.json already exists, blog already initialized")
         sys.exit(1)
 
-    state = State([Post(0, "test_post", datetime.now())])
+    state = State([Post(0, "test_post", datetime.now(), ["secret_language"])])
     state_path.write_text(json.dumps(state.to_json()))
 
 
@@ -53,6 +53,7 @@ def post_create_cmd() -> None:
     new_id = 1 + max([x.number for x in state.posts])
     title = click.prompt("Title")
     abstract = click.prompt("Abstract", default="No abstract available")
+    languages = click.prompt("Languages").split(",")
 
     template_file = Path("design") / "templates" / "post_empty.html"
 
@@ -65,7 +66,7 @@ def post_create_cmd() -> None:
     with open(result_dir / "abstract.html", "w") as f:
         f.write(abstract)
 
-    post = Post(new_id, title, datetime.now())
+    post = Post(new_id, title, datetime.now(), languages)
     state.posts.append(post)
     saveState(state)
     os.system("%s %s" % (os.getenv("EDITOR"), result_dir / "index.html"))

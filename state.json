@@ -3,12 +3,19 @@
         {
             "number": 0,
             "title": "test_post",
-            "postedAt": "2019-11-01T16:54:42"
+            "postedAt": "2019-11-01T16:54:42",
+            "languages": []
         },
         {
             "number": 1,
             "title": "Making a blog website",
-            "postedAt": "2019-11-01T17:22:20"
+            "postedAt": "2019-11-01T17:22:20",
+            "languages": [
+                "html",
+                "css",
+                "jinja",
+                "python"
+            ]
         }
     ]
 }
