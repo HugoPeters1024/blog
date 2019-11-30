@@ -340,6 +340,23 @@ footer .foot-box {
   border-radius: 5px;
 }
 
+.window {
+  display: flex;
+}
+
+.window .panel {
+  width: 50%
+}
+
+@media screen and (max-width: 1200px) {
+  .window {
+    display: block;
+  }
+  .window .panel {
+    width: 100%;
+  }
+}
+
 /* Home page */
 
 .profile-picture {
@@ -350,4 +367,33 @@ footer .foot-box {
 
 .about {
   display: inline-block;
+}
+
+/* Scientifc Table */
+table.rwd-table {
+  font-family: Verdana;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table.rwd-table thead tr th {
+  background-color: var(--black);
+  color: var(--white);
+  text-align: left;
+}
+
+table.rwd-table td {
+  padding: 0.5em;
+}
+
+table.rwd-table th {
+  padding: 0.5em;
+}
+
+table.rwd-table tbody tr:nth-child(even) {
+  background-color: #bbb;
+}
+
+table.rwd-table tbody tr:nth-child(odd) {
+  background-color: var(--white);
 }

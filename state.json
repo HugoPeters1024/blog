@@ -1,12 +1,6 @@
 {
     "posts": [
         {
-            "number": 0,
-            "title": "test_post",
-            "postedAt": "2019-11-01T16:54:42",
-            "languages": []
-        },
-        {
             "number": 1,
             "title": "Making a blog website",
             "postedAt": "2019-11-01T17:22:20",
@@ -14,6 +8,14 @@
                 "html",
                 "css",
                 "jinja",
+                "python"
+            ]
+        },
+        {
+            "number": 2,
+            "title": "The Knight of Hamilton",
+            "postedAt": "2019-11-27T19:11:30",
+            "languages": [
                 "python"
             ]
         }
