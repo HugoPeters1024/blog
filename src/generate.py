@@ -5,7 +5,7 @@ import os
 import re
 from pathlib import Path
 from datetime import datetime
-from typing import Callable, List, Any
+from typing import Callable, List, Any, Optional
 from pygments.formatters import HtmlFormatter  # type: ignore
 import pygments.lexers  # type: ignore
 
@@ -112,7 +112,7 @@ def clear_directory(dir_path: Path) -> None:
             entry.unlink()
 
 
-def highlight(lang: str, code: str) -> str:
+def highlight(lang: str, code: str, source: Optional[str]=None) -> str:
     formatter = HtmlFormatter()
 
     # special all() function that return false for empty sets
@@ -126,7 +126,14 @@ def highlight(lang: str, code: str) -> str:
                 lines[i] = lines[i][1:]
     code = "\n".join(lines)
     lex = pygments.lexers.get_lexer_by_name(lang)
-    return str(pygments.highlight(code, lex, formatter))
+    res = str(pygments.highlight(code, lex, formatter))
+    # Assuming tag ends with the 6 characters of '</div>'
+    if source:
+        res = (
+            res[:-7]
+            + f'<a class="source" href="{source}" target="_blank">full source</a></pre></div>'
+        )
+    return res
 
 
 def lastModified(path: Path) -> datetime:

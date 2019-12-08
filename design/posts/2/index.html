@@ -1,5 +1,9 @@
 {% extends "templates/post.html" %}
 
+{% set src = "https://github.com/HugoPeters1024/knightstour" %}
+
+{% block favicon %}/posts/2/knight_icon.jpg{% endblock %}
+
 {% block post %}
 
 <h2>Preface: A game and its rules</h2>
@@ -16,9 +20,9 @@ Don't tell my dad I gamble for money</i>
 
 <h2>Chapter 1: An impatient knight</h2>
 <p>
-A long time ago, in the old country of Hamilton we find a young, brave man riding a horse.
+A long time ago, in the old country of Hamilton, we find a brave young man riding a horse.
 Conflicted between the thrill of becoming an independent man and the distress of being
-sent away by his family, confidently traverses the various terrains towards the royal palace.
+sent away by his family, he confidently traverses the various terrains towards the royal palace.
 </p>
 
 <p>
@@ -90,7 +94,7 @@ the knight returned to the cabin.
 
 <div class="window">
 <div class="panel">
-  {% call macros.code('python') %}
+  {% call macros.code('python', source=src+"/blob/master/random_move.py") %}
     import random
 
     def tryRandom() -> int:
@@ -132,7 +136,7 @@ the knight returned to the cabin.
   <figure>
     <img src="random_move.png" alt="distribution plot of moves until blocked when randomly
     choosen" style="max-width:100%">
-    <figcaption>Fig.1 - Distribution plot of the number of moves made before he  
+    <figcaption>Fig.1 - Distribution plot of the number of moves made before the  
       knight was stuck. When any of these numbers would have been 36, the knight would have
       completed a tour.</figcaption>
   </figure>
@@ -168,13 +172,14 @@ the knight returned to the cabin.
   "It is just like the trees in the forest!" the knight yelled euphorically. Inside
   the knights head the cogs started turning.. "Well if you have a chessboard, each cell
   marked with the order of visiting it, or a 0 if it has never been visited, than we can
-  consider each possible move a sub three of that 'node'! The prince did not say anything
+  consider each possible move a sub tree of that 'node'! My fortune must be somewhere
+  at the top of the three, like a golden leaf! The prince did not say anything
   about using computers, I can simply program this out and let the computer find the solution!"
 </p>
 
 <div class="window">
   <div class="panel">
-    {% call macros.code('python') %}
+    {% call macros.code('python', padding=False, source=src+"/blob/master/depth_first.py") %}
     def printBoard(board, w, h):
         for y in range(h):
             for x in range(w):
@@ -229,12 +234,12 @@ the knight returned to the cabin.
         <tr><th>Board Size</th><th>Seconds to Find a Solution</th></tr>
       </thead>
       <tbody>
-      <tr><td>3x4</td><td>0.0000403919</td></tr>
+      <tr><td>3x4</td><td>0.0000404</td></tr>
       <tr><td>4x4</td><td>No solution</td></tr>
-      <tr><td>4x5</td><td>0.002298420004080981</td></tr>
-      <tr><td>5x5</td><td>0.01602805100264959</td></tr>
-      <tr><td>5x6</td><td>0.05149075100780465</td></tr>
-      <tr><td>6x6</td><td>39.208281058992725</td></tr>
+      <tr><td>4x5</td><td>0.00330</td></tr>
+      <tr><td>5x5</td><td>0.0160</td></tr>
+      <tr><td>5x6</td><td>0.0515</td></tr>
+      <tr><td>6x6</td><td>39.2</td></tr>
       </tbody>
     </table>
 
@@ -252,15 +257,350 @@ the knight returned to the cabin.
 </div>
 
 <p>
-Now without damaging his ego the knight was now able to see that victory was not yet in
+Without damaging his ego the knight was now able to see that victory was not yet in
 sight. The cabin owner had taught him to call the devil by his name 'exponential complexity'.
 Not only did he remember that the prince was able to solve the 6 by 6 board much faster
-than 39 seconds, he also knew that the 6 by 6 was merely a warm up. However, following
-the exponential curve it would seem that solving tour on boards larger than that would
-take minutes and quickly hours or days.
+than 39 seconds, he also knew that the 6 by 6 board was merely a warm up. However, following
+the exponential curve it would seem that solving the tour on boards larger than that would
+take minutes and quickly hours or days. As the sun set completely, the golden glow that
+seemed to radiate from the leaves, fades leaving a colorless soon to be compost.
+</p>
+
+<h2>Chapter 3: Taking a step back</h2>
+
+<p>
+At a loss for thinking of a better algorithm, the knight focused on optimizing the current
+one. He noticed how having to copy every board state to generate a successor was a non
+trivial operation compared to the rest. Furthermore, having to hold the stack in memory
+did feel a little redundant.
+<p>
+
+<p>
+Deep in the cellar of the cabin, a place filled with books and dust, the knight found
+a document on <a href="https://nl.wikipedia.org/wiki/Backtracking">Backtracking</a>. At
+first glance it appeared to be analogous to depth first search, but there were some
+benefits. First of all, there was no need to pop and push to a stack<sup>(*1)</sup>.
+Secondly, no copy of the board was needed, at every level of recursion the same board
+could be mutated in place. 
+</p>
+
+<p>
+The knight spent the rest of the week sweating away implementing the Knight's Tour
+solver using a backtracking approach. When it was finally ready, he couldn't wait
+to try out his new solution and ran it for a 6x6 board: 5.36 seconds! His heart started
+racing and a feeling of euphoria as he remembered the prince having to think a bit more
+than 5.36 seconds. Just to make sure he also plugged in 7x7: 0.34 seconds! Phenomenal!
+"If the devil is exponential, then god must be inverse exponential," the knight
+triumphantly thought to himself.
+</p>
+
+<p>
+His memory seemed to have served him correctly. The prince gave a small bow as he
+managed to beat him on the 6x6. "My congratulations my good man, but you know that
+to win the fortune you must beat me on not only 6x6 board, several larger ones as
+well," said the prince. The knight confidently followed the prince to another
+part of the garden where a 6x7 board was located. "Let's take it one step further,"
+said the prince invitingly. With the memory of the incredible speed in which he was
+able to solve a 7x7 he was already daydreaming of the surprised look the prince
+will have after beating him.
+</p>
+
+<p>
+Frustratingly, the truth could not be further removed from his dreams, as even after
+10 minutes, when the prince had long completed his tour, the knight was still
+backtracking. Feeling more flabbergasted than sad, he congratulated the prince and
+took of again to the old familiar cabin.
 </p>
 
 
+<div class="window">
+  <div class="panel">
+    {% call macros.code('python', padding=False, source=src+"/blob/master/backtracking.py") %}
+    def printBoard(board, w, h):
+        for y in range(h):
+            for x in range(w):
+                print(f"{board[x + w * y]}\t", end='')
+            print()
 
+
+    def isValid(board, w, h, pos):
+        (x, y) = pos
+        return x >= 0 and \
+               x <  w and \
+               y >= 0 and \
+               y <  h and \
+               board[x + w * y] == 0 \
+
+    def getMoves():
+        return [(2, 1), (2, -1), (-2, 1), (-2, -1),
+                (1, 2), (1, -2), (-1, 2), (-1, -2)]
+
+    def backtrack(board, w, h, x, y, move_c, show=True):
+        if move_c == w * h:
+            if show:
+                printBoard(board, w, h)
+            return True
+        
+        for (dx, dy) in getMoves():
+            nx = x + dx;
+            ny = y + dy;
+            if not isValid(board, w, h, (nx, ny)):
+                continue
+            move_c += 1
+            board[nx + w * ny] = move_c
+            if backtrack(board, w, h, nx, ny, move_c, show):
+                return True
+            move_c-=1
+            board[nx + w * ny] = 0
+
+        return False
+
+    def findSolution(w, h, show=True):
+        board = [0] * (w*h)
+        board[0] = 1
+        backtrack(board, w, h, 0, 0, 1, show)
+    {% endcall %}
+  </div>
+  <div class="panel">
+    <table class="rwd-table">
+      <thead>
+        <tr><th>Board Size</th><th>Seconds to Find a Solution</th></tr>
+      </thead>
+      <tbody>
+      <tr><td>3x4</td><td>0.000484</td></tr>
+      <tr><td>4x4</td><td>No solution</td></tr>
+      <tr><td>4x5</td><td>0.0256</td></tr>
+      <tr><td>5x5</td><td>0.166 </td></tr>
+      <tr><td>5x6</td><td>27.1</td></tr>
+      <tr><td>6x6</td><td>5.36</td></tr>
+      <tr><td>6x7</td><td>very long</td></tr>
+      <tr><td>7x7</td><td>0.338</td></tr>
+      <tr><td>7x8</td><td>very long</td></tr>
+      <tr><td>8x8</td><td>very long</td></tr>
+      </tbody>
+    </table>
+    <p>
+    <i>
+      Interestingly the time to complete appears to be not at all related
+      to the size of board. (Although larger boards never appear to have a
+      quick solution with this algorithm.)
+    </i>
+    </p>
+  </div>
+</div>
+
+<h2>Chapter 4: Depression, Despair, and Death</h2>
+<p>
+The knight was unable to hold back a few tears as he attended the
+funeral of the cabin owner. He was the only soul there, a fact only
+contributing to the tragedy. It had taken the knight multiple days
+to carve out the text in the gravestone. He found it only appropriate
+to make the cabin owner's most famous words were to ring into eternity:
+
+<p>
+<i>"If a work of fiction burns in a fire then the story dies with its
+writer. If a work of science burns in a fire, only the name of the
+author changes."</i> 
+</p>
+
+<p>
+The knight's soft sobbing changed to laughter because he only just now
+realised the irony of feeling resentment towards the cabin owner
+for not ever revealing the solution of that cursed cursed game.
+</p>
+
+<h2>Chapter 5: Sciens ex machina</h2>
+<p>
+His head was covered in sweat. The sheets were largely on the ground.
+The knight was heaving a nightmare<sup>(*2)</sup>. "No more ideas, oh
+brave knight," said the demon mockingly with a deep voice. "Your parents
+must be celebrating, they knew you would never be smart enough to make
+a fortune." The knight was paralyzed, it felt like the gravity dial
+was turned way up. Then something grabbed him by the hand and flew with
+him in the air.
+</p>
+
+<p>
+After an incomprehensible flight path, he was gracefully laid down in a 
+soft green patch of grass. The creature that had brought him there landed
+next to him. "What were you thinking, wandering so far from the human world,"
+the creature began. "Have your parents never told you to first look for
+answers close by? If you run all the way around the world you might not
+find the gold buried in your backyard. It's all about heuristics really..."
+</p>
+
+<p>
+The knight woke up feeling like his head was hit with a brick. That feeling
+would persist until well after sunset when it suddenly started to retreat.
+Like ebb and flow the headache replaced itself with an unprecedented clarity
+and one word from all the books in the cabin's cellar echoed in his skull:
+"Warndorff, Warndorff, Warndorff..."
+</p>
+
+<p>
+In the weeks following the cabin owner's death, the knight had spent most of
+his time on taking care of the cabin and rarely thought of the Knight's Tour.
+When he did try to gain more knowledge by scrolling through the old books, he
+was often distracted by his persisting grief. Yet that evening, having reflected
+all day on his dream it all seemed to come together. Every word he read but
+forget came surging back into his conciousness. "Warndorff.. Warndorff.. Warndorff's
+method!," his memory screamed. It was all so clear now. Backtracking is not that
+bad of an idea at all but it matters which path you choose. That's why the results
+varied so much, sometimes he was just lucky choosing the right move. Backtracking is
+of course based on the fact that you do not know the correct path upfront but that
+doesn't mean that you cannot make an educated guess. It's like the winged creature
+from his dream suggested, if go far from home to find adventure you will miss the
+small adventures close by forever. Just like the cells on the chessboard, if you
+do not visit the cells that are almost boxed in you may never see them again! You
+first got to choose the nearly closed doors before exploring new ones. That's the
+heuristic! Choose a move that has the least follow up moves first!
+</p>
+
+<div class="window">
+  <div class="panel">
+    {% call macros.code('python', padding=False, source=src+"/blob/master/warndorff.py") %}
+      import sys
+      # Allow for more recursion
+      sys.setrecursionlimit(100000)
+
+      def printBoard(board, w, h):
+          for y in range(h):
+              for x in range(w):
+                  print(f"{board[x + w * y]}\t", end='')
+              print()
+
+
+      def isValid(board, w, h, pos):
+          (x, y) = pos
+          return x >= 0 and \
+                 x <  w and \
+                 y >= 0 and \
+                 y <  h and \
+                 board[x + w * y] == 0 \
+
+      def getMoves():
+          return [(2, 1), (2, -1), (-2, 1), (-2, -1),
+                  (1, 2), (1, -2), (-1, 2), (-1, -2)]
+
+
+      def countMoves(board, w, h, x, y):
+          "Count the number of valid moves from a given position"
+          count=0
+          for (dx, dy) in getMoves():
+              if isValid(board, w, h, (x+dx, y+dy)):
+                  count += 1
+          return count
+
+      def getMovesHeuristic(board, w, h, x, y):
+          """
+          Note that to calculate the heuristic, we already need
+          to find the new absolute position, so be might as 
+          well give that back instead of doing it again later.
+          """
+          choices = []
+          # Determine all valid moves add annotate them
+          # with the heuristic, i.e. the number of follow
+          # up moves.
+          for (dx, dy) in getMoves():
+              nx = x + dx
+              ny = y + dy
+              if isValid(board, w, h, (nx, ny)):
+                  choices.append(
+                      ((nx, ny), countMoves(board, w, h, nx, ny)))
+          # sort the position by their heuristic
+          choices.sort(key=lambda x: x[1])
+          # strip the heuristic and the return
+          # the result
+          return [m for (m, _) in choices]
+
+      def backtrack(board, w, h, x, y, move_c, show=True):
+          if move_c == w * h:
+              if show:
+                  printBoard(board, w, h)
+              return True
+          
+          for (nx, ny) in getMovesHeuristic(board, w, h, x, y):
+              # No need to check the move, the heuristic
+              # function has already done that for us.
+              move_c += 1
+              board[nx + w * ny] = move_c
+              if backtrack(board, w, h, nx, ny, move_c, show):
+                  return True
+              move_c-=1
+              board[nx + w * ny] = 0
+
+          return False
+
+      def findSolution(w, h, show=True):
+          board = [0] * (w*h)
+          board[0] = 1
+          if not backtrack(board, w, h, 0, 0, 1, show):
+              print("No solution")
+    {% endcall %}
+  </div>
+  <div class="panel">
+    <table class="rwd-table">
+      <thead>
+        <tr><th>Board Size</th><th>Seconds to Find a Solution</th></tr>
+      </thead>
+      <tbody>
+      <tr><td>4x5</td><td>0.000161</td></tr>
+      <tr><td>5x5</td><td>0.000776</td></tr>
+      <tr><td>5x6</td><td>0.000304</td></tr>
+      <tr><td>6x6</td><td>0.000346</td></tr>
+      <tr><td>7x7</td><td>0.000561</td></tr>
+      <tr><td>8x8</td><td>0.000782</td></tr>
+      <tr><td>15x15</td><td>0.00338</td></tr>
+      <tr><td>50x50</td><td>0.0420</td></tr>
+      <tr><td>70x70</td><td>0.0762</td></tr>
+      <tr><td>40x100<sup>(*3)</sup></td><td>0.0572</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+Never before had a prince experienced that much agony and confusion as the time
+a most determined knight did challenge him again; For with a broad smile on his face, the 
+knight went home with a fortune that no could one ever take away from him. When somebody
+would ever ask him about his fortune he would simply say <i>"If a work of fiction 
+burns in a fire then the story dies with its writer. If a work of science 
+burns in a fire, only the name of the author changes."</i> 
+
+<h2>Epilogue</h2>
+What the knight had learned was not simply the meaning of fortune, nor
+that the value of life did not have any monetary value. Not even that taking
+care of a cabin in the woods sounds like a pretty neat idea. Whilst al those thing
+might be true, the real lesson is that an algorithm and its respective complexity
+alone is not always enough to make a judgement. Heuristics may not change
+the fact that it takes O(n<sup>2</sup>) to solve the Knight's Problem, yet it
+matters a hell of lot.
+
+<h2>Notes</h2>
+
+<span class="citings">
+  <p>
+  *1 <i>Granted, the previously explicit stack is now obscured by, well literally
+    the process' stack in order to manage all the recursive calls. Backtracking is
+    therefore not significantly less memory intense (in fact, neither DFS nor backtracking
+    are memory intense at all)</i>
+  </p>
+  
+  <p>
+  *2 <i>This phenomenon is more commonly known as a 'knightmare'</i>
+  </p>
+
+  <p>
+  *3 <i>The inverse, 100x40, takes ages (longer than my patience at least), 
+    I have no idea why. Please let me know if you have any idea. (edit: my
+    hyphothesis is that the unmeaningful order of moves are preserved when
+    heuristic is equal. It might be benificial to make the getMoves() method
+    return the moves in a more semantically meaningful order, like as clockwise vectors)</i>
+  </p>
+
+</span>
+<p>
+The full source, including benchmarking can be found over on <a target="_blank" href="https://github.com/HugoPeters1024/knightstour">Github</a>
+</p>
 
 {% endblock %}

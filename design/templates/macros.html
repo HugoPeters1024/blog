@@ -1,4 +1,6 @@
-{% macro code(language) -%}
-    {{ highlight(language, caller()) }}
+{% macro code(language, padding=True, source=None) -%}
+{% if padding %}<p>{% endif %}
+    {{ highlight(language, caller(), source) }}
+{% if padding %}</p>{% endif %}
 {%- endmacro %}
 

@@ -34,11 +34,11 @@
         },
         "dataclasses-json": {
             "hashes": [
-                "sha256:3f348a132c6c84772b99fca50c447ef3b8382d274fd9a539c958dd9b93ba4806",
-                "sha256:8851be971187d22a898247ffff9b23de6d5d1db93b8e648997a71a2e4023d13c"
+                "sha256:616876ac06ca3a8f2ae977a4e044850e81dbd3f86a404430b783e12f017b75b5",
+                "sha256:ebdf7407681763d6125fd00d15ed037cc3aa6f9129fe7634e8f891410e89559f"
             ],
             "index": "pypi",
-            "version": "==0.3.5"
+            "version": "==0.3.6"
         },
         "jinja2": {
             "hashes": [
@@ -83,10 +83,10 @@
         },
         "marshmallow": {
             "hashes": [
-                "sha256:077b4612f5d3b9333b736fdc6b963d2b46d409070f44ff3e6c4109645c673e83",
-                "sha256:9a2f3e8ea5f530a9664e882d7d04b58650f46190178b2264c72b7d20399d28f0"
+                "sha256:1a358beb89c2b4d5555272065a9533591a3eb02f1b854f3c4002d88d8f2a1ddb",
+                "sha256:eb97c42c5928b5720812c9268865fe863d4807bc1a8b48ddd7d5c9e1779a6af0"
             ],
-            "version": "==3.2.1"
+            "version": "==3.2.2"
         },
         "marshmallow-enum": {
             "hashes": [
@@ -111,11 +111,11 @@
         },
         "pygments": {
             "hashes": [
-                "sha256:71e430bc85c88a430f000ac1d9b331d2407f681d6f6aec95e8bcfbc3df5b0127",
-                "sha256:881c4c157e45f30af185c1ffe8d549d48ac9127433f2c380c24b84572ad66297"
+                "sha256:2a3fe295e54a20164a9df49c75fa58526d3be48e14aceba6d6b1e8ac0bfd6f1b",
+                "sha256:98c8aa5a9f778fcd1026a17361ddaf7330d1b7c62ae97c3bb0ae73e0b9b6b0fe"
             ],
             "index": "pypi",
-            "version": "==2.4.2"
+            "version": "==2.5.2"
         },
         "stringcase": {
             "hashes": [

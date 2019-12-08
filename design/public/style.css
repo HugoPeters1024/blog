@@ -219,7 +219,7 @@ footer .foot-box {
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(400px, 5fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 2fr) minmax(400px, 8fr) minmax(0, 4fr);
     /* Instead of justify-self: start */
     margin-bottom: auto;
 }
@@ -229,6 +229,18 @@ footer .foot-box {
     padding: 1em;
     grid-column: 2 / 3;
     color: black;
+}
+
+@media screen and (max-width: 1200px) {
+  .content {
+    grid-template-columns: minmax(0, 2fr) minmax(400px, 7fr) minmax(0, 3fr);
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .content {
+    grid-template-columns: minmax(0, 2fr) minmax(400px, 7fr) minmax(0, 2fr);
+  }
 }
 
 /* Code */
@@ -345,7 +357,19 @@ footer .foot-box {
 }
 
 .window .panel {
-  width: 50%
+  width: 50%;
+  padding: 0.6em;
+}
+
+.citings {
+  font-size: 0.86em;
+}
+
+a.source {
+  color: inherit;
+  float: right;
+  margin-right: 0.5em;
+  font-size: 0.9em;
 }
 
 @media screen and (max-width: 1200px) {
@@ -363,6 +387,7 @@ footer .foot-box {
   float: right;
   width: 25%;
   max-width: 200px;
+  margin-left: 1em;
 }
 
 .about {
