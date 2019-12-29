@@ -18,6 +18,15 @@
             "languages": [
                 "python"
             ]
+        },
+        {
+            "number": 3,
+            "title": "C# can be functional pt1: The Maybe Monad",
+            "postedAt": "2019-12-15T23:27:25",
+            "languages": [
+                "haskell",
+                "C#"
+            ]
         }
     ]
 }
