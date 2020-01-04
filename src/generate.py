@@ -31,17 +31,18 @@ def build(
         else:
             shutil.copy(entry, output_dir)
 
+    # Prepare state
+    state = prepareState(locked_state, output_dir)
+
     # Setup jinja2 context
     env = jinja2.Environment(loader=jinja2.FileSystemLoader("design/"))
     env.globals["DEBUG"] = debug
     env.globals["highlight"] = highlight
+    env.globals["refPostString"] = lambda post_id: refPostString(state, post_id)
 
     load_template: Callable[
         [Path], jinja2.Template
     ] = lambda template_file: env.get_template(str(template_file))
-
-    # Prepare state
-    state = prepareState(locked_state, output_dir)
 
     # Render index
     template = load_template(Path("index.html"))
@@ -144,3 +145,13 @@ def lastModified(path: Path) -> datetime:
             latest = max(latest, mtime)
 
     return datetime.fromtimestamp(latest)
+
+
+def refPostString(state: PreparedState, post_id: int) -> str:
+    for post in state.posts:
+        if post.number == post_id:
+            res_post = post
+            break
+    else:
+        raise Exception(f"Post {post_id} does not exist but is referenced")
+    return f'<a href="/posts/{post_id}">{res_post.title}</a>'

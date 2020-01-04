@@ -27,6 +27,15 @@
                 "haskell",
                 "C#"
             ]
+        },
+        {
+            "number": 4,
+            "title": "C# can be functional pt2: Lists are Monads",
+            "postedAt": "2020-01-04T18:59:02",
+            "languages": [
+                "C#",
+                "haskell"
+            ]
         }
     ]
 }

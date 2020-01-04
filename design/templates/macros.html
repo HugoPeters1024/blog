@@ -4,3 +4,6 @@
 {% if padding %}</p>{% endif %}
 {%- endmacro %}
 
+{% macro refPost(id) -%}
+  {{ refPostString(id) | safe }}
+{%- endmacro %}
