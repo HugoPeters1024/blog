@@ -112,7 +112,7 @@ def clear_directory(dir_path: Path) -> None:
             entry.unlink()
 
 
-def highlight(lang: str, code: str, source: Optional[str]=None) -> str:
+def highlight(lang: str, code: str, source: Optional[str] = None) -> str:
     formatter = HtmlFormatter()
 
     # special all() function that return false for empty sets

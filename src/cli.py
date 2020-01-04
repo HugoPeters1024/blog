@@ -47,6 +47,13 @@ def build_cmd(debug: bool) -> None:
     generate.build(source_dir, state, output_dir, debug=debug)
 
 
+@post.command(name="list")
+def post_list_cmd() -> None:
+    state = getState()
+    for post in state.posts:
+        print(f"{post.number}. {post.title}")
+
+
 @post.command(name="create")
 def post_create_cmd() -> None:
     state = getState()
