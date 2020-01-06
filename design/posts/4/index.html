@@ -67,17 +67,16 @@ public static void PrintAll<T>(this SList<T> list)
 {% endcall %}
 </p>
 
-<h2>Basic list operation</h2>
-To make our lives a bit more easier down the road, and to explore
-defining our own list type, we will define the basic concat
-operation, which simply concatenates two lists, as well as the zip operation,
-which joins every element of two lists at the same index in a tuple. When the lists
-are of different sizes the zip operations stops when the one of the lists is consumed.
+<h2>Basic list operations</h2>
+To both make our lives a bit more easier down the road, as well as to 
+get familiar with our newly found list type, we will define the basic concat
+operation, which simply concatenates two lists.
 
 {% call macros.code("csharp", source=Msrc) %}
 public static SList<T> concat<T>(this SList<T> one, SList<T> two)
 {
-    // This is C# 8 syntax
+    // This is C# 8 syntax, of course it can be done in earlier
+    // versions as well but less elegantly.
     switch ((one, two))
     {
         case (Empty<T> _, _): return two;
@@ -87,19 +86,6 @@ public static SList<T> concat<T>(this SList<T> one, SList<T> two)
             return new Cons<T>(
               left.Head,
               left.Tail.concat(two));
-    }
-}
-
-public static SList<(T1, T2)> zip<T1, T2>(this SList<T1> one, SList<T2> two)
-{
-    switch ((one, two))
-    {
-        case (Empty<T1> _, _): return new Empty<(T1, T2)>();
-        case (_, Empty<T2> _): return new Empty<(T1, T2)>();
-        default:
-            var left = one as Cons<T1>;
-            var right = two as Cons<T2>;
-            return new Cons<(T1, T2)>((left.Head, right.Head), left.Tail.zip<T1, T2>(right.Tail));
     }
 }
 {% endcall %}
@@ -175,12 +161,28 @@ public static SList<string> ToWord(SList<int> list)
 <h3>Ab makes Applicatives</h3>
 "To apply an argument wrapped in an object to an object containing a function." is the sentence
 that one ought to remember when implementing the function that ensures 
-membership of the applicative typeclass. Similar to fmap repetition is the
-key, we simply apply the given list of arguments to every function in the main list:
+membership of the applicative typeclass. Just like with fmap, repetition is the
+key: we simply apply the given list of arguments to every function in the main list. There
+is however a nuance in the fact that instead of a single function we now get a lists of arguments
+for a lists of functions but there is no constraint that tells us that these lists are of equal size.
+To resolve this issue we simply consume only the items that have a respective element in the other list.
+Any excess is simply discarded.
 
 {% call macros.code("csharp", source=Msrc) %}
 public static SList<TOut> ab<TIn, TOut>(this SList<Func<TIn, TOut>> list, SList<TIn> arg)
-    => list.zip(arg).fmap(t => t.Item1(t.Item2));
+{
+    switch ((list, arg))
+    {
+        // Base cases, either list is empty
+        case (Empty<Func<TIn, TOut>> _, _): return new Empty<TOut>();
+        case (_, Empty<TIn> _): return new Empty<TOut>();
+        // Recursive case, apply argument to function and continue with the tail.
+        default:
+            var funcs = list as Cons<Func<TIn, TOut>>;
+            var args = arg as Cons<TIn>;
+            return new Cons<TOut>(funcs.Head(args.Head), funcs.Tail.ab(args.Tail));
+    }
+}
 {% endcall %}
 
 <h3>Bind and pure and ye shall be a monad</h3>
@@ -255,6 +257,9 @@ If we write down the steps we can derive what the pure function should yield:
 4. [p(1), p(2), ..., p(n)] == [[1], [2], ..., [n]]
 -- From that follows
 5. forall x -> p(x) = [x]
+-- Therefore is the singleton constructor valid under right identity
+-- (Note that the other 2 laws should hold as well but I leave that as
+-- an exercise)
 {% endcall %}
 
 So now the rather trivial implementation is the only thing that awaits us:
@@ -306,13 +311,33 @@ public static SList<TOut> listComprension<TIn, TOut>(
     });
 {% endcall %}
 
-And to not forget the usefulness of fmap and ab for composition:
+A function that has found popularity in many mainstream languages is zip: it takes
+to lists and returns one new list with tuples containing the respective elements of the
+two lists. for example:
 
-{% call macros.code("csharp") %}
-public static SList<int> sumLists(SList<int> one, SList<int> two)
+{% call macros.code("haskell") %}
+-- Ideal case, lists are of equal size
+1. zip [1,2,3] ['a','b', 'c'] = [(1, 'a'), (2, 'b'), (3, 'c')]
+-- In case of different size lists, the excess is discarded
+2. zip [1] [9,10,11] = [(1, 9)]
+{% endcall %}
+
+In haskell you could define zip yourself as follows:
+
+{% call macros.code("haskell") %}
+zip :: [a] -> [b] -> [(a,b)]
+zip x y = (,) <$> x <*> y
+-- Note that (,) is a function of type :: a -> b -> (a,b)
+-- In other words this is the tuple constructor
+{% endcall %}
+
+But of course nothing can now stop us from doing the exact same in our C# project:
+
+{% call macros.code("csharp", source=Dsrc) %}
+public static SList<(T1, T2)> zip<T1, T2>(SList<T1> one, SList<T2> two)
 {
-    Func<int, Func<int, int>> sumFunc = a => b => a + b;
-    return sumFunc.fmap(one).ab(two);
+    Func<T1, Func<T2, (T1, T2)>> mkTuple = x => y => (x, y);
+    return mkTuple.fmap(one).ab(two);
 }
 {% endcall %}
 
