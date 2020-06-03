@@ -121,7 +121,7 @@ def preview_cmd(port: int, bind: str, watch: bool) -> None:
     """Run a local webserver on build output"""
     output_dir = Path("ignore/build")
     if not output_dir.is_dir():
-        click.echo("No output to serve. Please run `pxl build` first.", err=True)
+        click.echo("No output to serve. Please run `blog build` first.", err=True)
         sys.exit(1)
 
     click.launch(f"http://localhost:{port}")

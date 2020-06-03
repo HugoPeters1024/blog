@@ -15,9 +15,6 @@ from src.state import State, Post, PreparedPost, PreparedState
 def build(
     source_dir: Path, locked_state: State, output_dir: Path, debug: bool = False
 ) -> None:
-    if not Path.cwd() == Path.home() / "repos" / "blog":
-        click.echo("Running from bad location")
-        exit(1)
 
     clear_directory(output_dir)
     output_dir.mkdir(exist_ok=True, parents=True)
@@ -42,7 +39,7 @@ def build(
 
     load_template: Callable[
         [Path], jinja2.Template
-    ] = lambda template_file: env.get_template(str(template_file))
+    ] = lambda template_file: env.get_template(str(template_file).replace('\\', '/'))
 
     # Render index
     template = load_template(Path("index.html"))
@@ -63,7 +60,7 @@ def build(
         render = template.render(post=post)
 
         # overwrite template with rendered version
-        with open(post_path / "index.html", "w") as f:
+        with open(post_path / "index.html", "w", encoding="utf-8") as f:
             f.write(render)
 
 

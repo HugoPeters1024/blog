@@ -61,7 +61,7 @@ class PreparedPost(Post):
     abstract: str
 
     def get_modifiedAt_format(self) -> str:
-        return str(self.modifiedAt.strftime("%b %-d, %Y at %H:%M"))
+        return str(self.modifiedAt.strftime("%b %d, %Y at %H:%M"))
 
 
 @dataclass

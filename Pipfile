@@ -18,7 +18,7 @@ black = "==18.9b0"
 [scripts]
 format = "black ."
 typecheck = "mypy --strict ."
-blog = "python3 main.py"
+blog = "python main.py"
 
 [requires]
 python_version = "3.7"
