@@ -1,0 +1,51 @@
+{% extends "templates/post.html" %}
+
+{% block header %}
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+{% endblock %}
+
+{% block post %}
+
+<h2>Introduction</h2>
+My mother is a teacher on a primary school at which she often works with the gifted kids that
+yearn for an extra challenge. One of these challenges she provided them was called the <i>Boomerang Problem</i><sup>1</sup>.
+The goal of the challenge is to find the largest number that cannot be represented as the sum of multiples of two given numbers (called the boomerangs).
+So for example, given the number 4 and 5, you can construct 17 as 3 * 4 + 1 * 5. However, the number 11 cannot be represented that
+way and is therefore the answer to our problem. In this post we will try to formulate a generic method for finding this largest number
+given any two boomerangs.
+
+
+
+<h2>Euclid would like to interject for a moment</h2>
+<p>
+Before we try to answer the question of the largest number we must asks ourselved first: does such a number always exist? And in fact, this
+happens to not always be the case. The easiest counter example that you can think of is when the two boomerangs are even numbers. After all,
+both the sum and a multiple of even numbers remain even. As a result, two even boomerangs will never be able to express an odd number, making
+the question "What is the largest number that cannot be expressed?", rather nonsensical.
+</p>
+
+<p>
+Even numbers carry with them a property that troubles the water in the same way that 6 and 9 are two boomerangs for which the question becomes non-sensical.
+Namely, they are both a multiple of a number other than 1. This number number is known as the Greatest Common Divider (Or GCD for short). We know that if the
+GCD of two numbers is some number z, that z+1 can never be expressed. 
+</p>
+
+<p>
+Luckily there is a relatively simple method for determining the GCD which is known as the Euclidian Algorithm<sup>2</sup>.
+</p>
+
+<h2>Developing an intuition by force</h2>
+
+<h2>Proof that the number can never be expressed</h2>
+
+<h2>Proof that any larger number can be constructed</h2>
+
+
+<h2>References</h2>
+
+<ol>
+  <li>Boomerang Problem by <a target="_blank" href="https://www.mathplay.eu/files/media/boomerang.pdf">MathPickle</a></li>
+  <li>Wikipedia page about the <a href="https://en.wikipedia.org/wiki/Euclidean_algorithm">Euclidian Algorithm</a></li>
+</ol>
+
+{% endblock %}
