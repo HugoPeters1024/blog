@@ -6,7 +6,6 @@ verify_ssl = true
 [packages]
 click = "*"
 pathlib = "*"
-dataclasses = "*"
 dataclasses-json = "*"
 jinja2 = "*"
 pygments = "*"
@@ -21,4 +20,4 @@ typecheck = "mypy --strict ."
 blog = "python main.py"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"
