@@ -69,6 +69,15 @@
                 "c++",
                 "glsl"
             ]
+        },
+        {
+            "number": 9,
+            "title": "Shining light on a die",
+            "postedAt": "2021-03-12T21:12:31",
+            "languages": [
+                "C++",
+                "cuda"
+            ]
         }
     ]
 }
