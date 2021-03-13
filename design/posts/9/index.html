@@ -65,7 +65,7 @@ But it looks more daunting than it is.
 </p>
 
 <p>
-  But before we go that route, I think I owe a window into to future that justifies why we are going through all this. 
+  But before we go that route, I think I owe you a window into to future that justifies why we are going through all this. 
   What we want to be able to do is realistically render how light interacts with a scene and get images like
   the following.
 </p>
@@ -100,7 +100,7 @@ The source code for the program (written in C++ and cuda) can be found over on m
 
 <p>
   Lastly, we are not required to sample the domain of the integral uniformly, as long as we correct for
-  the fact that we have 'bias' to certain subsections of the domain. In fact, we can use any Probability Density (PDF) we function we like, as long as it never zero (unless the integral itself is also zero there) and integrates to one (we want to be energy preserving after all).
+  the fact that we have 'bias' to certain subsections of the domain. In fact, we can use any Probability Density Function (PDF) we like, as long as it never zero (unless the integral itself is also zero there) and integrates to one (we want to be energy preserving after all).
 </p>
 
 <p>
@@ -110,13 +110,13 @@ went a little too fast.
 
 <h2> NEE? Yes! </h2>
 
-Next Event Estimation (NEE) is a wonderful little trick which bring is very close to the trick I'd like to show you today. 
+Next Event Estimation (NEE) is a wonderful little trick which bring us very close to the trick I'd like to show you today. 
 The point of NEE is to sample direct and indirect light separately. As most of the energy
 will come from direct light it makes sense to sample with a higher probability making our pathtracer
 converge faster. To do this we effectively split the PDF in two, and cheat a little bit by
 assuming that the irradiance of surface from which we sample our direct light is dominated by
 its own emission term. (i.e. a light bulb doesn't appear brighter when you turn on another light).
-This allows us to get much much less variance with few samples:
+This allows us to get much less variance with few samples:
 
 <div class="window">
   <div class="panel"><img width=100% src="NEE_OFF.jpeg" alt="pathtracer without NEE"></div>
@@ -129,14 +129,14 @@ choose a point on an emissive triangle and trace it back to our point o to ensur
 <h2> Don't you turn your back on me! </h2>
 
 <p>
-  The cost of pathtracing used to originate mostly on performing the scene intersection that helps us find point i after selecting a random direction to sample the hemisphere (or light source directly). 
+  The cost of pathtracing used to originate mostly from the scene intersection procedure that helps us find point i after selecting a random direction to sample the hemisphere (or light source directly). 
   Lately, with dedicated hardware support like Nvidia's RTX cores it's actually the cost of shading that has taken over. Whatever way you put it though, it's clear that shading and
   intersecting together make up most of the costs. 
 </p>
 
 <p>
   Consequently, that gives us quite a reasonable budget when generating samples to do some extra work if it decreases variance. And we still have an efficiency problem
-  when sampling direct light. Namely, light sources themselves can be meshes (like the cube in the in the first set of images) and as usually the case with meshes, we have a notion
+  when sampling direct light. Namely, light sources themselves can be meshes (like the cube in the in the first set of images) and as is usually the case with meshes, we have a notion
   of the outside and inside, determined by the winding order of vertices. As most meshes are closed this means that we will never ever receive light from the backface of
   a triangle (the light doesn't escape the closed mesh).
   Therefore, after we have chosen a light vertex to sample direct light, we can first determine if we are perhaps looking at the backface of this triangle,
