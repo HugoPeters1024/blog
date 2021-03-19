@@ -4,9 +4,13 @@
   {% import 'templates/macros.html' as macros %}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
   <link rel="stylesheet" type="text/css" href="/public/pygments.css">
   <link rel="stylesheet" type="text/css" href="/public/style.css">
-  {% if DEBUG and False %}
+
+  {% if DEBUG %}
     <script type="text/javascript" src="http://livejs.com/live.js"></script>
   {% endif %}
   {% block header %}
@@ -15,6 +19,9 @@
   <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
+  {% if DEBUG %}
+  <h1 color=red>DEBUG</h1>
+  {% endif %}
 
   {% block nav %}
     {% include 'templates/nav.html' %}

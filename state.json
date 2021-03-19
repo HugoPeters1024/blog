@@ -78,6 +78,14 @@
                 "C++",
                 "cuda"
             ]
+        },
+        {
+            "number": 10,
+            "title": "Who still uses ReaderT",
+            "postedAt": "2021-03-18T22:33:53",
+            "languages": [
+                "haskell"
+            ]
         }
     ]
 }

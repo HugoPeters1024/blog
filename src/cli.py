@@ -87,7 +87,7 @@ def post_edit_cmd(number: int) -> None:
     if number == -1:
         number = max([x.number for x in state.posts])
 
-    file_path = Path("design") / "posts" / str(number)
+    file_path = Path("design") / "posts" / str(number) / "index.html"
     os.system("%s %s" % (os.getenv("EDITOR"), file_path))
 
 

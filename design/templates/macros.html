@@ -7,3 +7,25 @@
 {% macro refPost(id) -%}
   {{ refPostString(id) | safe }}
 {%- endmacro %}
+
+{% macro commentSection(issue_id) -%}
+
+{% set gitalk_client_id = 'a1da1553c3ddbf769a52' %}
+{% set gitalk_client_secret = '1ad095f6d5d87b7818859fa8184bd422fca65253' %}
+
+<div id="gitalk-container"></div>
+<script>
+const gitalk = new Gitalk({
+  clientID: "{{ gitalk_client_id }}",
+  clientSecret: "{{ gitalk_client_secret }}",
+  repo: 'blog',      // The repository of store comments,
+  owner: 'HugoPeters1024',
+  admin: ['HugoPeters1024'],
+  id: "{{ issue_id }}",      // Ensure uniqueness and length less than 50
+  number: 3,
+  distractionFreeMode: false  // Facebook-like distraction free mode
+})
+
+gitalk.render('gitalk-container')
+</script>
+{%- endmacro %}

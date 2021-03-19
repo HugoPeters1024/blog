@@ -16,6 +16,9 @@ def build(
     source_dir: Path, locked_state: State, output_dir: Path, debug: bool = False
 ) -> None:
 
+    if debug:
+        print("DEBUG ENABLED!")
+
     clear_directory(output_dir)
     output_dir.mkdir(exist_ok=True, parents=True)
 
