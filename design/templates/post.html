@@ -11,8 +11,13 @@
   <h1>{{post.title}}</h1>
   {% block post %}
   {% endblock %}
+
+    {% block comments %}
+    {{ macros.commentSection(post.number) }}
+    {% endblock %}
   <div class="modified-at"> 
     <small>last modified: {{post.get_modifiedAt_format()}}</small>
   </div>
 
 {% endblock %}
+
