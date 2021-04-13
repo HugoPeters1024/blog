@@ -86,6 +86,14 @@
             "languages": [
                 "haskell"
             ]
+        },
+        {
+            "number": 11,
+            "title": "Sudoku solving",
+            "postedAt": "2021-04-04T22:07:00",
+            "languages": [
+                "python"
+            ]
         }
     ]
 }

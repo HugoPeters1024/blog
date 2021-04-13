@@ -11,6 +11,10 @@ import pygments.lexers  # type: ignore
 
 from src.state import State, Post, PreparedPost, PreparedState
 
+def include_file(filename: str):
+    with open(filename, "r") as f:
+        return f.readlines()
+
 
 def build(
     source_dir: Path, locked_state: State, output_dir: Path, debug: bool = False
@@ -39,6 +43,7 @@ def build(
     env.globals["DEBUG"] = debug
     env.globals["highlight"] = highlight
     env.globals["refPostString"] = lambda post_id: refPostString(state, post_id)
+    env.globals["include_file"] = include_file
 
     load_template: Callable[
         [Path], jinja2.Template
