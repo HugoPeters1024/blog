@@ -1,4 +1,4 @@
-from mip import Model, INTEGER, maximize, BINARY
+from mip import Model, INTEGER, maximize, BINARY, xsum
 import itertools
 
 sudoku = [ 0,0,3,0,2,0,6,0,0,
