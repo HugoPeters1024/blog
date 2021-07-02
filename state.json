@@ -94,6 +94,16 @@
             "languages": [
                 "python"
             ]
+        },
+        {
+            "number": 12,
+            "title": "Functional in the wild: typeclasses",
+            "postedAt": "2021-07-03T00:31:18",
+            "languages": [
+                "haskell",
+                "c#",
+                "c++"
+            ]
         }
     ]
 }
