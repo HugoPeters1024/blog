@@ -2,7 +2,7 @@
     --nav-background: #303952;
     --nav-text: #bbb;
     --nav-text-hover: #e15f41;
-    --nav-font: "Ubuntu", "Courier New", Courier, monospace;
+    --nav-font: "Courier New", Courier, monospace;
     --white: #eee;
     --black: #333;
 }
@@ -11,7 +11,7 @@ body {
     min-height: 100%;
     margin: 0;
     padding: 0;
-    font-family: Helvetica, arial, sans-serif;
+    font-family: Ubuntu, sans-serif;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
