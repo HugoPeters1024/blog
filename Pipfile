@@ -13,6 +13,7 @@ pygments = "*"
 [dev-packages]
 mypy-mypyc = "*"
 black = "==18.9b0"
+neovim = "*"
 
 [scripts]
 format = "black ."
@@ -20,4 +21,4 @@ typecheck = "mypy --strict ."
 blog = "python main.py"
 
 [requires]
-python_version = "3.8"
+python_version = "3.9"
