@@ -104,6 +104,14 @@
                 "c#",
                 "c++"
             ]
+        },
+        {
+            "number": 13,
+            "title": "Demystifying the state monad",
+            "postedAt": "2021-11-04T16:49:30",
+            "languages": [
+                "haskell"
+            ]
         }
     ]
 }
