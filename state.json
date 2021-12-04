@@ -112,6 +112,14 @@
             "languages": [
                 "haskell"
             ]
+        },
+        {
+            "number": 14,
+            "title": "Higher Kinded Types in Rust",
+            "postedAt": "2021-12-03T21:54:06",
+            "languages": [
+                "rust"
+            ]
         }
     ]
 }
