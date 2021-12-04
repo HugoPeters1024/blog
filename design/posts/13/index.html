@@ -93,8 +93,8 @@ This function will, given a state function and an initial state return a final s
 If we don't care about the final state we could spoil the users of our code with a special version:
 
 {% call macros.code("haskell") %}
-runState' :: State a b -> a -> b
-runState' (State f) = snd . f
+execState :: State a b -> a -> b
+execState (State f) = snd . f
 {% endcall %}
 
 This is all fine and dandy but haven't really created anything interesting. Let's see if we can jump ahead in time and wonder what our getNextNr function might look like using the state monad:
@@ -211,7 +211,7 @@ main = let
     chained :: State Int [String]
     chained = sequence functions
 
-    numbers = runState' chained initial
+    numbers = execState chained initial
     in print numbers
 {% endcall %}
 
