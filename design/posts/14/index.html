@@ -104,6 +104,10 @@ impl<A, B> Plug<B> for Option<A> {
 // <Option<A> as Plug<B>>::R == Option<B>
 {% endcall %}
 
+Note that we have to trust the user here to correctly implement these traits in order to actually get a correct implementation of the upcoming traits.
+But more tragically, the typechecker is now blissfully unaware that the resulting type is still an instance of Option, making it often impossible to derive
+the types of expressions.
+
 <h2>Functor</h2>
 
 With the type management traits in place, we can define and implement the Functor trait quite easily, albeit syntactically a bit
