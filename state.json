@@ -120,6 +120,22 @@
             "languages": [
                 "rust"
             ]
+        },
+        {
+            "number": 15,
+            "title": "Solving newspaper puzzles with SMT solvers",
+            "postedAt": "2022-01-05T11:12:48",
+            "languages": [
+                "haskell"
+            ]
+        },
+        {
+            "number": 16,
+            "title": "Statically Typed Lambda Calculus as an Embedded Language",
+            "postedAt": "2022-01-31T15:27:26",
+            "languages": [
+                "Haskell"
+            ]
         }
     ]
 }
