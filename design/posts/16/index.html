@@ -1,6 +1,5 @@
 {% extends "templates/post.html" %}
 
-{% block favicon %}/posts/16/logo.png{% endblock %}
 {% block post %}
 
 <p>
@@ -11,7 +10,7 @@
 
 <p>
     A good example of when an embedded language is actually interesting, is the <a href="https://www.acceleratehs.org/">Accelerate</a> project. Which is itself an
-    embedded language that let's you describe parallel computations that can then be compiled to either CPU or even GPU code. The Accelerate language is,
+    embedded language that lets you describe parallel computations that can then be compiled to either CPU or even GPU code. The Accelerate language is,
     just like haskell or any other functional language, an embellished form of lambda calculus. As you will come to discover, pure lambda may be powerful
     enough, but is certainly not very pragmatic or intuitive at times. However, it forms a great basis from which you can later expand to create your
     own language.
@@ -22,9 +21,9 @@
     
     <ul>
         <li><a href="https://github.com/HugoPeters1024/typed-lambda/blob/master/app/Simplest.hs">Simplest</a> (no types no environment)</li>
-        <li><a href="https://github.com/HugoPeters1024/typed-lambda/blob/master/app/Harder.hs">Harder (types but no environment, worst option)</a></li>
-        <li><a href="https://github.com/HugoPeters1024/typed-lambda/blob/master/app/Complete.hs">Complete (types with a typed environment, great as a basis of another language)</a></li>
-        <li><a href="https://github.com/HugoPeters1024/typed-lambda/blob/master/app/Scoped.hs">Scoped (untyped with a scope environment, the best of lambda calculus)</a></li>
+        <li><a href="https://github.com/HugoPeters1024/typed-lambda/blob/master/app/Harder.hs">Harder </a>(types but no environment, worst option)</li>
+        <li><a href="https://github.com/HugoPeters1024/typed-lambda/blob/master/app/Complete.hs">Complete </a>(types with a typed environment, great as a basis of another language)</li>
+        <li><a href="https://github.com/HugoPeters1024/typed-lambda/blob/master/app/Scoped.hs">Scoped </a>(untyped with a scope environment, the best of lambda calculus)</li>
     </ul>
 </p>
 
@@ -66,7 +65,7 @@ f x    : the variable x applied to the variable f (which is supposedly a functio
 
 <p>
     With that short refresh out of the way, I would like to refer you to this most amazing presentation that tackles the subject of lambda calculus way better
-    than I ever could. If you still feel confused, feel especially targeted as it beginner friendly:
+    than I ever could. If you still feel confused, feel especially targeted as it is beginner friendly:
 </p>
 
 <iframe style ="text-align:center" width="560" height="315" src="https://www.youtube.com/embed/3VQ382QG-y4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -612,7 +611,7 @@ true :: Exp
 true = Lambda $ Lambda $ Var (S Z)
 
 false :: Exp
-false = Lambda $ Lambda $ Var (S Z)
+false = Lambda $ Lambda $ Var Z
 
 ifte = Lambda $ Lambda $ Lambda $ Var (S (S Z)) `App` Var (S Z) `App` Var Z
 

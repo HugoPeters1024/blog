@@ -39,7 +39,12 @@
   <div class="latest-posts">
   {% for post in state.posts | sort(attribute='postedAt', reverse=True)  %}
       <a href="{{post.get_url()}}">
-        <div class="post-block">{{ post.title }}</div>
+        <div style="padding-right:2em;width:32px;height:32px" class="post-block">
+            {% if post.favicon %}
+               <img style="position:relative;bottom:8px;width:32px;height:32px" src="posts/{{post.number}}/{{post.favicon}}">
+            {% endif %}
+        </div>
+        <div style="width:70%" class="post-block">{{ post.title }}</div>
         <div class="post-block">{{ post.get_postedAt_format() }}</div>
       </a>
   {% endfor %}

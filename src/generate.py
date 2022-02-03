@@ -92,6 +92,7 @@ def prepareState(state: State, root: Path) -> PreparedState:
                 post.title,
                 post.postedAt,
                 post.languages,
+                post.favicon,
                 modifiedAt,
                 abstract,
             )

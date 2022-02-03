@@ -11,6 +11,7 @@ class Post:
     title: str
     postedAt: datetime
     languages: List[str]
+    favicon: str
 
     def to_json(self) -> Dict[str, Any]:
         return {
@@ -33,10 +34,11 @@ class Post:
             title = str(json["title"])
             postedAt = datetime.fromisoformat(json["postedAt"])
             languages = json["languages"]
+            favicon = json["favicon"]
 
-            return cls(number, title, postedAt, languages)
+            return cls(number, title, postedAt, languages, favicon)
         except KeyError:
-            return None
+            raise "state.json is invalid"
 
 
 @dataclass

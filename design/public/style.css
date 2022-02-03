@@ -270,7 +270,7 @@ footer .foot-box {
   padding-left: 0;
   transition: color 120ms ease-in-out;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .latest-posts a:hover {
@@ -300,8 +300,8 @@ footer .foot-box {
 }
 
 .post-grid-block {
-  width: 15em;
-  height: 10em;
+  width: 18em;
+  height: 12em;
   padding: 0.5em;
   margin: 1em;
   color: black;
@@ -320,6 +320,12 @@ footer .foot-box {
 
 .post-grid-block:hover {
   border: 3px solid var(--nav-text-hover);
+}
+
+.post-grid-title-block {
+    display: grid;
+    grid-tempate-columns: 1fr 32px;
+    column-gap: 1em;
 }
 
 

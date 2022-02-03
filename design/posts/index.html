@@ -4,7 +4,12 @@
   <div class="post-grid">
     {% for post in state.posts | sort(attribute='postedAt') %}
      <a href="{{post.get_url()}}" class="post-grid-block">
-       <h3>{{ post.title }}</h3>
+        <div class="post-grid-title-block">
+           <h3 style="grid-row:1;grid-column:1">{{ post.title }}</h3>
+            {% if post.favicon %}
+               <img style="grid-row:1;grid-column:2;width:32px;height:auto;max-height:32px" src="{{post.number}}/{{post.favicon}}">
+            {% endif %}
+        </div>
        <p>posted at: {{ post.get_postedAt_format() }}</p>
        <p class="abstract">{{ post.abstract | safe }}</p>
        <div class="code-languages">
