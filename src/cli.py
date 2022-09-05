@@ -73,7 +73,7 @@ def post_create_cmd() -> None:
     with open(result_dir / "abstract.html", "w") as f:
         f.write(abstract)
 
-    post = Post(new_id, title, datetime.now(), languages)
+    post = Post(new_id, title, datetime.now(), languages, "favicon")
     state.posts.append(post)
     saveState(state)
     os.system("%s %s" % (os.getenv("EDITOR"), result_dir / "index.html"))

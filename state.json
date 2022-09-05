@@ -152,6 +152,18 @@
                 "Haskell"
             ],
             "favicon": "logo.png"
-        }
+        },
+        {
+            "number": 17,
+            "title": "3d normals are 2.0000001d",
+            "postedAt": "2022-06-05T22:51:27",
+            "languages": [
+                "c++",
+                "vulkan",
+                "glsl"
+            ],
+            "favicon": "favicon.png"
+         }
+
     ]
 }

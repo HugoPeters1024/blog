@@ -16,21 +16,21 @@ MathJax = {
 <p>
   Today we are going to dive into the wonderous world of pathtraced rendering. This technique
   has long since transcended animated movies and is becoming more and more a viable option
-  for real time applications also. 
+  for real time applications.
 </p>
 
 <p>
-  In short, pathtracing attempts to first formulate a complex integral that describes how much light arrives at any in the scene and than solve it stochastically using Monte Carlo. The rendering equation is complex beast to read:
+  In short, pathtracing attempts to first formulate a complex integral that describes how much light arrives at any point in the scene and then solve it stochastically using Monte Carlo. The rendering equation is a complex beast to read...
 </p>
 
 \(
 {\displaystyle L_{\text{o}}(\mathbf {x} ,\omega _{\text{o}},\lambda ,t)=L_{\text{e}}(\mathbf {x} ,\omega _{\text{o}},\lambda ,t)\ +\int _{\Omega }f_{\text{r}}(\mathbf {x} ,\omega _{\text{i}},\omega _{\text{o}},\lambda ,t)L_{\text{i}}(\mathbf {x} ,\omega _{\text{i}},\lambda ,t)(\omega _{\text{i}}\cdot \mathbf {n} )\operatorname {d} \omega _{\text{i}}}
 \)
 
-But it looks more daunting than it is.
+..but it looks more daunting than it is.
 
 <p>
-  \( L_{\text{o}}\) describes amount of energy that point o emmits (called the irradiance). 
+  \( L_{\text{o}}\) describes amount of energy that a point \(o\) emmits (called irradiance). 
 </p>
 
 <p>
@@ -42,7 +42,7 @@ But it looks more daunting than it is.
 </p>
 
 <p>
-  \( f_{\text{r}} \) a function that describes the relation between the incoming and outgoing light.  Properties like the color of the material and how much light it absorbs are represented by this function. 
+  \( f_{\text{r}} \) is a function that describes the relation between the incoming and outgoing light.  Properties like the color of the material and how much light it absorbs are represented by this function. 
 </p>
 
 <p>
