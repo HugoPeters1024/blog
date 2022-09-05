@@ -19,6 +19,7 @@ class Post:
             "title": self.title,
             "postedAt": self.postedAt.isoformat(timespec="seconds"),
             "languages": self.languages,
+            "favicon": self.favicon,
         }
 
     def get_url(self) -> str:
