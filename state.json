@@ -163,7 +163,16 @@
                 "glsl"
             ],
             "favicon": "favicon.png"
-         }
-
+        },
+        {
+            "number": 18,
+            "title": "$ is the wrong way around (sometimes)",
+            "postedAt": "2022-09-05T19:22:12",
+            "languages": [
+                "Haskell",
+                "Elm"
+            ],
+            "favicon": "favicon.svg"
+        }
     ]
 }

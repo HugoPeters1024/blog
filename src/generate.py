@@ -142,7 +142,6 @@ def highlight(lang: str, code: str, source: Optional[str] = None) -> str:
         )
     return res
 
-
 def lastModified(path: Path) -> datetime:
     latest = 0
     for entry in path.glob("*"):
