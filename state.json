@@ -173,6 +173,15 @@
                 "Elm"
             ],
             "favicon": "favicon.svg"
+        },
+        {
+            "number": 19,
+            "title": "Voronoi shading the web",
+            "postedAt": "2022-09-18T17:08:40",
+            "languages": [
+                "Rust"
+            ],
+            "favicon": "favicon.png"
         }
     ]
 }
