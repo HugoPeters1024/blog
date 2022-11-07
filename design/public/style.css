@@ -362,7 +362,7 @@ footer .foot-box {
   margin: 0.2em;
   margin-top: 0;
   font-size: 0.8em;
-  background-color: var(--black);
+  background-color: #303444;
   color: var(--white);
   border-radius: 5px;
 }

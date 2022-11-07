@@ -2,7 +2,7 @@
 
 {% block content %}
   <div class="post-grid">
-    {% for post in state.posts | sort(attribute='postedAt') %}
+    {% for post in state.posts | sort(attribute='postedAt', reverse=True) %}
      <a href="{{post.get_url()}}" class="post-grid-block">
         <div class="post-grid-title-block">
            <h3 style="grid-row:1;grid-column:1">{{ post.title }}</h3>

@@ -182,6 +182,15 @@
                 "Rust"
             ],
             "favicon": "favicon.png"
+        },
+        {
+            "number": 20,
+            "title": "MADS",
+            "postedAt": "2022-10-09T20:06:48",
+            "languages": [
+                "Rust"
+            ],
+            "favicon": "favicon.png"
         }
     ]
 }
