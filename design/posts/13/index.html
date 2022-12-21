@@ -216,7 +216,7 @@ main = let
 {% endcall %}
 
 For a complete picture let me reinvent sequence as well. This functional normally operates on any Traversable but let's keep
-it simply and just do lists for now:
+it simple and just do lists for now:
 
 {% call macros.code("haskell") %}
 listSequence :: Monad m => [m a] -> m [a]
