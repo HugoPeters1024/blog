@@ -10,7 +10,7 @@
                <img style="grid-row:1;grid-column:2;width:32px;height:auto;max-height:32px" src="{{post.number}}/{{post.favicon}}">
             {% endif %}
         </div>
-       <p>posted at: {{ post.get_postedAt_format() }}</p>
+       <p>posted on: {{ post.get_postedAt_format() }}</p>
        <p class="abstract">{{ post.abstract | safe }}</p>
        <div class="code-languages">
          {% for lang in post.languages %}
