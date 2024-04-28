@@ -191,6 +191,15 @@
                 "Rust"
             ],
             "favicon": "favicon.png"
+        },
+        {
+            "number": 21,
+            "title": "Cracking the Cryptic (with Z3 and Rust)",
+            "postedAt": "2024-04-28T16:35:22",
+            "languages": [
+                "Rust"
+            ],
+            "favicon": "favicon.png"
         }
     ]
 }
