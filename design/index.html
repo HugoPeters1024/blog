@@ -8,22 +8,22 @@
   <div class="about">
   <img src="hugo.jpeg" alt="picture of me" class="profile-picture"/>
   <p>
-    Hi, I am Hugo, I graduated with a Master's in Programming Technologies at the 
-    University of Utrecht in 2023. 
+    Hi, I am Hugo, I graduated with a Master's in Programming Technologies at the
+    University of Utrecht in 2023.
     On this blog I share things I've learned from coding projects that I
     found interesting. This can range from very technical depth about the theory behind
     something, to smart decision making and creating a maintainable project. My interest
-    lie generally in anything GPU related, writing efficient code, and a 
+    lie generally in anything GPU related, writing efficient code, and a
     sprinkle of functional programming on top.
   </p>
-  
+
   <p>
   I have also dabled by the field of cyber security and spent a healthy
   amount of time on <a href="https://www.hackthebox.eu/home/users/profile/226598">Hack the Box</a>.
   </p>
 
   <p>
-  I am currently employed at <a href="https://channable.com">Channable </a>as a Haskell Software Engineer. 
+  I am currently employed at <a href="https://channable.com">Channable </a>as a Haskell Software Engineer.
   </p>
 
   <p>
@@ -37,8 +37,7 @@
 
 
   <h1>Latest posts</h1>
-  
-  
+
   <div class="latest-posts">
   {% for post in state.posts | sort(attribute='postedAt', reverse=True)  %}
       <a href="{{post.get_url()}}">
@@ -51,6 +50,17 @@
         <div class="post-block">{{ post.get_postedAt_format() }}</div>
       </a>
   {% endfor %}
+  </div>
+
+  <h2>External posts</h2>
+
+  <div class="latest-posts">
+    <a href="https://www.channable.com/tech/postgres-performance-lessons-1">
+      <div style="padding-right:2em;width:32px;height:32px" class="post-block">
+           <img style="position:relative;bottom:8px;width:32px;height:32px" src="public/channable.ico">
+      </div>
+      <div class="post-block">Postgres performance lessons at Channable - Part 1</div>
+    </a>
   </div>
 
   <h2>Virtual friends</h2>
