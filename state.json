@@ -200,6 +200,15 @@
                 "Rust"
             ],
             "favicon": "favicon.png"
+        },
+        {
+            "number": 22,
+            "title": "Wrestling with exponential compile times in GHC",
+            "postedAt": "2024-06-09T16:41:02",
+            "languages": [
+                "haskell"
+            ],
+            "favicon": "explosion.png"
         }
     ]
 }
