@@ -209,6 +209,16 @@
                 "haskell"
             ],
             "favicon": "explosion.png"
+        },
+        {
+            "number": 23,
+            "title": "Monalis, stylized image compression with simulated annealing",
+            "postedAt": "2026-02-13T15:30:22",
+            "languages": [
+                "Rust",
+                "wgsl"
+            ],
+            "favicon": "favicon.png"
         }
     ]
 }
