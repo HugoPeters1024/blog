@@ -4,9 +4,11 @@ import click
 import os
 import re
 import subprocess
+import xml.etree.ElementTree as ET
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
+from email.utils import format_datetime
 from typing import Callable, List, Any, Optional, Tuple
 from pygments.formatters import HtmlFormatter  # type: ignore
 import pygments.lexers  # type: ignore
@@ -78,6 +80,9 @@ def build(
         with open(post_path / "index.html", "w", encoding="utf-8") as f:
             f.write(render)
 
+    # Generate RSS feed
+    generate_rss(state, output_dir)
+
 
 def prepareState(state: State, root: Path) -> PreparedState:
     posts_dir = root / "posts"
@@ -106,6 +111,55 @@ def prepareState(state: State, root: Path) -> PreparedState:
         )
 
     return PreparedState(prepared_posts)
+
+
+SITE_URL = "https://hugopeters.me"
+
+
+def generate_rss(state: PreparedState, output_dir: Path) -> None:
+    """Generate an RSS 2.0 feed from the prepared blog state."""
+    rss = ET.Element("rss", version="2.0", attrib={"xmlns:atom": "http://www.w3.org/2005/Atom"})
+    channel = ET.SubElement(rss, "channel")
+
+    ET.SubElement(channel, "title").text = "Hugo's Blog"
+    ET.SubElement(channel, "link").text = SITE_URL
+    ET.SubElement(channel, "description").text = (
+        "GPU programming, functional programming, and efficient code."
+    )
+    ET.SubElement(channel, "language").text = "en"
+
+    feed_url = f"{SITE_URL}/feed.xml"
+    atom_link = ET.SubElement(channel, "{http://www.w3.org/2005/Atom}link")
+    atom_link.set("href", feed_url)
+    atom_link.set("rel", "self")
+    atom_link.set("type", "application/rss+xml")
+
+    sorted_posts = sorted(state.posts, key=lambda p: p.postedAt, reverse=True)
+
+    if sorted_posts:
+        ET.SubElement(channel, "lastBuildDate").text = format_datetime(
+            sorted_posts[0].postedAt.replace(tzinfo=timezone.utc)
+        )
+
+    for post in sorted_posts:
+        item = ET.SubElement(channel, "item")
+        ET.SubElement(item, "title").text = post.title
+        post_url = f"{SITE_URL}/posts/{post.number}"
+        ET.SubElement(item, "link").text = post_url
+        ET.SubElement(item, "guid", isPermaLink="true").text = post_url
+        ET.SubElement(item, "pubDate").text = format_datetime(
+            post.postedAt.replace(tzinfo=timezone.utc)
+        )
+        ET.SubElement(item, "description").text = post.abstract
+
+    tree = ET.ElementTree(rss)
+    ET.indent(tree, space="  ")
+    tree.write(
+        output_dir / "feed.xml",
+        xml_declaration=True,
+        encoding="utf-8",
+    )
+    click.echo(f"Generated RSS feed with {len(sorted_posts)} items")
 
 
 def clear_directory(dir_path: Path) -> None:
