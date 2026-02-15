@@ -1,16 +1,19 @@
 {% extends "templates/base.html" %}
 
+{% block title %}Posts{% endblock %}
+
 {% block content %}
+  <h1>all posts</h1>
   <div class="post-grid">
     {% for post in state.posts | sort(attribute='postedAt', reverse=True) %}
      <a href="{{post.get_url()}}" class="post-grid-block">
         <div class="post-grid-title-block">
-           <h3 style="grid-row:1;grid-column:1">{{ post.title }}</h3>
             {% if post.favicon %}
-               <img style="grid-row:1;grid-column:2;width:32px;height:auto;max-height:32px" src="{{post.number}}/{{post.favicon}}">
+               <img style="width:24px;height:24px" src="{{post.number}}/{{post.favicon}}">
             {% endif %}
+           <h3>{{ post.title }}</h3>
         </div>
-       <p>posted on: {{ post.get_postedAt_format() }}</p>
+       <p>{{ post.get_postedAt_format() }}</p>
        <p class="abstract">{{ post.abstract | safe }}</p>
        <div class="code-languages">
          {% for lang in post.languages %}

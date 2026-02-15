@@ -4,9 +4,10 @@ import click
 import os
 import re
 import subprocess
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from pathlib import Path
 from datetime import datetime
-from typing import Callable, List, Any, Optional
+from typing import Callable, List, Any, Optional, Tuple
 from pygments.formatters import HtmlFormatter  # type: ignore
 import pygments.lexers  # type: ignore
 from PIL import Image  # type: ignore
@@ -131,78 +132,105 @@ JPEG_QUALITY = 80
 PNG_MAX_COLORS = 256
 
 
+def _optimize_single_image(img_path: Path) -> Tuple[int, int]:
+    """Optimize a single image file. Returns (saved_bytes, was_optimized)."""
+    original_size = img_path.stat().st_size
+
+    try:
+        img = Image.open(img_path)
+    except Exception:
+        return (0, 0)
+
+    if img.width > MAX_DIMENSION or img.height > MAX_DIMENSION:
+        img.thumbnail((MAX_DIMENSION, MAX_DIMENSION), Image.LANCZOS)
+
+    suffix = img_path.suffix.lower()
+    if suffix in (".jpg", ".jpeg"):
+        if img.mode in ("RGBA", "P"):
+            img = img.convert("RGB")
+        img.save(img_path, "JPEG", quality=JPEG_QUALITY, optimize=True)
+    elif suffix == ".png":
+        if img.mode == "RGBA":
+            img = img.quantize(colors=PNG_MAX_COLORS, method=Image.Quantize.FASTOCTREE)
+        elif img.mode == "P":
+            pass
+        else:
+            img = img.convert("RGB").quantize(colors=PNG_MAX_COLORS, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.FLOYDSTEINBERG)
+        img.save(img_path, "PNG", optimize=True)
+
+    new_size = img_path.stat().st_size
+    saved = original_size - new_size
+    if saved > 0:
+        return (saved, 1)
+    return (0, 0)
+
+
 def optimize_images(output_dir: Path) -> None:
     """Optimize images in the build directory for the web.
 
     Resizes images that exceed MAX_DIMENSION, compresses JPEGs with reduced
-    quality, and quantizes PNGs to reduce file size. GIFs and SVGs are left
-    untouched. The original files in the design directory are never modified.
+    quality, and quantizes PNGs to reduce file size. Runs in parallel across
+    available CPU cores. The original files in the design directory are never
+    modified.
     """
+    image_paths = [
+        p for p in output_dir.rglob("*")
+        if p.suffix.lower() in IMAGE_EXTENSIONS
+    ]
+
+    if not image_paths:
+        return
+
     optimized = 0
     saved_bytes = 0
 
-    for img_path in output_dir.rglob("*"):
-        if img_path.suffix.lower() not in IMAGE_EXTENSIONS:
-            continue
-
-        original_size = img_path.stat().st_size
-
-        try:
-            img = Image.open(img_path)
-        except Exception:
-            continue
-
-        # Resize if either dimension exceeds the limit
-        if img.width > MAX_DIMENSION or img.height > MAX_DIMENSION:
-            img.thumbnail((MAX_DIMENSION, MAX_DIMENSION), Image.LANCZOS)
-
-        suffix = img_path.suffix.lower()
-        if suffix in (".jpg", ".jpeg"):
-            if img.mode in ("RGBA", "P"):
-                img = img.convert("RGB")
-            img.save(img_path, "JPEG", quality=JPEG_QUALITY, optimize=True)
-        elif suffix == ".png":
-            if img.mode == "RGBA":
-                img = img.quantize(colors=PNG_MAX_COLORS, method=Image.Quantize.FASTOCTREE)
-            elif img.mode == "P":
-                pass
-            else:
-                img = img.convert("RGB").quantize(colors=PNG_MAX_COLORS, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.FLOYDSTEINBERG)
-            img.save(img_path, "PNG", optimize=True)
-
-        new_size = img_path.stat().st_size
-        if new_size < original_size:
-            saved_bytes += original_size - new_size
-            optimized += 1
+    with ProcessPoolExecutor() as pool:
+        for saved, count in pool.map(_optimize_single_image, image_paths):
+            saved_bytes += saved
+            optimized += count
 
     if optimized > 0:
         click.echo(f"Optimized {optimized} images, saved {saved_bytes / 1024:.1f} KB")
 
 
+def _optimize_single_gif(gif_path: Path) -> Tuple[int, int]:
+    """Optimize a single GIF file. Returns (saved_bytes, was_optimized)."""
+    original_size = gif_path.stat().st_size
+    original_bytes = gif_path.read_bytes()
+    subprocess.run(
+        ["gifsicle", "--optimize=3", "--lossy=80", "--batch", str(gif_path)],
+        capture_output=True,
+    )
+    new_size = gif_path.stat().st_size
+    saved = original_size - new_size
+    if saved > 0:
+        return (saved, 1)
+    gif_path.write_bytes(original_bytes)
+    return (0, 0)
+
+
 def optimize_gifs(output_dir: Path) -> None:
-    """Optimize GIF files using gifsicle (lossy compression + optimization)."""
+    """Optimize GIF files using gifsicle (lossy compression + optimization).
+
+    Runs gifsicle invocations in parallel using threads.
+    """
     try:
         subprocess.run(["gifsicle", "--version"], capture_output=True, check=True)
     except (FileNotFoundError, subprocess.CalledProcessError):
         click.echo("gifsicle not found, skipping GIF optimization")
         return
 
+    gif_paths = list(output_dir.rglob("*.gif"))
+    if not gif_paths:
+        return
+
     optimized = 0
     saved_bytes = 0
 
-    for gif_path in output_dir.rglob("*.gif"):
-        original_size = gif_path.stat().st_size
-        original_bytes = gif_path.read_bytes()
-        subprocess.run(
-            ["gifsicle", "--optimize=3", "--lossy=80", "--batch", str(gif_path)],
-            capture_output=True,
-        )
-        new_size = gif_path.stat().st_size
-        if new_size < original_size:
-            saved_bytes += original_size - new_size
-            optimized += 1
-        else:
-            gif_path.write_bytes(original_bytes)
+    with ThreadPoolExecutor() as pool:
+        for saved, count in pool.map(_optimize_single_gif, gif_paths):
+            saved_bytes += saved
+            optimized += count
 
     if optimized > 0:
         click.echo(f"Optimized {optimized} GIFs, saved {saved_bytes / 1024:.1f} KB")

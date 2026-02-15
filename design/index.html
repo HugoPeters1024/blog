@@ -23,56 +23,51 @@
   </p>
 
   <p>
-  I am currently employed at <a href="https://groq.com/">Groq</a> as an FPGA / Haskell Software Engineer.
+  I am currently employed at NVIDIA as an FPGA / Haskell Software Engineer.
   </p>
 
   <p>
-  Here are a couple of ways you can reach me:
-  <ul>
-    <li><a href="https://www.linkedin.com/in/hugopeters1024/">LinkedIn</a></li>
-    <li>Send an email to <i>hpeters1024 &#60;at&#62; gmail.com</i>. Don't forget to include your public key ;)</li>
-  </ul>
+  You can reach me by sending an email to <i>hpeters1024@gmail.com</i>. Don't forget to include your public key ;)
   </p>
   </div>
 
 
-  <h1>Latest posts</h1>
+  <h1>Latest Posts</h1>
 
   <div class="latest-posts">
   {% for post in state.posts | sort(attribute='postedAt', reverse=True)  %}
       <a href="{{post.get_url()}}">
-        <div style="padding-right:2em;width:32px;height:32px" class="post-block">
+        <div style="width:24px;height:24px;flex-shrink:0" class="post-block">
             {% if post.favicon %}
-               <img style="position:relative;bottom:8px;width:32px;height:32px" src="posts/{{post.number}}/{{post.favicon}}">
+               <img style="width:24px;height:24px" src="posts/{{post.number}}/{{post.favicon}}">
             {% endif %}
         </div>
-        <div style="width:70%" class="post-block">{{ post.title }}</div>
-        <div class="post-block">{{ post.get_postedAt_format() }}</div>
+        <span style="flex:1">{{ post.title }}</span>
+        <span style="color:var(--fg-muted);font-size:0.85em;white-space:nowrap">{{ post.get_postedAt_format() }}</span>
       </a>
   {% endfor %}
   </div>
 
-  <h2>External posts</h2>
+  <h2>External Posts</h2>
 
   <div class="latest-posts">
     <a href="https://www.channable.com/tech/postgres-performance-lessons-1">
-      <div style="padding-right:2em;width:32px;height:32px" class="post-block">
-           <img style="position:relative;bottom:8px;width:32px;height:32px" src="public/channable.ico">
+      <div style="width:24px;height:24px;flex-shrink:0" class="post-block">
+           <img style="width:24px;height:24px" src="public/channable.ico">
       </div>
-      <div class="post-block">Postgres performance lessons at Channable - Part 1</div>
+      <span>Postgres performance lessons at Channable - Part 1</span>
     </a>
     <a href="https://www.channable.com/tech/postgres-performance-lessons-2">
-      <div style="padding-right:2em;width:32px;height:32px" class="post-block">
-           <img style="position:relative;bottom:8px;width:32px;height:32px" src="public/channable.ico">
+      <div style="width:24px;height:24px;flex-shrink:0" class="post-block">
+           <img style="width:24px;height:24px" src="public/channable.ico">
       </div>
-      <div class="post-block">Postgres performance lessons at Channable - Part 2</div>
+      <span>Postgres performance lessons at Channable - Part 2</span>
     </a>
   </div>
 
-  <h2>Virtual friends</h2>
+  <h2>Virtual Friends</h2>
   <ul>
-  <li><td><a href="https://blog.llandsmeer.com/" target="_blank">The Weekend Writeup</a></td></li>
+  <li><a href="https://blog.llandsmeer.com/" target="_blank">The Weekend Writeup</a></li>
   </ul>
-
 
 {% endblock %}
