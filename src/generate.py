@@ -3,11 +3,13 @@ import shutil
 import click
 import os
 import re
+import subprocess
 from pathlib import Path
 from datetime import datetime
 from typing import Callable, List, Any, Optional
 from pygments.formatters import HtmlFormatter  # type: ignore
 import pygments.lexers  # type: ignore
+from PIL import Image  # type: ignore
 
 from src.state import State, Post, PreparedPost, PreparedState
 
@@ -34,6 +36,10 @@ def build(
             shutil.copytree(entry, output_dir / entry.name)
         else:
             shutil.copy(entry, output_dir)
+
+    # Optimize assets in the build output
+    optimize_images(output_dir)
+    optimize_gifs(output_dir)
 
     # Prepare state
     state = prepareState(locked_state, output_dir)
@@ -117,6 +123,89 @@ def clear_directory(dir_path: Path) -> None:
             shutil.rmtree(entry)
         else:
             entry.unlink()
+
+
+IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png"}
+MAX_DIMENSION = 1920
+JPEG_QUALITY = 80
+PNG_MAX_COLORS = 256
+
+
+def optimize_images(output_dir: Path) -> None:
+    """Optimize images in the build directory for the web.
+
+    Resizes images that exceed MAX_DIMENSION, compresses JPEGs with reduced
+    quality, and quantizes PNGs to reduce file size. GIFs and SVGs are left
+    untouched. The original files in the design directory are never modified.
+    """
+    optimized = 0
+    saved_bytes = 0
+
+    for img_path in output_dir.rglob("*"):
+        if img_path.suffix.lower() not in IMAGE_EXTENSIONS:
+            continue
+
+        original_size = img_path.stat().st_size
+
+        try:
+            img = Image.open(img_path)
+        except Exception:
+            continue
+
+        # Resize if either dimension exceeds the limit
+        if img.width > MAX_DIMENSION or img.height > MAX_DIMENSION:
+            img.thumbnail((MAX_DIMENSION, MAX_DIMENSION), Image.LANCZOS)
+
+        suffix = img_path.suffix.lower()
+        if suffix in (".jpg", ".jpeg"):
+            if img.mode in ("RGBA", "P"):
+                img = img.convert("RGB")
+            img.save(img_path, "JPEG", quality=JPEG_QUALITY, optimize=True)
+        elif suffix == ".png":
+            if img.mode == "RGBA":
+                img = img.quantize(colors=PNG_MAX_COLORS, method=Image.Quantize.FASTOCTREE)
+            elif img.mode == "P":
+                pass
+            else:
+                img = img.convert("RGB").quantize(colors=PNG_MAX_COLORS, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.FLOYDSTEINBERG)
+            img.save(img_path, "PNG", optimize=True)
+
+        new_size = img_path.stat().st_size
+        if new_size < original_size:
+            saved_bytes += original_size - new_size
+            optimized += 1
+
+    if optimized > 0:
+        click.echo(f"Optimized {optimized} images, saved {saved_bytes / 1024:.1f} KB")
+
+
+def optimize_gifs(output_dir: Path) -> None:
+    """Optimize GIF files using gifsicle (lossy compression + optimization)."""
+    try:
+        subprocess.run(["gifsicle", "--version"], capture_output=True, check=True)
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        click.echo("gifsicle not found, skipping GIF optimization")
+        return
+
+    optimized = 0
+    saved_bytes = 0
+
+    for gif_path in output_dir.rglob("*.gif"):
+        original_size = gif_path.stat().st_size
+        original_bytes = gif_path.read_bytes()
+        subprocess.run(
+            ["gifsicle", "--optimize=3", "--lossy=80", "--batch", str(gif_path)],
+            capture_output=True,
+        )
+        new_size = gif_path.stat().st_size
+        if new_size < original_size:
+            saved_bytes += original_size - new_size
+            optimized += 1
+        else:
+            gif_path.write_bytes(original_bytes)
+
+    if optimized > 0:
+        click.echo(f"Optimized {optimized} GIFs, saved {saved_bytes / 1024:.1f} KB")
 
 
 def highlight(lang: str, code: str, source: Optional[str] = None) -> str:

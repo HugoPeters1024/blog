@@ -5,3 +5,4 @@ jinja2
 pygments
 black
 neovim
+Pillow

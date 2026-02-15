@@ -1793,17 +1793,21 @@ function initSync(module) {
 
 async function init(input) {
     if (typeof input === 'undefined') {
-        input = new URL('bevy_shader_bg.wasm', import.meta.url);
+        input = new URL('bevy_shader_bg.wasm.gz', import.meta.url);
     }
     const imports = getImports();
 
     if (typeof input === 'string' || (typeof Request === 'function' && input instanceof Request) || (typeof URL === 'function' && input instanceof URL)) {
-        input = fetch(input);
+        const response = await fetch(input);
+        const ds = new DecompressionStream('gzip');
+        const decompressed = response.body.pipeThrough(ds);
+        const blob = await new Response(decompressed).blob();
+        input = await blob.arrayBuffer();
     }
 
     initMemory(imports);
 
-    const { instance, module } = await load(await input, imports);
+    const { instance, module } = await load(input, imports);
 
     return finalizeInit(instance, module);
 }
