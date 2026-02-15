@@ -124,7 +124,7 @@ instance Functor (State a) where
 
 As you can see we simply 'hijack' the final part of the state function by applying the transformation contained in f over the resulting value res. The resulting state ns is untouched.
 
-We could now make a new version of getNextNr that is very exiting:
+We could now make a new version of getNextNr that is very exciting:
 
 {% call macros.code("haskell") %}
 jacobDubbel :: State Int (String, String)

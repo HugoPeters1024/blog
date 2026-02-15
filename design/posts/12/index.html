@@ -2,7 +2,7 @@
 
 {% block post %}
 
-One thing that I always though was great about Haskell, which bothered me in OO languages, is the idea of a typeclass. It allows you to implement a common interface for a myriad of types and then implictly
+One thing that I always thought was great about Haskell, which bothered me in OO languages, is the idea of a typeclass. It allows you to implement a common interface for a myriad of types and then implicitly
 create higher order functions; after all, you don't pass the functions themselves, but they can be derived from the type the function is instantiated with. Let me give an example. A very common pattern in
 all languages is the ability to convert an object to its string representation. Haskell comes with a 'Show' typeclass, that defines the common interface:
 
@@ -11,7 +11,7 @@ class Show a where
     show :: a -> String
 {% endcall %}
 
-if we then create for example a currency datatype, we can define the show function for all it's constructors.
+if we then create for example a currency datatype, we can define the show function for all its constructors.
 
 {% call macros.code("haskell") %}
 data Currency = Euro Int | Dollar Int
@@ -102,7 +102,7 @@ struct show_class<Dollar> {
 
 {% endcall %}
 
-We can know use call upon the typeclass in some polymorphic function:
+We can now call upon the typeclass in some polymorphic function:
 
 {% call macros.code("cpp") %}
 

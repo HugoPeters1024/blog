@@ -30,7 +30,7 @@ MathJax = {
 ..but it looks more daunting than it is.
 
 <p>
-  \( L_{\text{o}}\) describes amount of energy that a point \(o\) emmits (called irradiance). 
+  \( L_{\text{o}}\) describes amount of energy that a point \(o\) emits (called irradiance). 
 </p>
 
 <p>
@@ -52,7 +52,7 @@ MathJax = {
 
 <p>
   Finally \( \omega _{\text{i}} \cdot {\mathbf n}  \) is just the cosine between the surface normal and the incoming light, correcting for the fact 
-  that light that arrives under an angle is spread out over a larger surface and thus contributes less to the theorical singularity o for which we want to calculate the incoming energy.
+  that light that arrives under an angle is spread out over a larger surface and thus contributes less to the theoretical singularity o for which we want to calculate the incoming energy.
   Formally this term converts the radiance to irradiance.
 </p>
 
@@ -63,7 +63,7 @@ MathJax = {
 </p>
 
 <p>
-  But before we go that route, I think I owe you a window into to future that justifies why we are going through all this. 
+  But before we go that route, I think I owe you a window into the future that justifies why we are going through all this. 
   What we want to be able to do is realistically render how light interacts with a scene and get images like
   the following.
 </p>
@@ -146,7 +146,7 @@ choose a point on an emissive triangle and trace it back to our point o to ensur
 
 <p>
   But we can do more! Since it is relatively cheap to inspect said facts of a random emissive triangle, we can do another little Monte Carlo experiment. Instead of picking just one light,
-  we pick say four (with replacement), and remember for how many of these four we are looking at there front face. 
+  we pick say four (with replacement), and remember for how many of these four we are looking at their front face. 
   We then use the first of these 4 that had a successful front face test (if any, otherwise contribution is still 0) to actually do the occlusion test and calculate the true contribution. 
   This drastically improves the chance of finding a possible light source that can contribute light, but by itself introduces bias. After all, we simply
   picked the first light for which the front face test passed. However, we also know an estimate for the prior probability that this could have happened (1/4, 2/4 or 3/4). So

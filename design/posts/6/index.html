@@ -31,7 +31,7 @@ to find an easier, lazier, and more elegant way to generate an answer.
 <p>
 In this post we will try to formulate a generic method for finding this largest number given 
 any two boomerangs. We do this for entertainment, to aid with sleeping now that one more 
-question in the universe is answered, and unbeknownst to most people: because proofing 
+question in the universe is answered, and unbeknownst to most people: because proving 
 is a creative process. In the final paragraph I will shed a few words on what makes 
 the process so interesting and worthwhile.
 </p>
@@ -212,7 +212,7 @@ int main(int argc, char** argv) {
 <p>
 Admittedly, it takes either luck or time to spot the pattern, but eventually it can be done. I was
 sitting in the garden, thinking about what these numbers might mean and where they came 
-from and then it suddenly hit me: the formula for the largest number is a follows.
+from and then it suddenly hit me: the formula for the largest number is as follows.
 
 $$
 L(x,y) = x * y - x - y
@@ -220,7 +220,7 @@ $$
 
 It seems we have found a simple and elegant formula that can tell us the answer right away; No
 programming languages, no sub problems, often not even a calculator is needed. But where does this
-formula come from? And it is always correct? Perhaps some number in the billions is waiting out
+formula come from? And is it always correct? Perhaps some number in the billions is waiting out
 there to show our hypothesis is wrong... Clearly, sleep is not yet an option.
 </p>
 
@@ -330,10 +330,10 @@ it to javascript for you to play with:
 <h2>Proof that any larger number can be expressed</h2>
 
 <p>
-Let's first think about how someone might proof such a thing. Our computer program was not a valid
+Let's first think about how someone might prove such a thing. Our computer program was not a valid
 proof because we could never evaluate every single number. What we have to come up with is something
 known as an induction proof. We aren't going to proof that it holds for some number, we are instead
-going to proof that we can always increment a number by 1 and still express the number of the sum
+going to prove that we can always increment a number by 1 and still express the number of the sum
 of the two boomerangs. That way, our statement suddenly holds for all numbers to the stars and 
 beyond!
 </p>

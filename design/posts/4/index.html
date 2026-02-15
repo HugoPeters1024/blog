@@ -6,7 +6,7 @@
 
 {% block post %}
 <h2>Preface: the story continues</h2>
-I will start of with a warning that this post is the continuation of
+I will start off with a warning that this post is the continuation of
 {{ macros.refPost(3) }}. That post explained numerous concepts of 
 functional programming in great detail. Therefore I
 will refrain from the same endeavour in this post, and assume you already have a
@@ -25,7 +25,7 @@ way of using such a list is by traversing it a from beginning to end.
 </p>
 
 <p>
-An instance of such a list be one of two things: and empty list, containing
+An instance of such a list can be one of two things: and empty list, containing
 nothing or a single element (which we will call the head) and another linked
 list as tail (which can be again one of the two). In C# we might write:
 </p>
@@ -161,8 +161,8 @@ public static SList<string> ToWord(SList<int> list)
 that one ought to remember when implementing the function that ensures 
 membership of the applicative typeclass. Just like with fmap, repetition is the
 key: we simply apply the given list of arguments to every function in the main list. There
-is however a nuance in the fact that instead of a single function we now get a lists of arguments
-for a lists of functions but there is no constraint that tells us that these lists are of equal size.
+is however a nuance in the fact that instead of a single function we now get a list of arguments
+for a list of functions but there is no constraint that tells us that these lists are of equal size.
 To resolve this issue we simply consume only the items that have a respective element in the other list.
 Any excess is simply discarded.
 
@@ -310,7 +310,7 @@ public static SList<TOut> listComprension<TIn, TOut>(
 {% endcall %}
 
 A function that has found popularity in many mainstream languages is zip: it takes
-to lists and returns one new list with tuples containing the respective elements of the
+two lists and returns one new list with tuples containing the respective elements of the
 two lists. for example:
 
 {% call macros.code("haskell") %}

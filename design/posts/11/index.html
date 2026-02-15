@@ -49,7 +49,7 @@ MathJax = {
     Arguably the closest thing that algorithm designers have to a cheat code, is the insane versatility and speed 
     that Integer Linear Programming (ILP) can bring to the table. 
     Many hard problems can be modelled as an ILP and solved rather efficiently. Even problems that are known
-    to be unsolvable in polynomial time* - like the travelling salesmen - can often scale fairly well as an 
+    to be unsolvable in polynomial time* - like the travelling salesman problem - can often scale fairly well as an 
     ILP model before the theory catches up. Obviously this does mean, that an ILP solver cannot run in
     polynomial time either. But, considering a sudoku is always of the same size, you could say that our program
     runs in \( O(1) \) time complexity :)
@@ -411,7 +411,7 @@ for i in range(9):
 {% endcall %}
 
 <p>
-That's all the constraints we need to complete a sudoku. There is still one still missing in the ILP model however and that is
+That's all the constraints we need to complete a sudoku. There is still one thing missing in the ILP model however and that is
 our objective. What is our objective? 
 Well to satisfy all the constraints, but other than that we don't really care. 
 Mmm, we really need to specify a goal? Let's just do something arbitrary, 

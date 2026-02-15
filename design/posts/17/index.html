@@ -81,7 +81,7 @@ struct Vertex {
 }
 {% endcall %}
 
-However this is problematic because storage buffer alignment requirements state that each struct field should be 16 bytes alligned. Therefore we would have to
+However this is problematic because storage buffer alignment requirements state that each struct field should be 16 bytes aligned. Therefore we would have to
 add some padding:
 
 {% call macros.code("cpp") %}
@@ -103,7 +103,7 @@ struct Vertex {
 {% endcall %}
 
 We can do this by relying on the mathematical invariant of a normal being of length 1: \(\sqrt(N_{x}^2 + N_{y}^2 + N_{z}^2) = 1\). Which means that if 
-we ommit the z component, we can later find it again as \(N_{z} = \sqrt(1 - N_{x}^2 - N_{y}^2)\). There is a problem however, because square root yields
+we omit the z component, we can later find it again as \(N_{z} = \sqrt(1 - N_{x}^2 - N_{y}^2)\). There is a problem however, because square root yields
 two unique solutions: a negative and a positive one. Therefore we need one extra bit to save the sign of the z component. Since we don't have an extra
 bit to spare, we need to steal it. Let's take a look at the memory layout of a floating point number:
 
@@ -119,7 +119,7 @@ bit to spare, we need to steal it. Let's take a look at the memory layout of a f
 {% endcall %}
 
 The definition of a floating point number is kind of like the mathemical notation but then powers of two. The most information is in the mantissa, which represent a number between 0 and 1.
-If we want to represent larger numbers we can choose a positive exponent to get a final value \(2^{exponent} * mantissa \). Finally there is a single sign bit which dictates wether the number
+If we want to represent larger numbers we can choose a positive exponent to get a final value \(2^{exponent} * mantissa \). Finally there is a single sign bit which dictates whether the number
 is positive. If we only deal with values between 0 and 1 (like normal components), we can speculate that flipping the least significant bit of the mantissa has minimal effect on the resulting
 floating point result. We are going to use this property to store the signbit of the z value in the least significant bit of the x component:
 

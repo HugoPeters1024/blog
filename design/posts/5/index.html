@@ -22,15 +22,15 @@ Inside your computer is a device that is amazingly powerful but also tediously h
 Your Graphics Processing Unit (GPU) is responsible for pretty much anything visual. Even if you
 do not have a dedicated graphics card, then you likely have a CPU that has onboard graphics. Basically
 a small build in GPU, which is still quite powerful. It provides all those millions of pixels on your screen
-with a color to display, often 60 times per second or more! So it goes without saying that is reputation as
-a work horse precedes it. Now let's use it to have some fun.
+with a color to display, often 60 times per second or more! So it goes without saying that its reputation as
+a workhorse precedes it. Now let's use it to have some fun.
 
 <h2>Step 1: Some mountains</h2>
-As my profile picture on the <a href="/">/about</a> reveals, mountains are my jam. There are an inspiration,
+As my profile picture on the <a href="/">/about</a> reveals, mountains are my jam. They are an inspiration,
 a place where you can lose time and get some great ideas about what to do with your time in the flatlands later.
 So let the first building block be homage to them giants. In my opinion, to only proper way to get mountains is to
 use a random process, we shouldn't be playing god after all. The process of generating terrain is actually pretty
-straightforward using a height-map. An height-map is an image that contains a luminance value per pixel indicating the
+straightforward using a height-map. A height-map is an image that contains a luminance value per pixel indicating the
 height of that pixel. You can compare it to looking at a satellite photo. 
 
 <div class="window">
@@ -54,7 +54,7 @@ quad which we can fill using two triangles. Then we just slap on a simple grass 
 <figure>
   <img src="renderedheightmap.png" style="max-width:100%"/ >
   <figcaption>
-    Figure 2: A simple rendering of our heightmap. It has not shading implemented and consequently
+    Figure 2: A simple rendering of our heightmap. It has no shading implemented and consequently
     doesn't look very attractive yet.
   </figcaption>
 </figure>
@@ -82,7 +82,7 @@ To fill the black void and get a sense of fresh air we could put a big box aroun
 
 <p>
   Now it is not our intention to create some sort of devilish light that contributes negatively to
-  fragments facing away so we should not forget to to clamp our scalar to not go below 0.
+  fragments facing away so we should not forget to clamp our scalar to not go below 0.
 </p>
 
 <p>
@@ -113,7 +113,7 @@ To fill the black void and get a sense of fresh air we could put a big box aroun
           // define a vector towards the light source
           vec3 lightRay = lightPos - fragPos;
 
-          // dot product of a vector with itself gives the square lenghth.
+          // dot product of a vector with itself gives the square length.
           float lightDis2 = dot(lightRay, lightRay);
 
           float falloff = 1.0f / lightDis2;
@@ -147,15 +147,15 @@ To fill the black void and get a sense of fresh air we could put a big box aroun
   executed for every pixel that is rendered, even if another object is rendered on top of it later! 
   This means that not only do we have to iterate over all light sources for every pixel we render, 
   but we are also likely to do all those, rather non-trivial, calculations for nothing as the fragment 
-  may turn out to be behind other fragments. This especially becomes are problem when we add more light
+  may turn out to be behind other fragments. This especially becomes a problem when we add more light
   sources and more and more illuminance calculations need to be added together.
 </p>
 
 <p>
-  The solution for this is very neat trick called <a href="https://en.wikipedia.org/wiki/Deferred_shading#History">Deffered Shading</a>,
-  which was developed back in 1988 by Micheal Deering<sup><a href="#notes">2</a></sup>. The idea is quite simple, instead actually performing
+  The solution for this is very neat trick called <a href="https://en.wikipedia.org/wiki/Deferred_shading#History">Deferred Shading</a>,
+  which was developed back in 1988 by Michael Deering<sup><a href="#notes">2</a></sup>. The idea is quite simple, instead actually performing
   the calculation for lightness we just save all the values we need for it to a set of textures. Now if fragments get rendered in front
-  it we haven't wasted as much effort. For a minimal example we need at least the following piecies of information to be saved per fragment.
+  it we haven't wasted as much effort. For a minimal example we need at least the following pieces of information to be saved per fragment.
 
   <ul>
     <li>The diffuse color</li>
@@ -179,7 +179,7 @@ To fill the black void and get a sense of fresh air we could put a big box aroun
     <br/>
     <figcaption>
       Figure 5: The four textures generated during the first pass of a
-      deffered shading pipeline. I added some simple stairs to make the example
+      deferred shading pipeline. I added some simple stairs to make the example
       more interesting.
     </figcaption>
   </figure>
@@ -226,7 +226,7 @@ To fill the black void and get a sense of fresh air we could put a big box aroun
 {% endcall %}
 
 <p>
-  Finally we can render a sphere with a radius that is propertional to the lights brightness
+  Finally we can render a sphere with a radius that is proportional to the light's brightness
   and use the lighting shader above to color each fragment. This gives two major speedups. First
   of all, we don't perform lighting calculations for fragments that are too far away from the light
   source to anything at all. Secondly, when a light source is behind us, the process is already stopped
@@ -264,7 +264,7 @@ Let's just pretend like that costs no effort at all and jump to end result:
 
 <p>
 All in all, this post is not my best work. I've been struggling to get it done and after
-a while it just became this ulser that I just had to get through. And that is what I did.
+a while it just became this ulcer that I just had to get through. And that is what I did.
 Sometimes quantity is better than quality, albeit for the writer, not the reader.
 </p>
 

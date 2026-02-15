@@ -185,7 +185,7 @@
   {% call macros.code("rust") %}
   // For each row
   for row in 0..8 {
-      // each domino starting in the first 7 columns (remember, now dominos cover
+      // each domino starting in the first 7 columns (remember, no dominos cover
       // the last column)
       for domino_lhs in 0..6 {
           // The right side of the domino is always one column to the right
@@ -248,7 +248,7 @@
 
   <p>
     Hopefully this post has shown how magical Z3 can feel and how you can easily get
-    started with it in Rust. If you are interesting in using Z3 in other languages,
+    started with it in Rust. If you are interested in using Z3 in other languages,
     I actually have an older post where I use Z3 from Haskell: {{ macros.refPost(15) }}.
   </p>
 

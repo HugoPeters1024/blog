@@ -64,7 +64,7 @@ runQuery query = ask >>= \conn -> liftIO $ externalFun conn query
 {% endcall %}
 
 <p>
-    DBIO is special monad to can still perform IO operations using the liftIO function to lift it up into DBIO. In addition, it exposes the ask function, which returns the value of the environment; or in this case the DbConn instance. This allows us to easily write functions 
+    DBIO is a special monad that can still perform IO operations using the liftIO function to lift it up into DBIO. In addition, it exposes the ask function, which returns the value of the environment; or in this case the DbConn instance. This allows us to easily write functions 
     like selectAll, without having to think about passing down the DbConn, all the while preserving purity. Finally, when we want to execute some DBIO operation, we can unpack the ReaderT layer by providing the environment with which to resolve the inner expression, 
     as seen in the main function.
 </p>

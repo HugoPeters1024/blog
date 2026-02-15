@@ -16,7 +16,7 @@
 <p>
   Playing with GPU shaders has always been one of my main hobbies. It started out with OpenGL after a introductory graphics course during my bachelors.
   It peaked when Vulkan came out and scratched that part of my brain that yearns for well designed and documented APIs (Not to mention RTX support!).
-  And now, frustrated with the fragility of C++, I came to Rust, eluded by the promise of <a href="https://bevyengine.org/">Bevy</a>.
+  And now, frustrated with the fragility of C++, I came to Rust, allured by the promise of <a href="https://bevyengine.org/">Bevy</a>.
   Whilst still in the honeymoon phase I discovered that it was not only possible, but near trivial to compile a bevy game to work in the browser! 
   Now I can finally convey my shader-love directly in my posts!
 
@@ -36,7 +36,7 @@ the points in real-time.
 <p>
   I personally really dislike working with WGSL (the suggested replacement for GLSL when it comes to web),
   so I chose to implement the material using GLSL shaders. All we have to do is create a struct containing
-  our set of points, let say a 100 of them, and them derive the Material2d trait.
+  our set of points, let's say a 100 of them, and then derive the Material2d trait.
   There is a crux however, because in order for the array to be mapped correctly to shader memory,
   each array element needs to be 16 byte aligned. We therefore allocate a Vec4 for each point, even though we only need 2. 
 </p>

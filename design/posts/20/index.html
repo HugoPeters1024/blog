@@ -18,7 +18,7 @@ MathJax = {
 
 <h2>The rules</h2>
 
-M.A.D.S (Multiply, Add, Substract, Divide) is a simple task that uses just basic arithmetic.
+M.A.D.S (Multiply, Add, Subtract, Divide) is a simple task that uses just basic arithmetic.
 Given two integers x and y, you need to find the least number steps from x to y 
 using a set of operations. This may or not have been a homework assignment of a friend of mine,
 whose identity I shall protect (It goes without saying that I did not do his homework...).
@@ -90,9 +90,9 @@ which is thus an upper bound to the number of steps required to solve the proble
 <p>
   Since we are only interested in the shortest number of operations, and do not 
   actually care which operations, we simply assign a cost of 1 to each edge.
-  If you are already familair with Breadth First Search, then you might understand
+  If you are already familiar with Breadth First Search, then you might understand
   Dijkstra as simply Breadth First Search using a priority queue. But since every
-  edge incurs a cost of precisily one, we will actually never need the priority
+  edge incurs a cost of precisely one, we will actually never need the priority
   property and Dijkstra simplifies to just BFS.
 </p>
 
@@ -146,12 +146,12 @@ BFS: answer is 8 in 16600 ticks or 282.945µs
 
 There is a major problem with this approach, which is that we visit the same node multiple times.
 During our search we may keeping adding and subtracting 1, making no meaningful progress. We can prune
-the search space by capatilizing on the fact that if we ever visit a number we have already seen after n steps, we know
+the search space by capitalizing on the fact that if we ever visit a number we have already seen after n steps, we know
 a fact that we can reach this number in at most n steps already, and thus we can prune this branch of the search tree.
 
 <h2>Implementation 2: BFS with pruning</h2>
 
-Very similar to the first implementation, with the exception that we keep track of visisted nodes
+Very similar to the first implementation, with the exception that we keep track of visited nodes
 using a hashset. In the while loop we can then first check if this node has been visited before, and if so
 we can skip it.
 
@@ -194,7 +194,7 @@ fn bfs_pruned(x: u32, y: u32) {
 }
 {% endcall %}
 
-This significantly increases the amount of numbers checked and consequently the time it takes to run.
+This significantly decreases the amount of numbers checked and consequently the time it takes to run.
 
 {% call macros.code('text') %}
 BFS_pruned: answer is 8 in 3362 ticks or 189.221µs
@@ -292,7 +292,7 @@ BFS_simul: answer is 8 in 299 ticks or 27.73µs
 
 <h2>Turning up the heat</h2>
 
-Thusfar we have been working with a relatively small example. Let's see how our implementations perform
+Thus far we have been working with a relatively small example. Let's see how our implementations perform
 with an x, y pair that is a bit further apart. Through random experimentation I have found that x = 32432, y = 2310024
 lie 20 steps apart. Tragically, the naive implementation crashes because it runs out of memory. We can still compare
 BFS_pruned to BFS_simul:

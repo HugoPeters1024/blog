@@ -113,7 +113,7 @@ the knight returned to the cabin.
                 ny = py + dy
                 if nx >= 0 and \
                    nx <  w and \
-                   ny >= 0 and \ 
+                   ny >= 0 and \
                    ny <  h and \
                    board[nx + w * ny] == 0:
                     validMoves.append((nx, ny))
@@ -133,7 +133,7 @@ the knight returned to the cabin.
   <div class="panel">
   <figure>
     <img src="random_move.png" alt="distribution plot of moves until blocked when randomly
-    choosen" style="max-width:100%">
+    chosen" style="max-width:100%">
     <figcaption>Fig.1 - Distribution plot of the number of moves made before the  
       knight was stuck. When any of these numbers would have been 36, the knight would have
       completed a tour.</figcaption>
@@ -148,7 +148,7 @@ the knight returned to the cabin.
   felt content with knowing the knight would be around for a while. The next day
   he took the knight out for a walk in the nearby forest. He pointed at the trees
   and with a soft voice started to describe how the each branch itself looks like
-  a three, albeit smaller. Symptomatic of overcoming his latest brush with defeat,
+  a tree, albeit smaller. Symptomatic of overcoming his latest brush with defeat,
   the knight started to climb up in one of the trees. Although not fully realizing
   the meaning behind the cabin owner's words, he appreciated the insight and felt
   it ought to be meaningful someday.
@@ -171,7 +171,7 @@ the knight returned to the cabin.
   the knights head the cogs started turning.. "Well if you have a chessboard, each cell
   marked with the order of visiting it, or a 0 if it has never been visited, than we can
   consider each possible move a sub tree of that 'node'! My fortune must be somewhere
-  at the top of the three, like a golden leaf! The prince did not say anything
+  at the top of the tree, like a golden leaf! The prince did not say anything
   about using computers, I can simply program this out and let the computer find the solution!"
 </p>
 
@@ -307,7 +307,7 @@ will have after beating him.
 Frustratingly, the truth could not be further removed from his dreams, as even after
 10 minutes, when the prince had long completed his tour, the knight was still
 backtracking. Feeling more flabbergasted than sad, he congratulated the prince and
-took of again to the old familiar cabin.
+took off again to the old familiar cabin.
 </p>
 
 
@@ -410,7 +410,7 @@ for not ever revealing the solution of that cursed cursed game.
 <h2>Chapter 5: Sciens ex machina</h2>
 <p>
 His head was covered in sweat. The sheets were largely on the ground.
-The knight was heaving a nightmare<sup>(*2)</sup>. "No more ideas, oh
+The knight was having a nightmare<sup>(*2)</sup>. "No more ideas, oh
 brave knight," said the demon mockingly with a deep voice. "Your parents
 must be celebrating, they knew you would never be smart enough to make
 a fortune." The knight was paralyzed, it felt like the gravity dial
@@ -432,7 +432,7 @@ The knight woke up feeling like his head was hit with a brick. That feeling
 would persist until well after sunset when it suddenly started to retreat.
 Like ebb and flow the headache replaced itself with an unprecedented clarity
 and one word from all the books in the cabin's cellar echoed in his skull:
-"Warndorff, Warndorff, Warndorff..."
+"Warnsdorff, Warnsdorff, Warnsdorff..."
 </p>
 
 <p>
@@ -441,13 +441,13 @@ his time on taking care of the cabin and rarely thought of the Knight's Tour.
 When he did try to gain more knowledge by scrolling through the old books, he
 was often distracted by his persisting grief. Yet that evening, having reflected
 all day on his dream it all seemed to come together. Every word he read but
-forget came surging back into his conciousness. "Warndorff.. Warndorff.. Warndorff's
+forget came surging back into his consciousness. "Warnsdorff.. Warnsdorff.. Warnsdorff's
 method!," his memory screamed. It was all so clear now. Backtracking is not that
 bad of an idea at all but it matters which path you choose. That's why the results
 varied so much, sometimes he was just lucky choosing the right move. Backtracking is
 of course based on the fact that you do not know the correct path upfront but that
 doesn't mean that you cannot make an educated guess. It's like the winged creature
-from his dream suggested, if go far from home to find adventure you will miss the
+from his dream suggested, if you go far from home to find adventure you will miss the
 small adventures close by forever. Just like the cells on the chessboard, if you
 do not visit the cells that are almost boxed in you may never see them again! You
 first got to choose the nearly closed doors before exploring new ones. That's the
@@ -560,7 +560,7 @@ heuristic! Choose a move that has the least follow up moves first!
 
 Never before had a prince experienced that much agony and confusion as the time
 a most determined knight did not challenge him again; For with a broad smile on his face, the 
-knight went home with a fortune that no could one ever take away from him. When somebody
+knight went home with a fortune that no one could ever take away from him. When somebody
 would ever ask him about his fortune he would simply say <i>"If a work of fiction 
 burns in a fire then the story dies with its writer. If a work of science 
 burns in a fire, only the name of the author changes."</i> 
@@ -568,11 +568,11 @@ burns in a fire, only the name of the author changes."</i>
 <h2>Epilogue</h2>
 What the knight had learned was not simply the meaning of fortune, nor
 that the value of life did not have any monetary value. Not even that taking
-care of a cabin in the woods sounds like a pretty neat idea. Whilst al those thing
+care of a cabin in the woods sounds like a pretty neat idea. Whilst all those things
 might be true, the real lesson is that an algorithm and its respective complexity
 alone is not always enough to make a judgement. Heuristics may not change
 the fact that it takes O(n<sup>2</sup>) to solve the Knight's Problem, yet it
-matters a hell of lot.
+matters a hell of a lot.
 
 <h2>Notes</h2>
 
@@ -591,8 +591,8 @@ matters a hell of lot.
   <p>
   *3 <i>The inverse, 100x40, takes ages (longer than my patience at least), 
     I have no idea why. Please let me know if you have any idea. (edit: my
-    hyphothesis is that the unmeaningful order of moves are preserved when
-    heuristic is equal. It might be benificial to make the getMoves() method
+    hypothesis is that the unmeaningful order of moves are preserved when
+    heuristic is equal. It might be beneficial to make the getMoves() method
     return the moves in a more semantically meaningful order, like as clockwise vectors)</i>
   </p>
 

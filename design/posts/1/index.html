@@ -7,7 +7,7 @@
         blog for two main reasons: 1. To force myself to think deeply about programming
         decisions (after all, it must somehow become a coherent narrative). And 2. as a way of 
         putting myself out there as a software and computer science enthusiast, something that
-        will hopefully lead to meeting new people. So now, what a better way to start of a 
+        will hopefully lead to meeting new people. So now, what a better way to start off a 
         programming blog by writing a piece on how I created this website itself? Do note 
         that I do not plan to keep editing and updating this post going forward, so if 
         you are from the future the website may well be a little different than described 
@@ -46,7 +46,7 @@
       Incidently, I also played a small role in making a static photo gallery
       for my study association which was to be placed behind a login to abide by
       GDPR guidelines. This project contained a few templates along with a python
-      applications to build and manage the website and it's state. I decided to
+      applications to build and manage the website and its state. I decided to
       borrow heavily from this setup. This project is also open source by the way
       (<a href="https://www.github.com/svsticky/pxl" target="_blank">github</a>)
       </p>
@@ -164,11 +164,11 @@
       <p>
       At this time I was introduced to another problem however; code segments are placed
       between 'pre' (preformated) tags. That means that the indent I so nicely added to my
-      templates to keep things readable, where now also showing up in the final result.
+      templates to keep things readable, were now also showing up in the final result.
       Evidently I could not simply remove all white space from the start of every line because I
       want to be able to present indented code snippets in a frivolous attempt to make the
       impression that I write tidy code. Fixing this problem would require us to consider all the
-      lines of code in the snippet together. What we want to the remove the leading indent
+      lines of code in the snippet together. What we want is to remove the leading indent
       of the snippet, or in other words remove all indent that is shared between all the lines.
       Let's fix our highlight function so to satisfy this new constraint:
       </p>
@@ -202,7 +202,7 @@
       <p>
       Over the years I've created loads of small cli programs. But until recently they always
       sucked. I've had dotnet projects with 30 different attributes all doing weird type
-      reflecion logic to slowly consume a command and eventually select a method to execute.
+      reflection logic to slowly consume a command and eventually select a method to execute.
       </p>
 
       <p>
@@ -384,7 +384,7 @@
       {% endcall %}
 
       <p>
-      We have the our design directory that contains all of our templates and other files that I
+      We have our design directory that contains all of our templates and other files that I
       might need in any future posts, conveniently boxed in their own subdirectory. In our build
       folder we have now have the exact same tree structure except that the template are now
       rendered with the data provided by the state.json file (also I deleted the templates

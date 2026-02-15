@@ -99,7 +99,7 @@
     <p>
     Alright, so what do we do when we can't always obtain an answer? What can we say
     about the result? Imagine we have a function that converts the character of a digit to
-    the actual integer, so 0-9. A beginning haskeller might find him or herself
+    the actual integer, so 0-9. A beginning Haskeller might find him or herself
     with the following dilemma: what if it is not a character of a digit? Should we return
     a standard value or throw an error. Perhaps leave a handy comment as well?
     </p>
@@ -147,7 +147,7 @@
 
     <p>
     Okay, so our answer is wrapped in a Maybe, it is either Nothing or Just a value. But how
-    do we get rid of it again when we want to do something with?
+    do we get rid of it again when we want to do something with it?
     </p>
 
     {% call macros.code("haskell") %}
@@ -241,7 +241,7 @@
     <p>
     This is the part where it gets really interesting and the use of complicated
     words increase. We're going to attribute 3 titles to Maybe that we later will
-    learned are also attributed to many other Haskell datatypes:
+    learn are also attributed to many other Haskell datatypes:
     </p>
 
     <ul>
@@ -346,9 +346,9 @@
     {% call macros.code("haskell") %}
     (<*>) :: Applicative f => f (a -> b) -> f a -> f b
 
-    --Again, let's tranlate that to specifically Maybe
+    --Again, let's translate that to specifically Maybe
 
-    (<*>) :: Maybe (a -> b) -> Maybe a -> Mabye b
+    (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b
     {% endcall %}
 
     This looks very familiar to fmap, the only difference is that the function is contained
@@ -368,7 +368,7 @@
     -- new function with one argument less.
     {% endcall %}
 
-    No let's look back at fmap:
+    Now let's look back at fmap:
 
     {% call macros.code("haskell") %}
     (<$>) :: (a -> b) -> Maybe a -> Maybe b
@@ -430,7 +430,7 @@
     }
     {% endcall %}
 
-    Now to top at all of, the plus with composition function in C#!
+    Now to top it all off, the plus with composition function in C#!
 
     {% call macros.code("csharp", source=Dsrc) %}
     public static class PlusDemo
@@ -484,7 +484,7 @@
     <p>
     With the damage already done, I can also say that haskell has an operator named
     'pure' which does exactly the same thing. In our C# implementation we will use
-    that word to make things less ambigious. 
+    that word to make things less ambiguous. 
     </p>
 
     <p>
@@ -546,7 +546,7 @@
     }
     {% endcall %}
 
-    No let's see what our 'destroyIfEven' were to look like:
+    Now let's see what our 'destroyIfEven' were to look like:
 
     {% call macros.code("csharp", source=Dsrc) %}
     public static Maybe<int> DestroyIfEven(Maybe<int> input)

@@ -29,7 +29,7 @@
 
 <p>
     The code in this post was heavily inspired by the <a href="https://github.com/VMatthijs/CHAD">CHAD: Combinatory Homomorphic Automatic Differentiation</a> project.
-    Which is an embedded language for automatic differentiation. One of the authors of that project and an acquittance at Utrecht University, 
+    Which is an embedded language for automatic differentiation. One of the authors of that project and an acquaintance at Utrecht University, 
     <a href="https://tomsmeding.com">Tom Smeding</a>, whom I regularly trouble with my questions, also deserves some credit for answering those questions.
     
 </p>
@@ -118,7 +118,7 @@ test :: Term
 test = Lambda (Lambda (Var 0)) `App` Var 1 `App` Var 2
 {% endcall %}
 
-Note that this program is some sense not valid, since the applied variables are not in scope. They refer to a binding site outside of the epxression. 
+Note that this program is some sense not valid, since the applied variables are not in scope. They refer to a binding site outside of the expression. 
 The fact that this is possible in our language already alludes to fact that our embedded language might be a bit underspecified to enforce
 correctness. However for now, it would be a great way to verify that our upcoming reduction routine works as expected. Because currently we have:
 
@@ -158,7 +158,7 @@ x2
 
 All seems to be well :). Except of course the fact that it is an invalid program, because we end with a naked variable that references
 a non existing value. Furthermore, there is not enough information to compile to, or rather evaluate, the expression back to normal haskell.
-Due the lack of of type information, the following function cannot be implemented:
+Due to the lack of type information, the following function cannot be implemented:
 
 {% call macros.code("haskell") %}
 eval :: Term -> a
@@ -433,7 +433,7 @@ subst' w n sub (Lambda e) = Lambda (subst' (wSink w) (S n) (sinkTerm1 sub) e)
 subst' w n sub (App f arg) = App (subst' w n sub f) (subst' w n sub arg)
 {% endcall %}
 
-Take a moment to appreaciate what exactly is going on here as it is a lot to comprehend. I don't expect you to fully understand it without
+Take a moment to appreciate what exactly is going on here as it is a lot to comprehend. I don't expect you to fully understand it without
 playing around with it yourself. If on the other hand you do trust that this function does what it promises, you will be glad to discover
 that beta reduction is now nearly trivial:                                                                                                                              
 
@@ -484,7 +484,7 @@ mockingbird = Lambda $ App (Var Z) (Var Z)
 
 
 <p>
-    The same problem arouses with the y-combinator, which introduces a form of recursion in lambda calculus. All in all, it seems that our typed version is much less expressive,
+    The same problem arises with the y-combinator, which introduces a form of recursion in lambda calculus. All in all, it seems that our typed version is much less expressive,
     and that is indeed true. I would argue that just typed lambda calculus also does not make that much sense. Instead it would be more sensible to use the type environment only as
     as 'count the number of binding sites' environment. That way we can still ensure that variables are not out of scope, but without the typing conflicts. 
 </p>
@@ -588,8 +588,8 @@ sinkTerm1 :: Term n -> Term (NS n)
 sinkTerm1 = sinkTerm (wSucc wId)
 
 subst :: n :> n' -> Term n' -> Term (NS n) -> Term n'
-subst w = subst' weakning Z
-    where weakning = Weaken $ \case
+subst w = subst' weakening Z
+    where weakening = Weaken $ \case
                           Z -> error "variable should have been replaced"
                           S i -> w >:> i
 
