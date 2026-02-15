@@ -66,7 +66,7 @@
             "title": "A Hacking Bootcamp",
             "postedAt": "2020-07-22T21:09:25",
             "languages": [],
-            "favicon": ""
+            "favicon": "favicon.svg"
         },
         {
             "number": 8,
@@ -115,7 +115,7 @@
                 "c#",
                 "c++"
             ],
-            "favicon": ""
+            "favicon": "favicon.svg"
         },
         {
             "number": 13,
@@ -124,7 +124,7 @@
             "languages": [
                 "haskell"
             ],
-            "favicon": ""
+            "favicon": "favicon.svg"
         },
         {
             "number": 14,
@@ -133,7 +133,7 @@
             "languages": [
                 "rust"
             ],
-            "favicon": ""
+            "favicon": "hkt.png"
         },
         {
             "number": 15,
