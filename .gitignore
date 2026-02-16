@@ -6,4 +6,6 @@ ignore/
 .dev-child
 env/
 venv/
-
+result/
+result
+.direnv/
