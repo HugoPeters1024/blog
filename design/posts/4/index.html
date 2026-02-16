@@ -20,7 +20,7 @@ code snippets.
 <p>
 Functional languages are keen on representing their lists as singly linked lists.
 This discourages the idea of accessing the list randomly since the lookup
-operation now requires linear time as opposed to constant time. The only sensible
+operation now requires linear time as opposed to constant time.  The only sensible
 way of using such a list is by traversing it a from beginning to end.
 </p>
 
@@ -116,8 +116,8 @@ public static SList<T> pureSList<T>(T el)
 {% endcall %}
 
 <h3>Fmap makes Functors</h3>
-"To apply a function over this object", that is the what fmap does. For maybe
-this could also mean silent rejection in the case of Nothing. With lists it is
+"To apply a function over this object", that is what <code>fmap</code> does. For maybe
+this could also mean silent rejection in the case of <code>Nothing</code>. With lists it is
 not much different; after all, we cannot apply a function over an empty list. 
 For the non empty list we simply apply the function over the head and then apply
 fmap over the tail recursively to affect the all the elements in the list.
@@ -207,13 +207,13 @@ Consider the following steps:
 {% endcall %}
 
 <p>
-I hear you pondering and yes you are absolutely correct: bind for lists is the
-same as concatenating after mapping, an operation also known as concatMap!
+I hear you pondering and yes you are absolutely correct: <code>bind</code> for lists is the
+same as concatenating after mapping, an operation also known as <code>concatMap</code>!
 </p>
 
 <p>
-Us rests one final task before we may call SList a monad and that is to implement
-pure. To complete our set of mnemonics: "To put an item inside an object". For lists
+Us rests one final task before we may call <code>SList</code> a monad and that is to implement
+<code>pure</code>. To complete our set of mnemonics: "To put an item inside an object". For lists
 we could easily think to create a list with one item, a.k.a. a singleton. But we will
 instead set out to derive this nonetheless correct idea from the holy <i>Monad Laws</i>.
 We haven't touched on this before but there are 3 laws monads have to abide by regarding the
@@ -345,10 +345,10 @@ We have constructed the singly linked list in C# and made it no less than a Func
 Applicative, and a Monad. We did this using some newly established mnemonics:
 
 <ul>
-  <li>fmap applies a given function to the contents of an object</li>
-  <li>ab applies a given argument (wrapped in an object) to a function inside another object</li>
-  <li>bind transforms the object by feeding its content to the given function</li>
-  <li>pure wraps a regular value inside an object (whilst adhering to the 3 monad laws)</li>
+  <li><code>fmap</code> applies a given function to the contents of an object</li>
+  <li><code>ab</code> applies a given argument (wrapped in an object) to a function inside another object</li>
+  <li><code>bind</code> transforms the object by feeding its content to the given function</li>
+  <li><code>pure</code> wraps a regular value inside an object (whilst adhering to the 3 monad laws)</li>
 </ul>
 
 Finally we have shortly seen how these functions can be utilized and combined to implement

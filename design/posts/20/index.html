@@ -100,7 +100,7 @@ which is thus an upper bound to the number of steps required to solve the proble
 
 We simply do a BFS using a work queue, containing pairs of a number and the
 number of steps taken to get there. Besides keeping track of the amount of time
-spent, we also keep track of the number of nodes we visit using the variable ticks.
+spent, we also keep track of the number of nodes we visit using the variable <code>ticks</code>.
 
 {% call macros.code("rust", source=src) %}
 use std::collections::VecDeque;
@@ -145,9 +145,9 @@ BFS: answer is 8 in 16600 ticks or 282.945µs
 {% endcall %}
 
 There is a major problem with this approach, which is that we visit the same node multiple times.
-During our search we may keeping adding and subtracting 1, making no meaningful progress. We can prune
-the search space by capitalizing on the fact that if we ever visit a number we have already seen after n steps, we know
-a fact that we can reach this number in at most n steps already, and thus we can prune this branch of the search tree.
+During our search we may keep adding and subtracting 1, making no meaningful progress. We can prune
+the search space by capitalizing on the fact that if we ever visit a number we have already seen after <code>n</code> steps, we know
+a fact that we can reach this number in at most <code>n</code> steps already, and thus we can prune this branch of the search tree.
 
 <h2>Implementation 2: BFS with pruning</h2>
 

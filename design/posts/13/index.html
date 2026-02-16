@@ -39,7 +39,7 @@ main = let
     in print numbers
 {% endcall %}
 
-What this program does, is figure out a way to work with the getNextNr function. Which does not only convert the number you give it to
+What this program does, is figure out a way to work with the <code>getNextNr</code> function. Which does not only convert the number you give it to
 a string, but also increments that number. We want to execute this function a number of times and collect the strings
 it outputs, but also <i>chain</i> the resulting integer back the input of the next call. The output of this piece of code is
 unsurprisingly:
@@ -89,7 +89,7 @@ runState :: State a b -> a -> (a, b)
 runState (State f) = f
 {% endcall %}
 
-This function will, given a state function and an initial state return a final state and the resulting b. 
+This function will, given a state function and an initial state return a final state and the resulting <code>b</code>. 
 If we don't care about the final state we could spoil the users of our code with a special version:
 
 {% call macros.code("haskell") %}
@@ -110,11 +110,11 @@ getNextNr = do
     return (show current)
 {% endcall %}
 
-Unfortunately, this does not yet compile because our custom State type does not implement the Monad typeclass yet (which first requires Functor and Applicative). The functions get and put also do not exist
+Unfortunately, this does not yet compile because our custom <code>State</code> type does not implement the <code>Monad</code> typeclass yet (which first requires <code>Functor</code> and <code>Applicative</code>). The functions <code>get</code> and <code>put</code> also do not exist
 yet. 
 
 <h2>Making State a functor</h2>
-A functor is a type that implements the Functor typeclass. This typeclass contains only the function fmap. As explained in {{ macros.refPost(3) }}, fmap just allows users to apply a function over the type contained in the monad. In our case this is the resulting type b:
+A functor is a type that implements the <code>Functor</code> typeclass. This typeclass contains only the function <code>fmap</code>. As explained in {{ macros.refPost(3) }}, <code>fmap</code> just allows users to apply a function over the type contained in the monad. In our case this is the resulting type <code>b</code>:
 
 
 {% call macros.code("haskell") %}
@@ -122,7 +122,7 @@ instance Functor (State a) where
     fmap f state = State $ \s -> let (ns, res) = runState state s in (ns, f res)
 {% endcall %}
 
-As you can see we simply 'hijack' the final part of the state function by applying the transformation contained in f over the resulting value res. The resulting state ns is untouched.
+As you can see we simply 'hijack' the final part of the state function by applying the transformation contained in <code>f</code> over the resulting value <code>res</code>. The resulting state <code>ns</code> is untouched.
 
 We could now make a new version of getNextNr that is very exciting:
 
@@ -180,7 +180,7 @@ instance Monad (State a) where
 
 <h2>Wrapping up, get and put</h2>
 
-The two last missing pieces in the puzzle are the get and put functions. The get function should give us the current
+The two last missing pieces in the puzzle are the <code>get</code> and <code>put</code> functions. The <code>get</code> function should give us the current
 state as is. We can do this by duplicating the state to the result value. This means that the state itself becomes unchanged
 but we can now get the state via the bind operation.
 
@@ -189,7 +189,7 @@ get :: State a a
 get = State $ \state -> (state, state)
 {% endcall %}
 
-Lastly the put operation is very similar in the sense that the effect is exactly reversed. We don't care about the result value
+Lastly the <code>put</code> operation is very similar in the sense that the effect is exactly reversed. We don't care about the result value
 but we just want to update the state regardless of its old value. 
 
 {% call macros.code("haskell") %}
@@ -215,7 +215,7 @@ main = let
     in print numbers
 {% endcall %}
 
-For a complete picture let me reinvent sequence as well. This functional normally operates on any Traversable but let's keep
+For a complete picture let me reinvent <code>sequence</code> as well. This function normally operates on any <code>Traversable</code> but let's keep
 it simple and just do lists for now:
 
 {% call macros.code("haskell") %}

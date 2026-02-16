@@ -35,7 +35,7 @@
   <h3>Modeling the puzzle</h3>
 
   <p>
-    First step is to make a new Rust project and add the Z3 crate to the dependencies.
+    First step is to make a new Rust project and add the <code>z3</code> crate to the dependencies.
   </p>
 
   {% call macros.code("sh") %}
@@ -63,7 +63,7 @@
 
   Then we need to create a set of 64 variables that represent the cells of the board.
   We store them in an 8x8 matrix to match the layout of the board. We also add the
-  constraint that the value must be in the range [1,8].
+  constraint that the value must be in the range <code>[1,8]</code>.
 
   {% call macros.code("rust") %}
   let mut board = Vec::new();

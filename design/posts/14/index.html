@@ -34,7 +34,7 @@
 
 <p>
     The first thing we need to realize is that a Functor is not defined over a traditional 'complete' type. Instead it is defined
-    over a type with kind * -> *. An example would be Maybe, or as Rustians like to call it: Option. Take a look at the definition
+    over a type with kind <code>* -> *</code>. An example would be <code>Maybe</code>, or as Rustians like to call it: <code>Option</code>. Take a look at the definition
     of Functor in haskell
 </p>
 
@@ -51,7 +51,7 @@ that this feature will conflict with the core language principles.
 
 <p>
 However, for the time being we need to hack it in ourselves. Copying from Edmund, I've decided upon two traits that just implement
-the associated type magic needed for our purposes. You see, at no time do we actually need the unapplied, generic Option type, as long as we can convert an Option&lt;A&gt; to an Option&lt;B&gt;
+the associated type magic needed for our purposes. You see, at no time do we actually need the unapplied, generic <code>Option</code> type, as long as we can convert an <code>Option&lt;A&gt;</code> to an <code>Option&lt;B&gt;</code>
 </p>
 
 <p>
@@ -74,7 +74,7 @@ And this is how we are going to do it in rust:
 </p>
 
 <p>
-The first of these is Generic1, which allows us to take the A out of Option&lt;A&gt;, or rather the type (I)nside:
+The first of these is <code>Generic1</code>, which allows us to take the <code>A</code> out of <code>Option&lt;A&gt;</code>, or rather the type (I)nside:
 </p>
 
 {% call macros.code("rust") %}
@@ -88,7 +88,7 @@ impl<A> Generic1 for Option<A> {
 {% endcall %}
 
 <p>
-Secondly, we need a way to replace the inner type of Option. We do that using the trait Plug:
+Secondly, we need a way to replace the inner type of <code>Option</code>. We do that using the trait <code>Plug</code>:
 </p>
 
 {% call macros.code("rust") %}
@@ -105,12 +105,12 @@ impl<A, B> Plug<B> for Option<A> {
 {% endcall %}
 
 Note that we have to trust the user here to correctly implement these traits in order to actually get a correct implementation of the upcoming traits.
-But more tragically, the typechecker is now blissfully unaware that the resulting type is still an instance of Option, making it often impossible to derive
+But more tragically, the typechecker is now blissfully unaware that the resulting type is still an instance of <code>Option</code>, making it often impossible to derive
 the types of expressions.
 
 <h2>Functor</h2>
 
-With the type management traits in place, we can define and implement the Functor trait quite easily, albeit syntactically a bit
+With the type management traits in place, we can define and implement the <code>Functor</code> trait quite easily, albeit syntactically a bit
 of a mess.
 
 {% call macros.code("rust") %}

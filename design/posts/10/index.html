@@ -47,7 +47,7 @@ main = do
 <h2>Hiding DbConn with ReaderT</h2>
 
 <p>
-    We want our functions to live in the IO monad with persistent access to some read only state. This is exactly what the ReaderT monad transformer was created for. We can use it to extend the IO monad and create our very own DBIO monad:
+    We want our functions to live in the IO monad with persistent access to some read only state. This is exactly what the <code>ReaderT</code> monad transformer was created for. We can use it to extend the IO monad and create our very own <code>DBIO</code> monad:
 </p>
 
 {% call macros.code("haskell") %}
@@ -64,13 +64,13 @@ runQuery query = ask >>= \conn -> liftIO $ externalFun conn query
 {% endcall %}
 
 <p>
-    DBIO is a special monad that can still perform IO operations using the liftIO function to lift it up into DBIO. In addition, it exposes the ask function, which returns the value of the environment; or in this case the DbConn instance. This allows us to easily write functions 
+    <code>DBIO</code> is a special monad that can still perform IO operations using the <code>liftIO</code> function to lift it up into <code>DBIO</code>. In addition, it exposes the <code>ask</code> function, which returns the value of the environment; or in this case the <code>DbConn</code> instance. This allows us to easily write functions 
     like selectAll, without having to think about passing down the DbConn, all the while preserving purity. Finally, when we want to execute some DBIO operation, we can unpack the ReaderT layer by providing the environment with which to resolve the inner expression, 
     as seen in the main function.
 </p>
 
 <p>
-    This approach is already much better than the original solution. However, there is just one thing that bugs me and that is the need for wrapping IO operations with liftIO. Consider the following cousin of selectAll:
+    This approach is already much better than the original solution. However, there is just one thing that bugs me and that is the need for wrapping IO operations with <code>liftIO</code>. Consider the following cousin of <code>selectAll</code>:
 </p>
 
 {% call macros.code("haskell") %}
@@ -119,15 +119,15 @@ selectAllAndMore = do
 {% endcall %}
 
 <p>
-    The runQuery and selectAll functions now have a type constraint clause that say that the implicit variable ?conn should be in scope and
-    is implicitly captured as well. This means that we can't call these functions if the typechecker is not convinced that ?conn is in scope. 
+    The <code>runQuery</code> and <code>selectAll</code> functions now have a type constraint clause that say that the implicit variable <code>?conn</code> should be in scope and
+    is implicitly captured as well. This means that we can't call these functions if the typechecker is not convinced that <code>?conn</code> is in scope. 
     Using a simply let binding in main we can declare ?conn and call the functions we want. However, it seems we have exchanged one evil
     for another; Although we now may freely call IO functions without using a tedious liftIO, we constantly have to repeat ourselves elsewhere
     by adding the ?conn constraint to all our database functions. Let's see if we can resolve this.
 </p>
 
 <p>
-Our goal is to create a new type (let's again pick DBIO) that encapsulates the implicit parameter type constraint. However, GHC won't allow
+Our goal is to create a new type (let's again pick <code>DBIO</code>) that encapsulates the implicit parameter type constraint. However, GHC won't allow
 this out of the box. It would mean that there are type variables that are not quantified in the most outer scope. Remember, haskell 
 automatically does the following:
 </p>
@@ -153,7 +153,7 @@ id x = x
 {% endcall %}
 
 <p>
-    Without first enabling the RankNTypes language extension. This is an extension that definitely belongs on the list of extensions that
+    Without first enabling the <code>RankNTypes</code> language extension. This is an extension that definitely belongs on the list of extensions that
     should never be enabled by default. It significantly complicates the job of the type checker, which results in unintelligible error messages
     when things go wrong. However, for our use case, everything remains quite sane, and thus we decide to cope.
 </p>
@@ -185,9 +185,9 @@ selectAllAndMore = do
 {% endcall %}
 
 <p>
-    All our wishes have come true! Inside the DBIO monad we are allowed to perform arbitrary naked IO computations and we always have access to
-    our connection with the ?conn variable. Although we can unlift DBIO back to IO with a simple let binding, we can create a final interface function,
-    allowing the users of our codebase to be able to forget about the implicit parameters all together. In fact, if your peer programmers are avid ReaderT
+    All our wishes have come true! Inside the <code>DBIO</code> monad we are allowed to perform arbitrary naked IO computations and we always have access to
+    our connection with the <code>?conn</code> variable. Although we can unlift <code>DBIO</code> back to IO with a simple let binding, we can create a final interface function,
+    allowing the users of our codebase to be able to forget about the implicit parameters all together. In fact, if your peer programmers are avid <code>ReaderT</code>
     fans, they might not even notice anything different is going on from the outside.
 </p>
 

@@ -54,7 +54,7 @@ MathJax = {
 
 <p>
     In the raytracing pipeline there is initially limited information available about the surface with which a ray collides. Effectively,
-    we only get the gl_PrimitiveID variable, which refers to a triangle in the index buffer. We then need to fetch each vertex of triangle
+    we only get the <code>gl_PrimitiveID</code> variable, which refers to a triangle in the index buffer. We then need to fetch each vertex of triangle
     and interpolate the normal and the texture using the barycentric intersection coordinates. Back in 2009, NVIDIA discovered
     that an imperfect thread scheduling was the biggest bottleneck for raytracing performance. Even after just monkey patching it on the spot
     using persistent threads, they correctly discovered that from that moment on raytracing is not a compute bound process, but memory bound
@@ -71,7 +71,7 @@ MathJax = {
 <p>
 
 <p>
-    My initial Vertex struct looked liked the listing below.
+    My initial <code>Vertex</code> struct looked liked the listing below.
 </p>
 
 {% call macros.code("cpp") %}
@@ -94,7 +94,7 @@ struct Vertex {
 {% endcall %}
 
 Now this is of course very wasteful. Not only are we thrashing the cache, but are doing so with lots of bytes that we never even use. I claim that we can
-compress the normals to only 2 floats such that we can have struct like this:
+compress the normals to only 2 floats such that we can have a struct like this:
 
 {% call macros.code("cpp") %}
 struct Vertex {
@@ -158,7 +158,7 @@ normal.z = sign * sqrt(max(0, 1 - normal.x * normal.x - normal.y * normal.y));
 {% endcall %}
 
 <p>
-   Despite adding a few more compute operations to our shader, the reduced cache pressure due to a smaller Vertex type yielded a performance increase of 5%.
+   Despite adding a few more compute operations to our shader, the reduced cache pressure due to a smaller <code>Vertex</code> type yielded a performance increase of 5%.
 </p>
 
 <img src="honest_work.jpg" class="img">

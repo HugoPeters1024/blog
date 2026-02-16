@@ -128,8 +128,8 @@ data Solution = Solution
 {% endcall %}
 
 However, when dealing with our theorem prover, we are considering Z3 variables, which are addressed as AST nodes.
-Since Z3 is strictly typed when it comes to booleans vs integers, we'll need two distinct variables jint and jbool.
-We could make a third auxiliary boolean variable jisbool, that decides which is the case.
+Since Z3 is strictly typed when it comes to booleans vs integers, we'll need two distinct variables <code>jint</code> and <code>jbool</code>.
+We could make a third auxiliary boolean variable <code>jisbool</code>, that decides which is the case.
 However, that would make it very tedious to define our constraints as the decision to include j is dynamic.
 Instead, I decided to make the decision variable a static boolean, expanding our search space to 2 permutations,
 I think we'll be fine.
@@ -180,7 +180,7 @@ getAllIntsZ3 Z3Solution {..} = let ints = [a,b,d,f,h] in if jisbool then ints el
 <h3>Some auxiliary Z3 helpers</h3>
 
 Z3 does not care about divisions resulting in something other than an integer, and just rounds down to the nearest one.
-Since we do care, we create the following helper function:
+Since we do care, we create the following <code>mkIntDiv</code> helper function:
 
 {% call macros.code("haskell", source=src) %}
 mkIntDiv :: Z.AST -> Z.AST -> Z.Z3 Z.AST
@@ -193,7 +193,7 @@ mkIntDiv lhs rhs = do
     Z.mkDiv lhs rhs
 {% endcall %}
 
-In order to count booleans more easily, we'll create a function to convert true to 1 and false to 0:
+In order to count booleans more easily, we'll create a <code>boolToInt</code> function to convert <code>true</code> to 1 and <code>false</code> to 0:
 
 {% call macros.code("haskell", source=src) %}
 boolToInt :: Z.AST -> Z.Z3 Z.AST
@@ -208,8 +208,8 @@ boolToInt v = do
 With the boilerplate boiling, we can setup our z3 universe. This will be a script that might produce a solution.
 We can get this solution by evaluating the integers and booleans and combining in them in our previously defined Solution datatype.
 The problem is however that the evaluation functions produce a value of type Z3 (Maybe a).
-This means that using a traditional Functor and Applicative approach won't cut it because we'd be propagating (Maybe a) instead.
-What we actually want is a version of fmap and ap that operates on a nested structure:
+This means that using a traditional Functor and Applicative approach won't cut it because we'd be propagating <code>Maybe a</code> instead.
+What we actually want is a version of <code>fmap</code> and <code>ap</code> that operates on a nested structure:
 
 {% call macros.code("haskell", source=src) %}
 (<$$>) :: (Functor f1, Functor f2) => (a -> b) -> f1 (f2 a) -> f1 (f2 b)
@@ -219,7 +219,7 @@ f <$$> arg = fmap (fmap f) arg
 f <**> arg = f >>= \f -> arg >>= \arg -> pure (ap f arg)
 {% endcall %}
 
-With that we can also create a helper to converts the Integer to an Int in the result of evalInt:
+With that we can also create a helper to convert the <code>Integer</code> to an <code>Int</code> in the result of <code>evalInt</code>:
 
 {% call macros.code("haskell", source=src) %}
 evalInt' :: Z.Model -> Z.AST -> Z.Z3 (Maybe Int)
@@ -302,7 +302,7 @@ Now all that is left, is modelling the questions as constraints.
 {% endcall %}
 
 Finally, we run the program and learn in mere milliseconds that we had guessed wrong that j is a boolean answer as the program
-presents us with a Nothing result. Changing that around produces a solution to our puzzle in a similarly near instantaneous fashion:
+presents us with a <code>Nothing</code> result. Changing that around produces a solution to our puzzle in a similarly near instantaneous fashion:
 
 {% call macros.code("haskell") %}
 Just (Solution {a = 144, b = 2, c = True, d = 2, e = False, f = 24, g = False, h = -12, i = True, j = Right (-16)})

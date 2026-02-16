@@ -4,14 +4,14 @@
 
 One thing that I always thought was great about Haskell, which bothered me in OO languages, is the idea of a typeclass. It allows you to implement a common interface for a myriad of types and then implicitly
 create higher order functions; after all, you don't pass the functions themselves, but they can be derived from the type the function is instantiated with. Let me give an example. A very common pattern in
-all languages is the ability to convert an object to its string representation. Haskell comes with a 'Show' typeclass, that defines the common interface:
+all languages is the ability to convert an object to its string representation. Haskell comes with a <code>Show</code> typeclass, that defines the common interface:
 
 {% call macros.code("haskell") %}
 class Show a where
     show :: a -> String
 {% endcall %}
 
-if we then create for example a currency datatype, we can define the show function for all its constructors.
+if we then create for example a currency datatype, we can define the <code>show</code> function for all its constructors.
 
 {% call macros.code("haskell") %}
 data Currency = Euro Int | Dollar Int
@@ -131,8 +131,8 @@ It seems however that there is experimental solutions for this in the pipeline: 
 Although I myself was not skilled enough to get it working just yet.
 
 <h3>Cool hack, but I write professional software</h3>
-Great, this stuff is not a hack, this is actually being used, even in STL! If I want to create an unordered_map of say pairs, you will run into the problem that STL has not implemented a hash
-function for that type and will refuse it as a map key. However, there is a templated hash struct very similar to our show_class that we can specialize with a generic pair type to allow
+Great, this stuff is not a hack, this is actually being used, even in STL! If I want to create an <code>unordered_map</code> of say pairs, you will run into the problem that STL has not implemented a hash
+function for that type and will refuse it as a map key. However, there is a templated hash struct very similar to our <code>show_class</code> that we can specialize with a generic pair type to allow
 for this:
 
 

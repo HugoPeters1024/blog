@@ -61,7 +61,7 @@ $ sudo apt install libglfw3 libglfw3-dev
 {% endcall %}
 
 Now to compile the project we are going to use cmake, which is also available in apt. For simplicity we are going
-to use only a single source file, making the cmake config rather simple. Put the following snippet in a file called CMakeLists.txt
+to use only a single source file, making the cmake config rather simple. Put the following snippet in a file called <code>CMakeLists.txt</code>
 
 {% call macros.code("cmake") %}
 # Ensure we are using a recent version
@@ -92,7 +92,7 @@ target_link_libraries(fire ${OPENGL_LIBRARIES})
 {% endcall %}
 
 <p>
-  Now let's setup a minimal main.cpp to test the compilation pipeline:
+  Now let's setup a minimal <code>main.cpp</code> to test the compilation pipeline:
 </p>
 
 {% call macros.code("cpp") %}
@@ -612,7 +612,7 @@ for (int y=0; y<image_height; y++)
 The compute shader is not much different from this except that the GPU has abstracted away the for loops to help it
 with its own multithreaded execution. 
 In the shader we have defined the work group size as a square of 32 by 32 units. This means that 32*32 instances of the 
-program are executed in parallel. The vector found in the gl_GlobalInvocationID variable tells us the values of which execution
+program are executed in parallel. The vector found in the <code>gl_GlobalInvocationID</code> variable tells us the values of which execution
 we are globally.
 The number of times we have to execute this program then depends of how many times a 32 by 32 grid fits in the entire image.
 </p>

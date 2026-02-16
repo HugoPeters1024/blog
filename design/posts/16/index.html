@@ -98,7 +98,7 @@ can get familiar with the concept of substitutions. In fact, we will start with 
 <h2>Simplest: No types</h2>
 <hr/>
 
-We first define the datatype as well as a custom Show instance:
+We first define the datatype as well as a custom <code>Show</code> instance:
 
 {% call macros.code("haskell") %}
 data Term = Var Int | Lambda Term | App Term Term
@@ -118,8 +118,8 @@ test :: Term
 test = Lambda (Lambda (Var 0)) `App` Var 1 `App` Var 2
 {% endcall %}
 
-Note that this program is some sense not valid, since the applied variables are not in scope. They refer to a binding site outside of the expression. 
-The fact that this is possible in our language already alludes to fact that our embedded language might be a bit underspecified to enforce
+Note that this program is in some sense not valid, since the applied variables are not in scope. They refer to a binding site outside of the expression. 
+The fact that this is possible in our language already alludes to the fact that our embedded language might be a bit underspecified to enforce
 correctness. However for now, it would be a great way to verify that our upcoming reduction routine works as expected. Because currently we have:
 
 {% call macros.code("haskell") %}
@@ -158,7 +158,7 @@ x2
 
 All seems to be well :). Except of course the fact that it is an invalid program, because we end with a naked variable that references
 a non existing value. Furthermore, there is not enough information to compile to, or rather evaluate, the expression back to normal haskell.
-Due to the lack of type information, the following function cannot be implemented:
+Due to the lack of type information, the following <code>eval</code> function cannot be implemented:
 
 {% call macros.code("haskell") %}
 eval :: Term -> a
@@ -168,7 +168,7 @@ eval = error "Not even Tom Cruise can do this..."
 <h2>Harder: Typed expressions</h2>
 <hr/>
 
-Using the power of Generic Algebraic Datatypes (GADTs), we can inductively build up a return type as we construct a term:
+Using the power of Generic Algebraic Datatypes (GADTs), we can inductively build up a return type as we construct a <code>Term</code>:
 
 {% call macros.code("haskell") %}
 {-# LANGUAGE GADTs #-}
@@ -193,7 +193,7 @@ instance Show (Term a) where
 
 <p>
     But we have a problem... The environment can contain terms of all sorts of types, but we cannot have a polymorphic list in haskell (not without more advanced features).
-    Sadly, we can at best botch it with some unsafeCoerce sprinkles; we might just as well have used C.
+    Sadly, we can at best botch it with some <code>unsafeCoerce</code> sprinkles; we might just as well have used C.
 </p>
                                     
 
@@ -212,7 +212,7 @@ ghci> eval (Lambda (Lambda (Var 0))) 10 20 :: Int
 20
 {% endcall %}
 
-The same goes for the substitution function. We could make the error a bit more specific by using the Typeable typeclass (which adds runtime overhead), but that will not
+The same goes for the substitution function. We could make the error a bit more specific by using the <code>Typeable</code> typeclass (which adds runtime overhead), but that will not
 solve the fundamental problem.
 
 {% call macros.code("haskell") %}
@@ -224,15 +224,15 @@ subst' n sub (App f arg) = App (subst' n sub f) (subst' n sub arg)
 {% endcall %}
 
 
-So what is that fundamental problem? It is that we cannot find any evidence for a ~ b because it simply is not true; Our embedded language classifies programs that are
-invalid as admissible. We need stronger guarantees, and by extend more compile time information.
+So what is that fundamental problem? It is that we cannot find any evidence for <code>a ~ b</code> because it simply is not true; Our embedded language classifies programs that are
+invalid as admissible. We need stronger guarantees, and by extension more compile time information.
 
 <h2>Complete: Type Environments</h2>
 <hr/>
 
 The ultimate crux is the environment from which variables get their values. If we encounter a variable with index 1, we must be sure that that binding site exists,
-as well as as that the type of that variable matches with the value in the environment. The way to go about this is to keep track of a type level environment in
-the Term datatype itself. This describes on the type level what kind of environment it needs to resolve all its variables. If that environment is empty, the
+as well as that the type of that variable matches with the value in the environment. The way to go about this is to keep track of a type level environment in
+the <code>Term</code> datatype itself. This describes on the type level what kind of environment it needs to resolve all its variables. If that environment is empty, the
 expression is closed and can be seen as a program that stands on its own.
 
 {% call macros.code("haskell") %}
@@ -267,7 +267,7 @@ instance Show (Term env a) where
 type Exp = Term '[]
 {% endcall %}
 
-So what is Idx then? Because we don't want to be able to reference variables that are out of scope, we create a custom Church Encoding that tells the Var term
+So what is <code>Idx</code> then? Because we don't want to be able to reference variables that are out of scope, we create a custom Church Encoding that tells the <code>Var</code> term
 how many variables in its environment are needed at the least. Don't forget that there may be more variables available, that is not an issue. By adding variables we
 say that an environment becomes weaker, but more on this later.
 
@@ -291,7 +291,7 @@ instance Show (Idx env t) where
     show = ("x"<>) . show . idxToInt
 {% endcall %}
 
-We use similar type magic to create a polymorphic list, that can serve as our runtime environment, allowing us to finally define eval without any caveats:
+We use similar type magic to create a polymorphic list, that can serve as our runtime environment, allowing us to finally define <code>eval</code> without any caveats:
 
 {% call macros.code("haskell") %}
 data Env env where
@@ -338,15 +338,15 @@ ghci> Lambda (Var (S Z)) :: Exp (a -> b)
 
 Us awaits only one last feature: beta reduction. Before we can start on that, we first need a notion of equality for two indices that live in the same environment. 
 Not only should we know that they are the same number, we should also learn that they must then refer to the same type. If we can observe that fact, we no
-longer need any coercions. The perfect candidate for this is the Refl constructor from Data.Equality. It is roughly defined as:
+longer need any coercions. The perfect candidate for this is the <code>Refl</code> constructor from <code>Data.Equality</code>. It is roughly defined as:
 
 {% call macros.code("haskell") %}
 data IsEq a b where
     Refl :: IsEq a a
 {% endcall %}
 
-The effect is that encountering an instance of Refl, gives us the knowledge that a ~ b. Capturing both value and type equality is best done in this case using the
-GEq typeclass:
+The effect is that encountering an instance of <code>Refl</code>, gives us the knowledge that <code>a ~ b</code>. Capturing both value and type equality is best done in this case using the
+<code>GEq</code> typeclass:
 
 {% call macros.code("haskell") %}
 instance GEq (Idx env) where

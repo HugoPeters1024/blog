@@ -280,8 +280,8 @@
 
     <p>
     Alright, let's break it down. To be a Functor means nothing more than having
-    implemented the function 'fmap' which can also be used as an operator under the
-    alias '<$>', the only difference is the location of the arguments. Let's see
+    implemented the function <code>fmap</code> which can also be used as an operator under the
+    alias <code>&lt;$&gt;</code>, the only difference is the location of the arguments. Let's see
     what fmap's type tells us:
     </p>
 
@@ -340,8 +340,8 @@
     <h2>2. Applicative</h2>
     <p>
     To be an applicative means, just like being a functor, nothing more that implementing
-    a function. In this case 'liftA2'. A less general version, but much more commonly used is
-    the operator <*> = liftA2 id. We will focus on <*> (called ab) for now.
+    a function. In this case <code>liftA2</code>. A less general version, but much more commonly used is
+    the operator <code>&lt;*&gt;</code>. We will focus on <code>&lt;*&gt;</code> (called <code>ab</code>) for now.
 
     {% call macros.code("haskell") %}
     (<*>) :: Applicative f => f (a -> b) -> f a -> f b
@@ -488,7 +488,7 @@
     </p>
 
     <p>
-    So this weird (>>=) operator, what does it do? First all, that operator is called
+    So this weird <code>&gt;&gt;=</code> operator, what does it do? First of all, that operator is called
     bind and many would say is the most powerful operator in functional languages. What
     it does is again not that complicated. Give it a function and it will decide for 
     you whether it can actually execute it. This very similar to fmap except that the function
@@ -508,11 +508,11 @@
         if (even x) then Just x else Nothing
     {% endcall %}
 
-    Alright, that's all cool and dandy, but where does 'pure' or 'return' come in?
-    Well, just like its type signature reveals, it simply takes a normal value in
-    puts in a monad. For Maybe that operation is not that hard to imagine...
-    We can just put it in a Just! And yes, that is what happens, pure for Maybe is
-    simply the Just constructor. We could have more generally written:
+    Alright, that's all cool and dandy, but where does <code>pure</code> or <code>return</code> come in?
+    Well, just like its type signature reveals, it simply takes a normal value and
+    puts it in a monad. For <code>Maybe</code> that operation is not that hard to imagine...
+    We can just put it in a <code>Just</code>! And yes, that is what happens, <code>pure</code> for <code>Maybe</code> is
+    simply the <code>Just</code> constructor. We could have more generally written:
 
     {% call macros.code("haskell") %}
     destroyIfEven'' :: Maybe Int -> Maybe Int

@@ -17,7 +17,7 @@ MathJax = {
     For a recent project I found the need to partition a list of errors into
     <b>user</b> and <b>server</b> errors... on the type level. This would allow me to properly
     define a servant definition that is transparent about which errors are returned along with the
-    400 HTTP status code, and which would be send as a 500. This information can then be utilized
+    <code>400</code> HTTP status code, and which would be send as a <code>500</code>. This information can then be utilized
     to automatically generate OpenAPI documentation, which is turning out to be an incredibly powerful
     tool. It allows developers to easily and quickly test an endpoint, reviewers to spot any breaking
     changes in the API, and other teams to do their thing without requiring much assistance.
@@ -89,14 +89,14 @@ MathJax = {
     for the slowdown, but this is actually not case.
     With the help of <a href='https://github.com/codedownio/time-ghc-modules'>time-ghc-modules</a> I was able to identify
     GHC's simplifier as the source of the slowdown.
-    Not really expecting to learn much from it, I compiled with the -ddump-simpl flag to be able to inspect the Core representation
+    Not really expecting to learn much from it, I compiled with the <code>-ddump-simpl</code> flag to be able to inspect the Core representation
     at each stage of the simplifier. But without even looking at it, I could see something was off: the pretty printed Core was gigabytes
     in size! All the while the server module was only a couple hundred lines of code.
-    Glancing at the Core identified the suspect: A LOT of typelevel occurances of the <b>If</b> constructor.
+    Glancing at the Core identified the suspect: A LOT of typelevel occurances of the <code>If</code> constructor.
   </p>
 
   <p>
-    The issue is that <b>If</b> is just a constructor and is not actually being reduced by the compiler. As a result, both
+    The issue is that <code>If</code> is just a constructor and is not actually being reduced by the compiler. As a result, both
     recursive calls to the filter are expanded and an exponential size type level term is created! To be precise, \(2 ^ n\).
     To resolve this, we need to reformulate the type family to only have 1 recursive call.
     It might seem obvious when I give you the answer, but I can assure you that I would not have been able to crack the case

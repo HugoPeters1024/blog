@@ -36,9 +36,9 @@ the points in real-time.
 <p>
   I personally really dislike working with WGSL (the suggested replacement for GLSL when it comes to web),
   so I chose to implement the material using GLSL shaders. All we have to do is create a struct containing
-  our set of points, let's say a 100 of them, and then derive the Material2d trait.
+  our set of points, let's say a 100 of them, and then derive the <code>Material2d</code> trait.
   There is a crux however, because in order for the array to be mapped correctly to shader memory,
-  each array element needs to be 16 byte aligned. We therefore allocate a Vec4 for each point, even though we only need 2. 
+  each array element needs to be 16 byte aligned. We therefore allocate a <code>Vec4</code> for each point, even though we only need 2. 
 </p>
 
 {% call macros.code("rust", source=src_main) %}
@@ -76,7 +76,7 @@ impl Material2d for CustomMaterial {
 }
 {% endcall %}
 
-The vertex shader is a simple one; we take the mesh inputs from bevy and simply set the gl_Position and extract
+The vertex shader is a simple one; we take the mesh inputs from bevy and simply set the <code>gl_Position</code> and extract
 the screenspace uv coordinates.
 
 
@@ -176,7 +176,7 @@ void main() {
 <h2>Creating a resource for animation</h2>
 
 To animate the app we need to alter the points in the material, as well as keep track of the velocities of each point.
-We don't actually need the velocities in the shader so I kept them separate from the material and created a resource
+We don't actually need the velocities in the shader so I kept them separate from the material and created a <code>Resource</code>
 instead:
 
 {% call macros.code("rust", source = src_main) %}

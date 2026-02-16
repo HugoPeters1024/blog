@@ -23,7 +23,7 @@ I will use an actual case I encountered when using the haskell-like language Elm
 Whilst working on an application where you can explore and compare multiple code sources,
 I wanted to add a functionality that hides toplevel functions that are the same across currently
 opened panels.
-I had already written a function effectively executed a GROUP BY query based on some integer projection of
+I had already written a function that effectively executed a GROUP BY query based on some integer projection of
 the function. I would later call it with a mapping from the function to a pre calculated hash based on its body.
 
 {% call macros.code("elm") %}
@@ -52,7 +52,7 @@ hideSet = Set.fromList (List.map topBindingInfoToInt (List.concat (List.filter (
 </p>
 
 <p>
-  One option to improve the snippet is with the help of the equivalent of Haskell's dollar sign operator in Elm:
+  One option to improve the snippet is with the help of the equivalent of Haskell's <code>$</code> operator in Elm:
 </p>
 
 {% call macros.code("elm") %}

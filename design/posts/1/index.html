@@ -80,7 +80,7 @@
 
       Also, be warned. I use type annotations in python. They do not have any effect on the
       functionality but are used to enforce a typesystem using static analysis. You can read
-      more about it here: <a href="http://mypy-lang.org/" target="_blank">mypy</a>.
+      more about it here: <a href="http://mypy-lang.org/" target="_blank"><code>mypy</code></a>.
 
       <p>
       Also, I left out the code for json parsing here since it is quite straightforward.
@@ -156,7 +156,7 @@
       {% endcall %}
 
       <p>
-      Effectively, you can use the caller() method to load in the literal string
+      Effectively, you can use the <code>caller()</code> method to load in the literal string
       that was typed between the call block. This circumvents the need of awkwardly passing code
       containing all kinds of weird characters as argument to the macro directly. 
       </p>
@@ -225,10 +225,10 @@
       <h3>4. Nginx configuration</h3>
       Now that we have everything setup, we just need a way to serve the files. For this we
       only need a simple and short nginx configuration that simply looks for the file specified
-      in the uri. To avoid having ugly looking uri's that end in <i>.html</i>, we simply leverage
-      the fact that nginx simply looks for <i>index.html</i> if no file is specified. 
-      So you, my dear reader, only see <i>/posts/1</i> for example, which in actuality 
-      is interpreted as <i>/posts/1/index.html</i>. Note that in reality of course, 
+      in the uri. To avoid having ugly looking uri's that end in <code>.html</code>, we simply leverage
+      the fact that nginx simply looks for <code>index.html</code> if no file is specified. 
+      So you, my dear reader, only see <code>/posts/1</code> for example, which in actuality 
+      is interpreted as <code>/posts/1/index.html</code>. Note that in reality of course, 
       we use a slightly longer configuration to enable ssl and redirect http to https, 
       but that is outside the scope of this post. 
 
