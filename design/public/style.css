@@ -365,6 +365,14 @@ table.rwd-table tbody tr:nth-child(odd) {
     background-color: var(--bg);
 }
 
+/* Responsive iframes (YouTube embeds etc.) */
+
+iframe {
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+}
+
 /* Images */
 
 img.img {
